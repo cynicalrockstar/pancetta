@@ -249,7 +249,7 @@ namespace Baconit.Panels
             // Dispatch to the UI thread
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Oops", "Baconit can't load any posts right now, check your Internet connection.");
+                App.BaconMan.MessageMan.ShowMessageSimple("Oops", "Pancetta can't load any posts right now, check your Internet connection.");
                 ToggleLoadingBar(false);
             });
         }

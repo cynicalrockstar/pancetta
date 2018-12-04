@@ -421,9 +421,9 @@ namespace Baconit.Panels.FlipView
         {
             if (m_sharePost != null)
             {
-                args.Request.Data.Properties.ApplicationName = "Baconit";
+                args.Request.Data.Properties.ApplicationName = "Pancetta";
                 args.Request.Data.Properties.ContentSourceWebLink = new Uri(m_sharePost.Url, UriKind.Absolute);
-                args.Request.Data.Properties.Title = "A Reddit Post Shared From Baconit";
+                args.Request.Data.Properties.Title = "A Reddit Post Shared From Pancetta";
                 args.Request.Data.Properties.Description = m_sharePost.Title;
                 args.Request.Data.SetText($"\r\n\r\n{m_sharePost.Title}\r\n\r\n{m_sharePost.Url}");
                 m_sharePost = null;
@@ -431,7 +431,7 @@ namespace Baconit.Panels.FlipView
             }
             else
             {
-                args.Request.FailWithDisplayText("Baconit doesn't have anything to share!");
+                args.Request.FailWithDisplayText("Pancetta doesn't have anything to share!");
                 App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToShareFilpViewPostNoSharePost");
             }
         }

@@ -36,7 +36,7 @@
 
                     <TextBlock Grid.Row="0"
                                Margin="0,0,0,12"
-                               Text="Baconit can integrate with your Microsoft Band v1 or v2 to update your wallpaper, add a Baconit tile, or give you instant notifications for new inbox messages."
+                               Text="Pancetta can integrate with your Microsoft Band v1 or v2 to update your wallpaper, add a Baconit tile, or give you instant notifications for new inbox messages."
                                TextWrapping="Wrap" />
 
                     <TextBlock x:Name="ui_noBandConnected"
@@ -74,7 +74,7 @@
                                        TextWrapping="Wrap" />
 
                             <TextBlock Margin="0,12,0,0"
-                                       Text="Add a Baconit tile and sync my message inbox"
+                                       Text="Add a Pancetta tile and sync my message inbox"
                                        TextWrapping="Wrap" />
                             <TextBlock x:Name="ui_messageInboxNotEnabled"
                                        Margin="0,6,0,0"

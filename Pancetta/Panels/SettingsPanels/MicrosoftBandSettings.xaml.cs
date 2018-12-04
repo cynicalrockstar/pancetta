@@ -273,11 +273,11 @@ namespace Baconit.Panels.SettingsPanels
             {
                 if (App.BaconMan.BackgroundMan.BandMan.ShowInboxOnBand)
                 {
-                    App.BaconMan.MessageMan.ShowMessageSimple("Mission Complete", "You can now find the Baconit tile on your Band!");
+                    App.BaconMan.MessageMan.ShowMessageSimple("Mission Complete", "You can now find the Pancetta tile on your Band!");
                 }
                 else
                 {
-                    App.BaconMan.MessageMan.ShowMessageSimple("All Done", "We have successfully removed the Baconit tile from your Band.");
+                    App.BaconMan.MessageMan.ShowMessageSimple("All Done", "We have successfully removed the Pancetta tile from your Band.");
                 }
             }
         }
