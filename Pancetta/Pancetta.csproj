@@ -163,9 +163,6 @@
     <Compile Include="HelperControls\LoadingOverlay.xaml.cs">
       <DependentUpon>LoadingOverlay.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HelperControls\RateAndFeedbackPopUp.xaml.cs">
-      <DependentUpon>RateAndFeedbackPopUp.xaml</DependentUpon>
-    </Compile>
     <Compile Include="HelperControls\RedditMarkdownVisualHelper.xaml.cs">
       <DependentUpon>RedditMarkdownVisualHelper.xaml</DependentUpon>
     </Compile>
@@ -323,8 +320,8 @@
     <Content Include="Assets\MainPage\BaconitLogo.png" />
     <Content Include="Assets\MainPage\FavoriteIcon.png" />
     <Content Include="Assets\MainPage\NotFavoriteIcon.png" />
-    <Content Include="Assets\MainPage\reddit_50.png" />
-    <Content Include="Assets\Settings\AboutBaconitIcon.png" />
+    <Content Include="Assets\MainPage\pancetta_50.png" />
+    <Content Include="Assets\Settings\pancetta_100.png" />
     <Content Include="Assets\Welcome\MarilynImageMedium.jpg" />
     <Content Include="Assets\Welcome\QuinnImageMedium.jpg" />
     <None Include="Package.StoreAssociation.xml" />
@@ -394,10 +391,6 @@
     <Page Include="HelperControls\LoadingOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HelperControls\RateAndFeedbackPopUp.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="HelperControls\RedditMarkdownVisualHelper.xaml">
       <SubType>Designer</SubType>

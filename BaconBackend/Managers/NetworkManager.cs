@@ -105,7 +105,7 @@ namespace BaconBackend.Managers
             HttpClient request = new HttpClient();
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, new Uri(url, UriKind.Absolute));
             // Set the user agent
-            message.Headers.Add("User-Agent", "Baconit");
+            message.Headers.Add("User-Agent", "Pancetta");
             // Set the auth header
             if (!String.IsNullOrWhiteSpace(authHeader))
             {
@@ -137,7 +137,7 @@ namespace BaconBackend.Managers
             }
             HttpClient request = new HttpClient();
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.Absolute));
-            message.Headers.Add("User-Agent", "Baconit");
+            message.Headers.Add("User-Agent", "Pancetta");
 
             // Set the auth header
             if (!String.IsNullOrWhiteSpace(authHeader))
@@ -175,7 +175,7 @@ namespace BaconBackend.Managers
             // Build the request
             HttpClient request = new HttpClient();
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, new Uri(url, UriKind.Absolute));
-            message.Headers.Add("User-Agent", "Baconit");
+            message.Headers.Add("User-Agent", "Pancetta");
 
             // Send the request
             HttpResponseMessage response = await request.SendRequestAsync(message, HttpCompletionOption.ResponseHeadersRead);

@@ -90,14 +90,14 @@
                     <Image Width="20"
                            Height="20"
                            Margin="12,12,9,12"
-                           Source="ms-appx:///Assets/MainPage/reddit_50.png" />
+                           Source="ms-appx:///Assets/MainPage/pancetta_50.png" />
                     <TextBlock Grid.Column="1"
                                Margin="0,0,0,0"
                                VerticalAlignment="Center"
                                FontSize="18"
                                RequestedTheme="Dark"
                                Style="{ThemeResource TitleTextBlockStyle}"
-                               Text="Reddit" />
+                               Text="Pancetta" />
 
                     <!--  Diver  -->
                     <Rectangle Grid.Row="1"

@@ -379,7 +379,7 @@ namespace Baconit.Panels
                         message = "That link has already been submitted";
                         break;
                     case SubmitNewPostErrors.BAD_CAPTCHA:
-                        message = "You need to provide a CAPTCHA to post. Baconit currently doesn't support CAPTCHA so you will have to post this from your desktop. After a few post try from Baconit again. Sorry about that.";
+                        message = "You need to provide a CAPTCHA to post. Pancetta currently doesn't support CAPTCHA so you will have to post this from your desktop. After a few post try from Baconit again. Sorry about that.";
                         break;
                     case SubmitNewPostErrors.DOMAIN_BANNED:
                         message = "The domain of this link has been banned for spam.";

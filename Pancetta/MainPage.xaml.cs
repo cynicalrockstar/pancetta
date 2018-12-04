@@ -172,7 +172,7 @@ namespace Baconit
             UpdateTrendingSubreddits();
 
             // Show review if we should
-            CheckShowReviewAndFeedback();
+            //CheckShowReviewAndFeedback();
         }
 
         /// <summary>
@@ -238,16 +238,6 @@ namespace Baconit
         private void App_OnResuming(object sender, object e)
         {
             UpdateTrendingSubreddits();
-
-            if(!m_reviewLeaveTime.Equals(DateTime.MinValue))
-            {
-                TimeSpan timeSinceReviewLeave = DateTime.Now - m_reviewLeaveTime;
-                if(timeSinceReviewLeave.TotalMinutes < 5)
-                {
-                    App.BaconMan.MessageMan.ShowMessageSimple("Thanks ❤", "Thank you for reviewing Baconit, we really appreciate your support of the app!");
-                }
-                m_reviewLeaveTime = DateTime.MinValue;
-            }
         }
 
         /// <summary>
@@ -1091,64 +1081,6 @@ namespace Baconit
                 double currentBar = ui_memoryBarBackground.ActualHeight * e.UsagePercentage;
                 ui_memoryBarOverlay.Height = currentBar;
             });
-        }
-
-        #endregion
-
-        #region Review and Feedback
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="markdownContent"></param>
-        public async void CheckShowReviewAndFeedback()
-        {
-            // Check to see if we should show the review message.
-            if (App.BaconMan.UiSettingsMan.AppOpenedCount > App.BaconMan.UiSettingsMan.MainPage_NextReviewAnnoy)
-            {
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    // Make the popup.
-                    RateAndFeedbackPopUp reviewPopup = new RateAndFeedbackPopUp();
-                    reviewPopup.OnHideComplete += ReviewPopup_OnHideComplete;
-
-                    // This is a little tricky, we need to add it second to last
-                    // so the global content presenter can sill come up over it for links.
-                    if (ui_mainHolder.Children.Count > 0)
-                    {
-                        ui_mainHolder.Children.Insert(ui_mainHolder.Children.Count - 1, reviewPopup);
-                    }
-                    else
-                    {
-                        ui_mainHolder.Children.Add(reviewPopup);
-                    }
-
-                    reviewPopup.ShowPopUp();
-                });
-
-                // If we showed the UI update the value to the next time we should annoy them.
-                // If they leave a review we will make this huge.
-                App.BaconMan.UiSettingsMan.MainPage_NextReviewAnnoy += 120;
-            }
-        }
-
-        /// <summary>
-        /// Fired when the review box is hidden
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ReviewPopup_OnHideComplete(object sender, RateAndFeedbackClosed e)
-        {
-            // Remove it
-            ui_mainHolder.Children.Remove((RateAndFeedbackPopUp)sender);
-
-            // Set the rate value
-            if(e.WasReviewGiven)
-            {
-                // Assume they rated the app. Set this to be huge.
-                App.BaconMan.UiSettingsMan.MainPage_NextReviewAnnoy = int.MaxValue;
-            }
         }
 
         #endregion

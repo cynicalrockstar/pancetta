@@ -160,7 +160,7 @@ namespace BaconBackend.Managers.Background
                             int tileCapacity = await bandClient.TileManager.GetRemainingTileCapacityAsync();
                             if (tileCapacity == 0)
                             {
-                                m_baconMan.MessageMan.ShowMessageSimple("Can't add tile to Band", "Baconit can't add a tile to your Microsoft Band because you reached the maximum number of tile. To add the Baconit tile remove one of the other tiles on your band.");
+                                m_baconMan.MessageMan.ShowMessageSimple("Can't add tile to Band", "Pancetta can't add a tile to your Microsoft Band because you reached the maximum number of tile. To add the Pancetta tile remove one of the other tiles on your band.");
                                 wasSuccess = false;
                             }
                             else

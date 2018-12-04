@@ -84,27 +84,15 @@ namespace Baconit.Panels.SettingsPanels
             App.BaconMan.TelemetryMan.ReportEvent(this, "RateAndReviewTapped");
         }
 
-        private void Facebook_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            OpenGlobalPresenter("http://facebook.com/Baconit");
-            App.BaconMan.TelemetryMan.ReportEvent(this, "FacebookOpened");
-        }
-
         private void Website_Tapped(object sender, TappedRoutedEventArgs e)
         {
             OpenGlobalPresenter("http://baconit.quinndamerell.com/");
             App.BaconMan.TelemetryMan.ReportEvent(this, "WebsiteOpened");
         }
 
-        private void Twitter_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            OpenGlobalPresenter("http://twitter.com/BaconitWP");
-            App.BaconMan.TelemetryMan.ReportEvent(this, "TwitterOpened");
-        }
-
         private void ShowSource_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            OpenGlobalPresenter("http://github.com/QuinnDamerell/Baconit");
+            OpenGlobalPresenter("http://github.com/cynicalrockstar/pancetta");
             App.BaconMan.TelemetryMan.ReportEvent(this, "SourceOpened");
         }
 
