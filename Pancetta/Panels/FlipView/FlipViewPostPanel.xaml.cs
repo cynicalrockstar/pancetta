@@ -74,11 +74,6 @@ namespace Baconit.Panels.FlipView
         bool? m_fullScreenOverwrite = null;
 
         /// <summary>
-        /// Indicates if the fullnesses overwrite is from the user.
-        /// </summary>
-        bool? m_isfullScreenOverwriteUser = true;
-
-        /// <summary>
         /// A grid to hold on to the sticky header.
         /// </summary>
         Grid m_stickyHeader;
@@ -981,7 +976,6 @@ namespace Baconit.Panels.FlipView
         private void SetupFullScreenForNewContext()
         {
             m_fullScreenOverwrite = null;
-            m_isfullScreenOverwriteUser = null;
             ToggleFullscreen(false, true);
 
             if (m_storyHeader != null)
@@ -1006,12 +1000,10 @@ namespace Baconit.Panels.FlipView
 
                 // Set the overwrite
                 m_fullScreenOverwrite = true;
-                m_isfullScreenOverwriteUser = false;
             }
             else
             {
                 // Disable the overwrite
-                m_isfullScreenOverwriteUser = null;
                 m_fullScreenOverwrite = null;
             }
 
@@ -1030,12 +1022,10 @@ namespace Baconit.Panels.FlipView
             if(!m_isFullscreen)
             {
                 m_fullScreenOverwrite = true;
-                m_isfullScreenOverwriteUser = true;
             }
             else
             {
                 m_fullScreenOverwrite = null;
-                m_isfullScreenOverwriteUser = null;
             }
 
             ToggleFullscreen(!m_isFullscreen);

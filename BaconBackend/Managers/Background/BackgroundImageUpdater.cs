@@ -558,14 +558,7 @@ namespace BaconBackend.Managers.Background
                     Size targetImageSize = LastKnownScreenResoultion;
                     if (type == UpdateTypes.Band)
                     {
-                        if(m_baconMan.BackgroundMan.BandMan.BandVersion == BandVersions.V1)
-                        {
-                            targetImageSize = new Size(310, 102);
-                        }
-                        else
-                        {
-                            targetImageSize = new Size(310, 128);
-                        }
+                        targetImageSize = new Size(310, 128);
                     }
                     else if(type == UpdateTypes.Desktop && DeviceHelper.CurrentDevice() == DeviceTypes.Mobile)
                     {
@@ -834,26 +827,17 @@ namespace BaconBackend.Managers.Background
         {
             bool wasSuccess = false;
 
-            if(type == UpdateTypes.Band)
+            // Try to set the image
+            UserProfilePersonalizationSettings profileSettings = UserProfilePersonalizationSettings.Current;
+            if (type == UpdateTypes.LockScreen)
             {
-                wasSuccess = await m_baconMan.BackgroundMan.BandMan.UpdateBandWallpaper(file);
-                // The band can fail quite a lot, if so don't count this as a fail.
-                wasSuccess = true;
+                wasSuccess = await profileSettings.TrySetLockScreenImageAsync(file);
             }
-            // Make sure we can do it
-            else if (UserProfilePersonalizationSettings.IsSupported())
+            else
             {
-                // Try to set the image
-                UserProfilePersonalizationSettings profileSettings = UserProfilePersonalizationSettings.Current;
-                if (type == UpdateTypes.LockScreen)
-                {
-                    wasSuccess = await profileSettings.TrySetLockScreenImageAsync(file);
-                }
-                else
-                {
-                    wasSuccess = await profileSettings.TrySetWallpaperImageAsync(file);
-                }
+                wasSuccess = await profileSettings.TrySetWallpaperImageAsync(file);
             }
+
             return wasSuccess;
         }
 

@@ -945,7 +945,7 @@ namespace Baconit
         /// Fired when someone wants to show the global content presenter
         /// </summary>
         /// <param name="link">What to show</param>
-        public async void ShowGlobalContent(string link)
+        public void ShowGlobalContent(string link)
         {
             // Validate that the link can't be opened by the subreddit viewer
             RedditContentContainer container = MiscellaneousHelper.TryToFindRedditContentInLink(link);

@@ -1236,7 +1236,7 @@ namespace Baconit
             // we check if it exits.
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                return await SetStatusBar_Internal(color, opacity);
+                return SetStatusBar_Internal(color, opacity);
             }
             return 0;
         }
@@ -1247,7 +1247,7 @@ namespace Baconit
         /// <param name="color"></param>
         /// <param name="opacity"></param>
         /// <returns></returns>
-        private async Task<double> SetStatusBar_Internal(Color? color = null, double opacity = 1)
+        private double SetStatusBar_Internal(Color? color = null, double opacity = 1)
         {
             //StatusBar statusbar = StatusBar.GetForCurrentView();
             //if (statusbar != null)

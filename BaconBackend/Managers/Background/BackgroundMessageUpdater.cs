@@ -221,12 +221,6 @@ namespace BaconBackend.Managers.Background
                 // Make sure the main tile is an iconic tile.
                 m_baconMan.TileMan.UpdateMainTile(unreadCount);
 
-                // Update the band if we have one.
-                if(!updateSliently)
-                {
-                    await m_baconMan.BackgroundMan.BandMan.UpdateInboxMessages(newNotifications, newMessages);
-                }
-
                 // If all was successful update the last time we updated
                 LastUpdateTime = DateTime.Now;
             }

@@ -11,8 +11,8 @@
     <AssemblyName>Pancetta</AssemblyName>
     <DefaultLanguage>en-us</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.17134.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -21,14 +21,18 @@
     <PackageCertificateThumbprint>C1A74F90FCED45C673178E27F09DA81E102DEA92</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x64|arm</AppxBundlePlatforms>
     <AppxPackageDir>\\nas.swanhouse.local\Aaron\Apps\</AppxPackageDir>
     <ApplicationInsightsResourceId>/subscriptions/8cb09ec7-eef0-4505-923e-a8965130da21/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/Baconit</ApplicationInsightsResourceId>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
-    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerUpdateFrequency>0</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
     <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
     <AppInstallerUri>\\nas.swanhouse.local\Aaron\Apps\</AppInstallerUri>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -223,9 +227,6 @@
     <Compile Include="Panels\SettingsPanels\FlipViewSettings.xaml.cs">
       <DependentUpon>FlipViewSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Panels\SettingsPanels\MicrosoftBandSettings.xaml.cs">
-      <DependentUpon>MicrosoftBandSettings.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Panels\SettingsPanels\SubredditViewSettings.xaml.cs">
       <DependentUpon>SubredditViewSettings.xaml</DependentUpon>
     </Compile>
@@ -263,10 +264,6 @@
     <Content Include="Assets\AppAssets\BadgeLogo\96.scale-150.png" />
     <Content Include="Assets\AppAssets\BadgeLogo\96.scale-200.png" />
     <Content Include="Assets\AppAssets\BadgeLogo\96.scale-400.png" />
-    <Content Include="Assets\AppAssets\BandIcons\BandImage24.png" />
-    <Content Include="Assets\AppAssets\BandIcons\BandImage46.png" />
-    <Content Include="Assets\AppAssets\IconicTiles\Iconic144.png" />
-    <Content Include="Assets\AppAssets\IconicTiles\Iconic200.png" />
     <Content Include="Assets\AppAssets\SplashScreen\Splash.scale-100.png" />
     <Content Include="Assets\AppAssets\SplashScreen\Splash.scale-125.png" />
     <Content Include="Assets\AppAssets\SplashScreen\Splash.scale-150.png" />
@@ -282,16 +279,6 @@
     <Content Include="Assets\AppAssets\Square310x310\Square210.scale-150.png" />
     <Content Include="Assets\AppAssets\Square310x310\Square210.scale-200.png" />
     <Content Include="Assets\AppAssets\Square310x310\Square210.scale-400.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-100.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-100_altform-unplated.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-125.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-125_altform-unplated.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-150.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-150_altform-unplated.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-200.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-200_altform-unplated.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-400.png" />
-    <Content Include="Assets\AppAssets\Square44x44\Square44.scale-400_altform-unplated.png" />
     <Content Include="Assets\AppAssets\Square44x44\Square44.targetsize-16.png" />
     <Content Include="Assets\AppAssets\Square44x44\Square44.targetsize-16_altform-unplated.png" />
     <Content Include="Assets\AppAssets\Square44x44\Square44.targetsize-24.png" />
@@ -468,10 +455,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Panels\SettingsPanels\MicrosoftBandSettings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Panels\SettingsPanels\SubredditViewSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -524,11 +507,8 @@
     <PackageReference Include="Microsoft.ApplicationInsights.WindowsApps">
       <Version>1.1.1</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Band">
-      <Version>1.3.11121</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.0.0</Version>
+      <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="MyToolkit.Extended">
       <Version>2.5.9</Version>

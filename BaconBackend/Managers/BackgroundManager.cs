@@ -29,18 +29,11 @@ namespace BaconBackend.Managers
         /// </summary>
         public BackgroundMessageUpdater MessageUpdaterMan { get; }
 
-        /// <summary>
-        /// In charge of image updates
-        /// </summary>
-        public BackgroundBandManager BandMan { get; }
-
-
         public BackgroundManager(BaconManager baconMan)
         {
             m_baconMan = baconMan;
             ImageUpdaterMan = new BackgroundImageUpdater(baconMan);
             MessageUpdaterMan = new BackgroundMessageUpdater(baconMan);
-            BandMan = new BackgroundBandManager(baconMan);
         }
 
         /// <summary>
