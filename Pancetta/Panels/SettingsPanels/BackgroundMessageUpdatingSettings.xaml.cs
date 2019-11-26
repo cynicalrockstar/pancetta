@@ -1,4 +1,5 @@
 ﻿using Baconit.Interfaces;
+using Microsoft.Band;
 using System;
 using System.Collections.Generic;
 using System.IO;

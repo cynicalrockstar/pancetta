@@ -71,6 +71,19 @@ namespace BaconBackend.Helpers
     }
 
     /// <summary>
+    /// Used for special case roots that have a nameless array.
+    /// </summary>
+    public class ArrayRoot<Et>
+    {
+        /// <summary>
+        /// List of all the elements under the root.
+        /// </summary>
+        [JsonProperty(PropertyName = "root")]
+        public List<RootElement<Et>> Root;
+    }
+
+
+    /// <summary>
     /// This is a helper class designed to help with returning long
     /// reddit lists. Most lists on reddit have a limit (like subreddits and such)
     /// and if you want the entire thing it might take multiple calls.

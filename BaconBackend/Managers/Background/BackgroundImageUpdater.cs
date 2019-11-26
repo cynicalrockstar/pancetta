@@ -91,6 +91,7 @@ namespace BaconBackend.Managers.Background
         /// </summary>
         private async Task KickOffUpdate(bool force, RefCountedDeferral refDeferral)
         {
+            m_baconMan.TelemetryMan.ReportLog(this, "Updater updating.");
             try
             {
                 // Figure out if we need to do a full update
@@ -99,9 +100,13 @@ namespace BaconBackend.Managers.Background
 
                 if (timeSinceLastFullUpdate.TotalMinutes > fullUpdateFequencyMins || force)
                 {
+                    m_baconMan.TelemetryMan.ReportLog(this, "Running full update");
+
                     // Update lock screen images
                     if (IsLockScreenEnabled)
                     {
+                        m_baconMan.TelemetryMan.ReportLog(this, "Updating lock screen", SeverityLevel.Verbose);
+
                         // Make a deferral scope object so we can do our work without being killed.
                         // Note! We need release this object or it will hang the app around forever!
                         m_lockScreenRefDeferral = refDeferral;
@@ -113,13 +118,18 @@ namespace BaconBackend.Managers.Background
 
                     if(IsDeskopEnabled)
                     {
+                        m_baconMan.TelemetryMan.ReportLog(this, "Updating lock screen", SeverityLevel.Verbose); 
+                                        
                         // Shortcut: If lock screen in enabled and it is the same subreddit just share the same cache. If not,
                         // get the desktop images
                         if (IsLockScreenEnabled && LockScreenSubredditName.Equals(DesktopSubredditName))
                         {
+                            m_baconMan.TelemetryMan.ReportLog(this, "Desktop same sub as lockscreen, skipping image update.", SeverityLevel.Verbose);
                         }
                         else
                         {
+                            m_baconMan.TelemetryMan.ReportLog(this, "Updating desktop image", SeverityLevel.Verbose);
+
                             // Make a deferral scope object so we can do our work without being killed.
                             // Note! We need release this object or it will hang the app around forever!
                             m_desktopRefDeferral = refDeferral;
@@ -133,6 +143,8 @@ namespace BaconBackend.Managers.Background
                     // Update lock screen images
                     if (IsBandWallpaperEnabled)
                     {
+                        m_baconMan.TelemetryMan.ReportLog(this, "Updating band wallpaper", SeverityLevel.Verbose);
+
                         // Make a deferral scope object so we can do our work without being killed.
                         // Note! We need release this object or it will hang the app around forever!
                         m_bandRefDeferral = refDeferral;
@@ -145,6 +157,8 @@ namespace BaconBackend.Managers.Background
                 // Else full update
                 else
                 {
+                    m_baconMan.TelemetryMan.ReportLog(this, "No need for a full update, just rotating.");
+
                     // If we aren't doing a full update just rotate the images.
                     await DoImageRotation(UpdateTypes.All);
 
@@ -158,6 +172,7 @@ namespace BaconBackend.Managers.Background
             catch(Exception e)
             {
                 m_baconMan.MessageMan.DebugDia("Failed to set background image", e);
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "Failed to set background image", e);
             }
         }
 
@@ -201,6 +216,7 @@ namespace BaconBackend.Managers.Background
             catch (Exception e)
             {
                 m_baconMan.MessageMan.DebugDia("Failed to set background image", e);
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "Failed to set background image", e);
             }
         }
 
@@ -225,6 +241,8 @@ namespace BaconBackend.Managers.Background
 
                 // Get the current files..
                 IReadOnlyList<StorageFile> files = await GetCurrentCacheImages(fileCacheType);
+
+                m_baconMan.TelemetryMan.ReportLog(this, "Current images in cache :" + files.Count);
 
                 if (files != null && files.Count != 0)
                 {
@@ -260,8 +278,20 @@ namespace BaconBackend.Managers.Background
                         currentIndex = CurrentDesktopRotationIndex;
                     }
 
+                    m_baconMan.TelemetryMan.ReportLog(this, "Current index used to set image :" + currentIndex);
+
                     // Set the image
                     bool wasSuccess = await SetBackgroundImage(type, files[currentIndex]);
+
+                    if (!wasSuccess)
+                    {
+                        m_baconMan.TelemetryMan.ReportLog(this, "Image update failed", SeverityLevel.Error);
+                        m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, type == UpdateTypes.LockScreen ? "LockscreenImageUpdateFailed" : "DesktopImageUpdateFailed");
+                    }
+                    else
+                    {
+                        m_baconMan.TelemetryMan.ReportLog(this, "Image update success");
+                    }
 
                     return wasSuccess;
                 }
@@ -424,7 +454,14 @@ namespace BaconBackend.Managers.Background
         private async void GetImagesFromPosts(List<Post> posts, UpdateTypes type)
         {
             // First, remove all of the existing images
-            await DeleteAllCacheImages(type);
+            try
+            {
+                await DeleteAllCacheImages(type);
+            }
+            catch(Exception e)
+            {
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToDeleteCacheImages", e);
+            }
 
             // Setup the vars
             if(type == UpdateTypes.LockScreen)
@@ -519,10 +556,23 @@ namespace BaconBackend.Managers.Background
                 {
                     // Get the target size
                     Size targetImageSize = LastKnownScreenResoultion;
-
-                    // If we are desktop on mobile we want to do a bit larger than the screen res because
-                    // there is a sliding image animation when you switch to all apps. Lets make the width 30% larger.
-                    targetImageSize.Width *= 1.3;
+                    if (type == UpdateTypes.Band)
+                    {
+                        if(m_baconMan.BackgroundMan.BandMan.BandVersion == BandVersions.V1)
+                        {
+                            targetImageSize = new Size(310, 102);
+                        }
+                        else
+                        {
+                            targetImageSize = new Size(310, 128);
+                        }
+                    }
+                    else if(type == UpdateTypes.Desktop && DeviceHelper.CurrentDevice() == DeviceTypes.Mobile)
+                    {
+                        // If we are desktop on mobile we want to do a bit larger than the screen res because
+                        // there is a sliding image animation when you switch to all apps. Lets make the width 30% larger.
+                        targetImageSize.Width *= 1.3;
+                    }
 
                     // Resize the image to fit nicely
                     InMemoryRandomAccessStream image = await ResizeImage(response.ImageStream, targetImageSize);
@@ -533,6 +583,7 @@ namespace BaconBackend.Managers.Background
                 catch (Exception e)
                 {
                     m_baconMan.MessageMan.DebugDia("Failed to write background image", e);
+                    m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "Failed to write background image", e);
                 }
             }
 
@@ -783,17 +834,26 @@ namespace BaconBackend.Managers.Background
         {
             bool wasSuccess = false;
 
-            // Try to set the image
-            UserProfilePersonalizationSettings profileSettings = UserProfilePersonalizationSettings.Current;
-            if (type == UpdateTypes.LockScreen)
+            if(type == UpdateTypes.Band)
             {
-                wasSuccess = await profileSettings.TrySetLockScreenImageAsync(file);
+                wasSuccess = await m_baconMan.BackgroundMan.BandMan.UpdateBandWallpaper(file);
+                // The band can fail quite a lot, if so don't count this as a fail.
+                wasSuccess = true;
             }
-            else
+            // Make sure we can do it
+            else if (UserProfilePersonalizationSettings.IsSupported())
             {
-                wasSuccess = await profileSettings.TrySetWallpaperImageAsync(file);
+                // Try to set the image
+                UserProfilePersonalizationSettings profileSettings = UserProfilePersonalizationSettings.Current;
+                if (type == UpdateTypes.LockScreen)
+                {
+                    wasSuccess = await profileSettings.TrySetLockScreenImageAsync(file);
+                }
+                else
+                {
+                    wasSuccess = await profileSettings.TrySetWallpaperImageAsync(file);
+                }
             }
-
             return wasSuccess;
         }
 

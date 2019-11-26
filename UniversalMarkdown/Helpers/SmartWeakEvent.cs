@@ -70,7 +70,7 @@ namespace UniversalMarkdown.Helpers
             {
                 Delegate d = (Delegate)(object)eh;
 
-                IEnumerable<Attribute> attributes = (Attribute[])d.GetMethodInfo().DeclaringType.GetTypeInfo().GetCustomAttributes(typeof(CompilerGeneratedAttribute), false);
+                IEnumerable<Attribute> attributes = d.GetMethodInfo().DeclaringType.GetTypeInfo().GetCustomAttributes(typeof(CompilerGeneratedAttribute), false);
                 int count = 0;
                 using (IEnumerator<Attribute> enumerator = attributes.GetEnumerator())
                 {

@@ -180,6 +180,9 @@ namespace Baconit.HelperControls
         /// </summary>
         private void ShowBoxInternal()
         {
+            // Report
+            App.BaconMan.TelemetryMan.ReportEvent(this, "CommentBoxOpened");
+
             // Show the box
             VisualStateManager.GoToState(this, "ShowCommentBox", true);
 
@@ -372,6 +375,7 @@ namespace Baconit.HelperControls
                 catch (Exception ex)
                 {
                     App.BaconMan.MessageMan.DebugDia("failed to fire OnCommentSubmitted", ex);
+                    App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "OnCommentSubmittedFireFailed", ex);
                 }
             }
             else

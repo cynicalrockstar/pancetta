@@ -182,6 +182,7 @@ namespace BaconBackend.Helpers
             }
             catch (Exception e)
             {
+                baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to send comment", e);
                 baconMan.MessageMan.DebugDia("failed to send message", e);
             }
             return returnString;
@@ -200,10 +201,11 @@ namespace BaconBackend.Helpers
                 string jsonResponse = await baconMan.NetworkMan.MakeRedditGetRequestAsString($"user/{userName}/about/.json");
 
                 // Parse the new user
-                foundUser = MiscellaneousHelper.ParseOutRedditDataElement<User>(baconMan, jsonResponse);
+                foundUser = await MiscellaneousHelper.ParseOutRedditDataElement<User>(baconMan, jsonResponse);
             }
             catch (Exception e)
             {
+                baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to search for user", e);
                 baconMan.MessageMan.DebugDia("failed to search for user", e);
             }
             return foundUser;
@@ -234,6 +236,7 @@ namespace BaconBackend.Helpers
             }
             catch (Exception e)
             {
+                baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to delete post", e);
                 baconMan.MessageMan.DebugDia("failed to delete post", e);
             }
             return false;
@@ -281,11 +284,13 @@ namespace BaconBackend.Helpers
                 }
                 else
                 {
+                    baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to save or hide item, unknown response");
                     baconMan.MessageMan.DebugDia("failed to save or hide item, unknown response");
                 }
             }
             catch (Exception e)
             {
+                baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to save or hide item", e);
                 baconMan.MessageMan.DebugDia("failed to save or hide item", e);
             }
             return wasSuccess;
@@ -353,17 +358,20 @@ namespace BaconBackend.Helpers
                         string enumName = Enum.GetName(typeof(SubmitNewPostErrors), i).ToLower(); ;
                         if (responseLower.Contains(enumName))
                         {
+                            baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to submit post; error: "+ enumName);
                             baconMan.MessageMan.DebugDia("failed to submit post; error: "+ enumName);
                             return new SubmitNewPostResponse() { Success = false, RedditError = (SubmitNewPostErrors)i};
                         }
                     }
 
+                    baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to submit post; unknown reddit error: ");
                     baconMan.MessageMan.DebugDia("failed to submit post; unknown reddit error");
                     return new SubmitNewPostResponse() { Success = false, RedditError = SubmitNewPostErrors.UNKNOWN };
                 }
             }
             catch (Exception e)
             {
+                baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to submit post", e);
                 baconMan.MessageMan.DebugDia("failed to submit post", e);
                 return new SubmitNewPostResponse() { Success = false };
             }
@@ -408,85 +416,93 @@ namespace BaconBackend.Helpers
         /// </summary>
         /// <param name="originalJson"></param>
         /// <returns></returns>
-        public static T ParseOutRedditDataElement<T>(BaconManager baconMan, string originalJson)
+        public static async Task<T> ParseOutRedditDataElement<T>(BaconManager baconMan, string originalJson)
         {
             // TODO make this async. If I try to Task.Run(()=> the parse the task returns but the
             // await never resumes... idk why.
-            // Try to parse out the data object
-            int dataPos = originalJson.IndexOf("\"data\":");
-            if (dataPos == -1)
+            try
             {
-                return default(T);
-            }
-            int dataStartPos = originalJson.IndexOf('{', dataPos + 7);
-            if (dataStartPos == -1)
-            {
-                return default(T);
-            }
-            // There can be nested { } in the data we want
-            // To do this optimally, we will just look for the close manually.
-            int dataEndPos = dataStartPos + 1;
-            int depth = 0;
-            bool isInText = false;
-            while (dataEndPos < originalJson.Length)
-            {
-                // If we find a " make sure we ignore everything.
-                if (originalJson[dataEndPos] == '"')
+                // Try to parse out the data object
+                int dataPos = originalJson.IndexOf("\"data\":");
+                if (dataPos == -1)
                 {
-                    if (isInText)
-                    {
-                        // If we are in a text block look if it is an escape.
-                        // If it isn't an escape, end the text block.
-                        if (originalJson[dataEndPos - 1] != '\\')
-                        {
-                            isInText = false;
-                        }
-                    }
-                    else
-                    {
-                        // We entered text.
-                        isInText = true;
-                    }
+                    return default(T);
                 }
-
-                // If not in a text block, look for {}
-                if (!isInText)
+                int dataStartPos = originalJson.IndexOf('{', dataPos + 7);
+                if (dataStartPos == -1)
                 {
-                    // If we find an open +1 to depth
-                    if (originalJson[dataEndPos] == '{')
+                     return default(T);
+                }
+                // There can be nested { } in the data we want
+                // To do this optimally, we will just look for the close manually.
+                int dataEndPos = dataStartPos + 1;
+                int depth = 0;
+                bool isInText = false;
+                while (dataEndPos < originalJson.Length)
+                {
+                    // If we find a " make sure we ignore everything.
+                    if(originalJson[dataEndPos] == '"')
                     {
-                        depth++;
-                    }
-                    // If we find and end..
-                    else if (originalJson[dataEndPos] == '}')
-                    {
-                        // If we have no depth we are done.
-                        if (depth == 0)
+                        if(isInText)
                         {
-                            break;
+                            // If we are in a text block look if it is an escape.
+                            // If it isn't an escape, end the text block.
+                            if(originalJson[dataEndPos - 1] != '\\')
+                            {
+                                isInText = false;
+                            }
                         }
-                        // Otherwise take one off.
                         else
                         {
-                            depth--;
+                            // We entered text.
+                            isInText = true;
                         }
                     }
+
+                    // If not in a text block, look for {}
+                    if(!isInText)
+                    {
+                        // If we find an open +1 to depth
+                        if (originalJson[dataEndPos] == '{')
+                        {
+                            depth++;
+                        }
+                        // If we find and end..
+                        else if (originalJson[dataEndPos] == '}')
+                        {
+                            // If we have no depth we are done.
+                            if (depth == 0)
+                            {
+                                break;
+                            }
+                            // Otherwise take one off.
+                            else
+                            {
+                                depth--;
+                            }
+                        }
+                    }
+                              
+                    dataEndPos++;
                 }
 
+                // Make sure we didn't fail.
+                if(depth != 0)
+                {
+                    return default(T);
+                }
+                
+                // Move past the last }
                 dataEndPos++;
-            }
 
-            // Make sure we didn't fail.
-            if (depth != 0)
+                string dataBlock = originalJson.Substring(dataStartPos, (dataEndPos - dataStartPos));
+                return JsonConvert.DeserializeObject<T>(dataBlock);
+            }
+            catch(Exception e)
             {
-                return default(T);
+                baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to parse data element", e);
             }
-
-            // Move past the last }
-            dataEndPos++;
-
-            string dataBlock = originalJson.Substring(dataStartPos, (dataEndPos - dataStartPos));
-            return JsonConvert.DeserializeObject<T>(dataBlock);
+            return default(T);
         }
 
         /// <summary>

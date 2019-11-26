@@ -330,6 +330,7 @@ namespace Baconit
                 }
 
                 // Report the new panel being shown.
+                App.BaconMan.TelemetryMan.ReportPageView(m_panelStack.Last().Panel.GetType().Name);
 
                 // Get the type of the leaving panel
                 PanelType leavingPanelType = GetPanelType(leavingStackItem.Panel);
@@ -511,6 +512,9 @@ namespace Baconit
                 // Last, add the panel to the bottom of the list.
                 // Note if this existing the panel will be in the list twice!
                 m_panelStack.Add(navigateToPanel);
+
+                // Report the view
+                App.BaconMan.TelemetryMan.ReportPageView(navigateToPanel.Panel.GetType().Name);
 
                 // Check if there is someone we should ask to reduce memory
                 if(m_panelStack.Count > (c_numberOfHistoryPagesBeforeMemoryReduce + 1))
@@ -1010,6 +1014,7 @@ namespace Baconit
                 // Check that we are good.
                 if (currentPanel == null)
                 {
+                    App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "MemoryCleanupCurrentPanelNull");
                     return;
                 }
 
@@ -1231,7 +1236,7 @@ namespace Baconit
             // we check if it exits.
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                return SetStatusBar_Internal(color, opacity);
+                return await SetStatusBar_Internal(color, opacity);
             }
             return 0;
         }
@@ -1242,7 +1247,7 @@ namespace Baconit
         /// <param name="color"></param>
         /// <param name="opacity"></param>
         /// <returns></returns>
-        private double SetStatusBar_Internal(Color? color = null, double opacity = 1)
+        private async Task<double> SetStatusBar_Internal(Color? color = null, double opacity = 1)
         {
             //StatusBar statusbar = StatusBar.GetForCurrentView();
             //if (statusbar != null)

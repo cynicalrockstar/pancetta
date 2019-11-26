@@ -60,7 +60,7 @@ namespace BaconBackend.Managers.Background
         /// Updates all of the notifications based on the message list.
         /// </summary>
         /// <param name="newMessages"></param>
-        public void UpdateNotifications(List<Message> newMessages)
+        public async void UpdateNotifications(List<Message> newMessages)
         {
             bool updateSliently = !m_baconMan.IsBackgroundTask;
 
@@ -221,11 +221,18 @@ namespace BaconBackend.Managers.Background
                 // Make sure the main tile is an iconic tile.
                 m_baconMan.TileMan.UpdateMainTile(unreadCount);
 
+                // Update the band if we have one.
+                if(!updateSliently)
+                {
+                    await m_baconMan.BackgroundMan.BandMan.UpdateInboxMessages(newNotifications, newMessages);
+                }
+
                 // If all was successful update the last time we updated
                 LastUpdateTime = DateTime.Now;
             }
             catch (Exception ex)
             {
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "messageUpdaterFailed", ex);
                 m_baconMan.MessageMan.DebugDia("failed to update message notifications", ex);
             }
 

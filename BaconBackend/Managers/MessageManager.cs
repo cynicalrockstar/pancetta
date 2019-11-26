@@ -27,10 +27,17 @@ namespace BaconBackend.Managers
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                bool? showStatus = await ShowYesNoMessage("Reddit is Down", "It looks like reddit is down right now. Go outside for a while and try again in a few minutes.", "Check Reddit's Status", "Go Outside");
-                if (showStatus.HasValue && showStatus.Value)
+                try
                 {
-                    m_baconMan.ShowGlobalContent("http://www.redditstatus.com/");
+                    bool? showStatus = await ShowYesNoMessage("Reddit is Down", "It looks like reddit is down right now. Go outside for a while and try again in a few minutes.", "Check Reddit's Status", "Go Outside");
+                    if(showStatus.HasValue && showStatus.Value)
+                    {
+                        m_baconMan.ShowGlobalContent("http://www.redditstatus.com/");
+                    }
+                }
+                catch (Exception e)
+                {
+                    m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToShowMessage", e);
                 }
             });
         }
@@ -69,8 +76,15 @@ namespace BaconBackend.Managers
 
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                MessageDialog message = new MessageDialog(content, title);
-                await message.ShowAsync();
+                try
+                {
+                    MessageDialog message = new MessageDialog(content, title);
+                    await message.ShowAsync();
+                }
+                catch(Exception e)
+                {
+                    m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToShowMessage",e);
+                }
             });
         }
 

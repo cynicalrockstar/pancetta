@@ -65,6 +65,7 @@ namespace BaconBackend.Managers
             catch(Exception e)
             {
                 m_baconMan.MessageMan.DebugDia("failed to write draft", e);
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToWriteDraftFile",e);
                 return false;
             }
             return true;
@@ -97,6 +98,7 @@ namespace BaconBackend.Managers
             catch (Exception e)
             {
                 m_baconMan.MessageMan.DebugDia("failed to read draft", e);
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToReadDraftFile", e);
                 return null;
             }
         }

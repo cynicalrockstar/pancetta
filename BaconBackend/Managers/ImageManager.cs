@@ -150,37 +150,45 @@ namespace BaconBackend.Managers
                 {
                     string fileName = MakeFileNameFromUrl(currentRequest.Context.Url);
 
-                    // If not we have to get the image
-                    IBuffer imgBuffer = await m_baconMan.NetworkMan.MakeRawGetRequest(currentRequest.Context.Url);
-
-                    // Turn the stream into an image
-                    InMemoryRandomAccessStream imageStream = new InMemoryRandomAccessStream();
-                    Stream readStream = imgBuffer.AsStream();
-                    Stream writeStream = imageStream.AsStreamForWrite();
-
-                    // Copy the buffer
-                    // #todo perf - THERE HAS TO BE A BTTER WAY TO DO THIS.
-                    readStream.CopyTo(writeStream);
-                    writeStream.Flush();
-
-                    // Seek to the start.
-                    imageStream.Seek(0);
-
-                    // Create a response
-                    ImageManagerResponseEventArgs response = new ImageManagerResponseEventArgs()
+                    // First check if we have the file
+                    if (m_baconMan.CacheMan.HasFileCached(fileName))
                     {
-                        ImageStream = imageStream,
-                        Request = currentRequest.Context,
-                        Success = true
-                    };
+                        // If we have it cached pull it from there
+                    }
+                    else
+                    {
+                        // If not we have to get the image
+                        IBuffer imgBuffer = await m_baconMan.NetworkMan.MakeRawGetRequest(currentRequest.Context.Url);
 
-                    // Fire the callback
-                    currentRequest.Context.m_onRequestComplete.Raise(currentRequest.Context, response);
+                        // Turn the stream into an image
+                        InMemoryRandomAccessStream imageStream = new InMemoryRandomAccessStream();
+                        Stream readStream = imgBuffer.AsStream();
+                        Stream writeStream = imageStream.AsStreamForWrite();
+
+                        // Copy the buffer
+                        // #todo perf - THERE HAS TO BE A BTTER WAY TO DO THIS.
+                        readStream.CopyTo(writeStream);
+                        writeStream.Flush();
+
+                        // Seek to the start.
+                        imageStream.Seek(0);
+
+                        // Create a response
+                        ImageManagerResponseEventArgs response = new ImageManagerResponseEventArgs()
+                        {
+                            ImageStream = imageStream,
+                            Request = currentRequest.Context,
+                            Success = true
+                        };
+
+                        // Fire the callback
+                        currentRequest.Context.m_onRequestComplete.Raise(currentRequest.Context, response);
+                    }
                 }
                 catch (Exception e)
                 {
                     // Report the error
-                    m_baconMan.MessageMan.DebugDia("Error getting image", e);
+                    m_baconMan.MessageMan.DebugDia("Error getting image", e);                 
 
                     // Create a response
                     ImageManagerResponseEventArgs response = new ImageManagerResponseEventArgs()
@@ -313,6 +321,7 @@ namespace BaconBackend.Managers
                     }
                     catch(Exception ex)
                     {
+                        m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToSaveImageLocallyCallback", ex);
                         m_baconMan.MessageMan.DebugDia("failed to save image locally in callback", ex);
                     }
                 };
@@ -320,6 +329,7 @@ namespace BaconBackend.Managers
             }
             catch (Exception e)
             {
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToSaveImageLocally", e);
                 m_baconMan.MessageMan.DebugDia("failed to save image locally", e);
             }
         }

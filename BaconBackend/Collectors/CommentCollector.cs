@@ -424,7 +424,7 @@ namespace BaconBackend.Collectors
                 try
                 {
                     // Parse the new comment
-                    Comment newComment = MiscellaneousHelper.ParseOutRedditDataElement<Comment>(m_baconMan, serverResponse);
+                    Comment newComment = MiscellaneousHelper.ParseOutRedditDataElement<Comment>(m_baconMan, serverResponse).Result;
 
                     if (isEdit)
                     {
@@ -440,6 +440,7 @@ namespace BaconBackend.Collectors
                 {
                     // We fucked up adding the comment to the UI.
                     m_baconMan.MessageMan.DebugDia("Failed injecting comment", e);
+                    m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "AddCommentSuccessButAddUiFailed");
                 }
 
                 // If we get to adding to the UI return true because reddit has the comment.
@@ -449,6 +450,7 @@ namespace BaconBackend.Collectors
             {
                 // Reddit returned something wrong
                 m_baconMan.MessageMan.ShowMessageSimple("That's not right", "Sorry we can't post your comment right now, reddit returned and unexpected message.");
+                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "CommentPostReturnedUnexpectedMessage");
                 return false;
             }
         }   

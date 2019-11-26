@@ -93,7 +93,7 @@ namespace Baconit.Panels
                     m_host.Navigate(typeof(CommentSettings), "CommentsSettings");
                     break;
                 case 3:
-                    //m_host.Navigate(typeof(MicrosoftBandSettings), "MicrosoftBandSettings");
+                    m_host.Navigate(typeof(MicrosoftBandSettings), "MicrosoftBandSettings");
                     break;
                 case 4:
                     m_host.Navigate(typeof(BackgroundMessageUpdatingSettings), "BackgroundMessageUpdating");

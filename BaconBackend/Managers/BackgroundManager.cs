@@ -29,11 +29,18 @@ namespace BaconBackend.Managers
         /// </summary>
         public BackgroundMessageUpdater MessageUpdaterMan { get; }
 
+        /// <summary>
+        /// In charge of image updates
+        /// </summary>
+        public BackgroundBandManager BandMan { get; }
+
+
         public BackgroundManager(BaconManager baconMan)
         {
             m_baconMan = baconMan;
             ImageUpdaterMan = new BackgroundImageUpdater(baconMan);
             MessageUpdaterMan = new BackgroundMessageUpdater(baconMan);
+            BandMan = new BackgroundBandManager(baconMan);
         }
 
         /// <summary>
@@ -70,7 +77,7 @@ namespace BaconBackend.Managers
             // Request access to run in the background.
             BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
             LastSystemBackgroundUpdateStatus = (int)status;
-            if(status != BackgroundAccessStatus.AllowedSubjectToSystemPolicy && status != BackgroundAccessStatus.AlwaysAllowed)
+            if(status != BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity && status != BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
             {
                 m_baconMan.MessageMan.DebugDia("System denied us access from running in the background");
             }
@@ -92,6 +99,7 @@ namespace BaconBackend.Managers
                     }
                     catch(Exception e)
                     {
+                        m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "failed to register background task", e);
                         m_baconMan.MessageMan.DebugDia("failed to register background task", e);
                     }
                 }
@@ -115,6 +123,19 @@ namespace BaconBackend.Managers
             if (m_baconMan.IsBackgroundTask)
             {
                 LastUpdateTime = DateTime.Now;
+            }
+
+            // If we are not a background task check message of the day
+            if(!m_baconMan.IsBackgroundTask)
+            {
+                // Sleep for a little while to give the UI some time get work done.
+                await Task.Delay(1000);
+
+                // Check for MOTD updates.
+                await m_baconMan.MotdMan.CheckForUpdates();
+
+                // Sleep for a little while to give the UI some time get work done.
+                await Task.Delay(5000);
             }
 
             // Ensure everything is ready

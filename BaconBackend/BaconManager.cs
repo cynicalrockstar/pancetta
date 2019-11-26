@@ -107,14 +107,29 @@ namespace BaconBackend
         public ImageManager ImageMan { get; }
 
         /// <summary>
+        /// Responsible for dealing with file caching
+        /// </summary>
+        public CacheManager CacheMan { get; }
+
+        /// <summary>
         /// Holds settings for the UI classes
         /// </summary>
         public UiSettingManager UiSettingsMan { get; }
 
         /// <summary>
+        /// Manages all app telemetry
+        /// </summary>
+        public TelemetryManager TelemetryMan { get; }
+
+        /// <summary>
         /// Manages all background tasks
         /// </summary>
         public BackgroundManager BackgroundMan { get; }
+
+        /// <summary>
+        /// Manages the message of the day prompt
+        /// </summary>
+        public MessageOfTheDayManager MotdMan { get; }
 
         /// <summary>
         /// Manages the tiles on the start screen
@@ -148,13 +163,16 @@ namespace BaconBackend
 
             // Init managers
             UserMan = new UserManager(this);
+            CacheMan = new CacheManager(this);
             ImageMan = new ImageManager(this);
             SubredditMan = new SubredditManager(this);
             SettingsMan = new SettingsManager(this);
             NetworkMan = new NetworkManager(this);
             MessageMan = new MessageManager(this);
             UiSettingsMan = new UiSettingManager(this);
+            TelemetryMan = new TelemetryManager();
             BackgroundMan = new BackgroundManager(this);
+            MotdMan = new MessageOfTheDayManager(this);
             TileMan = new TileManager(this);
             DraftMan = new DraftManager(this);
             MemoryMan = new MemoryManager(this);
