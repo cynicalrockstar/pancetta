@@ -1,5 +1,6 @@
 ﻿using Pancetta.Collectors;
 using Pancetta.DataObjects;
+using Pancetta.Managers;
 using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
         public SubredditViewSettings()
         {
             this.InitializeComponent();
-            App.BaconMan.SubredditMan.OnSubredditsUpdated += SubredditMan_OnSubredditsUpdated;
+            SubredditManager.Instance.OnSubredditsUpdated += SubredditMan_OnSubredditsUpdated;
         }
 
         public void PanelSetup(IPanelHost host, Dictionary<string, object> arguments)
@@ -56,8 +57,8 @@ namespace Pancetta.Windows.Panels.SettingsPanels
 
             m_takeChangeAction = false;
 
-            SetDefaultSortType(App.BaconMan.UiSettingsMan.SubredditList_DefaultSortType);
-            SetDefaultSortTimeType(App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType);
+            SetDefaultSortType(UiSettingManager.Instance.SubredditList_DefaultSortType);
+            SetDefaultSortTimeType(UiSettingManager.Instance.SubredditList_DefaultSortTimeType);
             SetSubredditList();
 
             m_takeChangeAction = true;
@@ -87,10 +88,10 @@ namespace Pancetta.Windows.Panels.SettingsPanels
         private void SetSubredditList()
         {
             // Get the subreddits
-            List<Subreddit> subreddits = App.BaconMan.SubredditMan.SubredditList;
+            List<Subreddit> subreddits = SubredditManager.Instance.SubredditList;
 
             // Get the current defaults
-            string defaultSubreddit = App.BaconMan.UiSettingsMan.SubredditList_DefaultSubredditDisplayName;
+            string defaultSubreddit = UiSettingManager.Instance.SubredditList_DefaultSubredditDisplayName;
 
             List<string> displayNames = new List<string>();
             int count = 0;
@@ -124,7 +125,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 return;
             }
 
-            App.BaconMan.UiSettingsMan.SubredditList_DefaultSubredditDisplayName = (string)ui_defaultSubreddit.SelectedItem;
+            UiSettingManager.Instance.SubredditList_DefaultSubredditDisplayName = (string)ui_defaultSubreddit.SelectedItem;
         }
 
         private void DefaultSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -137,19 +138,19 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             switch (ui_defaultSort.SelectedIndex)
             {
                 case 0:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortType = SortTypes.Hot;
+                    UiSettingManager.Instance.SubredditList_DefaultSortType = SortTypes.Hot;
                     break;
                 case 1:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortType = SortTypes.New;
+                    UiSettingManager.Instance.SubredditList_DefaultSortType = SortTypes.New;
                     break;
                 case 2:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortType = SortTypes.Rising;
+                    UiSettingManager.Instance.SubredditList_DefaultSortType = SortTypes.Rising;
                     break;
                 case 3:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortType = SortTypes.Controversial;
+                    UiSettingManager.Instance.SubredditList_DefaultSortType = SortTypes.Controversial;
                     break;
                 case 4:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortType = SortTypes.Top;
+                    UiSettingManager.Instance.SubredditList_DefaultSortType = SortTypes.Top;
                     break;
             }
         }
@@ -186,22 +187,22 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             switch (ui_defaultTimeSort.SelectedIndex)
             {
                 case 0:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType = SortTimeTypes.Hour;
+                    UiSettingManager.Instance.SubredditList_DefaultSortTimeType = SortTimeTypes.Hour;
                     break;
                 case 1:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType = SortTimeTypes.Day;
+                    UiSettingManager.Instance.SubredditList_DefaultSortTimeType = SortTimeTypes.Day;
                     break;
                 case 2:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType = SortTimeTypes.Week;
+                    UiSettingManager.Instance.SubredditList_DefaultSortTimeType = SortTimeTypes.Week;
                     break;
                 case 3:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType = SortTimeTypes.Month;
+                    UiSettingManager.Instance.SubredditList_DefaultSortTimeType = SortTimeTypes.Month;
                     break;
                 case 4:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType = SortTimeTypes.Year;
+                    UiSettingManager.Instance.SubredditList_DefaultSortTimeType = SortTimeTypes.Year;
                     break;
                 case 5:
-                    App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType = SortTimeTypes.AllTime;
+                    UiSettingManager.Instance.SubredditList_DefaultSortTimeType = SortTimeTypes.AllTime;
                     break;
             }
         }

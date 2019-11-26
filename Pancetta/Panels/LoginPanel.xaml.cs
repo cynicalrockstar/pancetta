@@ -90,7 +90,7 @@ namespace Pancetta.Windows.Panels
             CrossfadeUi(true);
 
             // Make the call
-            UserManager.SignInResult result = await App.BaconMan.UserMan.SignInNewUser();
+            UserManager.SignInResult result = await UserManager.Instance.SignInNewUser();
 
             if(result.WasSuccess)
             {
@@ -103,7 +103,7 @@ namespace Pancetta.Windows.Panels
 
                 if (result.WasErrorNetwork)
                 {
-                    App.BaconMan.MessageMan.ShowMessageSimple("Check Your Connection", "We can't talk to reddit right now, check your internet connection.");
+                    MessageManager.Instance.ShowMessageSimple("Check Your Connection", "We can't talk to reddit right now, check your internet connection.");
                 }
                 if(result.WasUserCanceled)
                 {
@@ -111,7 +111,7 @@ namespace Pancetta.Windows.Panels
                 }
                 else
                 {
-                    App.BaconMan.MessageMan.ShowMessageSimple("Something Went Wrong", "We can't log you in right now, try again later.");
+                    MessageManager.Instance.ShowMessageSimple("Something Went Wrong", "We can't log you in right now, try again later.");
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace Pancetta.Windows.Panels
             ui_welcome.Visibility = Visibility.Visible;
 
             // Set the new text
-            ui_welcomeText.Text = "Welcome " + App.BaconMan.UserMan.CurrentUser.Name;
+            ui_welcomeText.Text = "Welcome " + UserManager.Instance.CurrentUser.Name;
 
             // Start the animations
             ui_storyWelcome.Begin();
@@ -189,7 +189,7 @@ namespace Pancetta.Windows.Panels
 
         private void CreateAccount_Click(object sender, RoutedEventArgs e)
         {
-            App.BaconMan.ShowGlobalContent("https://www.reddit.com/register");
+            BaconManager.Instance.ShowGlobalContent("https://www.reddit.com/register");
         }
     }
 }

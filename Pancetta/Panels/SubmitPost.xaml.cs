@@ -73,7 +73,7 @@ namespace Pancetta.Windows.Panels
             }
 
             // Resigner for back presses
-            App.BaconMan.OnBackButton += BaconMan_OnBackButton;
+            BaconManager.Instance.OnBackButton += BaconMan_OnBackButton;
         }
 
         public async void OnNavigatingFrom()
@@ -240,7 +240,7 @@ namespace Pancetta.Windows.Panels
         private void FormattedTextBlock_OnMarkdownLinkTapped(object sender, UniversalMarkdown.OnMarkdownLinkTappedArgs e)
         {
             // Show it.
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
         }
 
         #endregion
@@ -262,7 +262,7 @@ namespace Pancetta.Windows.Panels
                 // First get the list if we don't have it
                 if(m_currentSubreddits == null)
                 {
-                    m_currentSubreddits = App.BaconMan.SubredditMan.SubredditList;
+                    m_currentSubreddits = SubredditManager.Instance.SubredditList;
                 }
 
                 // Do a simple starts with search for things that match the user's query.
@@ -325,22 +325,22 @@ namespace Pancetta.Windows.Panels
             // Do some basic validation.
             if (String.IsNullOrWhiteSpace(titleText))
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Say Something...", "You can't submit a post with out a title.");
+                MessageManager.Instance.ShowMessageSimple("Say Something...", "You can't submit a post with out a title.");
                 return;
             }
             if (String.IsNullOrWhiteSpace(urlOrMarkdownText) && !isSelfText)
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Say Something...", $"You can't submit a post with no link.");
+                MessageManager.Instance.ShowMessageSimple("Say Something...", $"You can't submit a post with no link.");
                 return;
             }
             if(!isSelfText && urlOrMarkdownText.IndexOf(' ') != -1)
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Hmmmmm", "That URL doesn't look quite right, take a second look.");
+                MessageManager.Instance.ShowMessageSimple("Hmmmmm", "That URL doesn't look quite right, take a second look.");
                 return;
             }
             if (String.IsNullOrWhiteSpace(subreddit))
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Where's It Going?", $"You need to pick a subreddit to submit to.");
+                MessageManager.Instance.ShowMessageSimple("Where's It Going?", $"You need to pick a subreddit to submit to.");
                 return;
             }
 
@@ -348,7 +348,7 @@ namespace Pancetta.Windows.Panels
             ui_loadingOverlay.Show(true, "Submitting Post...");
 
             // Make the request
-            SubmitNewPostResponse response = await MiscellaneousHelper.SubmitNewPost(App.BaconMan, titleText, urlOrMarkdownText, subreddit, isSelfText, ui_sendRepliesToInbox.IsChecked.Value);
+            SubmitNewPostResponse response = await MiscellaneousHelper.SubmitNewPost(BaconManager.Instance, titleText, urlOrMarkdownText, subreddit, isSelfText, ui_sendRepliesToInbox.IsChecked.Value);
 
             // Hide the overlay
             ui_loadingOverlay.Hide();
@@ -356,7 +356,7 @@ namespace Pancetta.Windows.Panels
             if(response.Success && !String.IsNullOrWhiteSpace(response.NewPostLink))
             {
                 // Navigate to the new post.
-                App.BaconMan.ShowGlobalContent(response.NewPostLink);
+                BaconManager.Instance.ShowGlobalContent(response.NewPostLink);
 
                 // Clear out all of the text so when we come back we are clean
                 ui_postTitleTextBox.Text = "";
@@ -410,7 +410,7 @@ namespace Pancetta.Windows.Panels
                         message = "We can't post for you right now, check your Internet connection.";
                         break;
                 }
-                App.BaconMan.MessageMan.ShowMessageSimple(title, message);
+                MessageManager.Instance.ShowMessageSimple(title, message);
             }
         }
 
@@ -528,7 +528,7 @@ namespace Pancetta.Windows.Panels
             };
 
             // Save the data
-            bool success = await App.BaconMan.DraftMan.SavePostSubmissionDraft(data);
+            bool success = await DraftManager.Instance.SavePostSubmissionDraft(data);
 
             // Print the last save time
             if(success)
@@ -549,7 +549,7 @@ namespace Pancetta.Windows.Panels
             }
 
             // See if we have something to restore
-            if(await App.BaconMan.DraftMan.HasPostSubmitDraft())
+            if(await DraftManager.Instance.HasPostSubmitDraft())
             {
                 // Make a message to show the user
                 bool restoreDraft = true;
@@ -569,7 +569,7 @@ namespace Pancetta.Windows.Panels
                 if(restoreDraft)
                 {
                     // Get the data
-                    PostSubmissionDraftData data = await App.BaconMan.DraftMan.GetPostSubmissionDraft();
+                    PostSubmissionDraftData data = await DraftManager.Instance.GetPostSubmissionDraft();
 
                     if(data != null)
                     {
@@ -600,7 +600,7 @@ namespace Pancetta.Windows.Panels
         private void ClearDraft()
         {
             // Delete the data.
-            App.BaconMan.DraftMan.DiscardPostSubmissionDraft();
+            DraftManager.Instance.DiscardPostSubmissionDraft();
 
             // Clear the text
             ui_lastDraftSaveTime.Text = "";

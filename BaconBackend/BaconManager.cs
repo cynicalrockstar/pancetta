@@ -38,6 +38,18 @@ namespace Pancetta
     /// </summary>
     public class BaconManager
     {
+        private static BaconManager _instance = null;
+        public static BaconManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new BaconManager(false);
+
+                return _instance;
+            }
+        }
+
         /// <summary>
         /// Indicates if this is a background task or not.
         /// </summary>
@@ -77,61 +89,6 @@ namespace Pancetta
         SmartWeakEvent<EventHandler<OnBackButtonArgs>> m_onBackButton = new SmartWeakEvent<EventHandler<OnBackButtonArgs>>();
 
         /// <summary>
-        /// Responsible for managing the current subreddits.
-        /// </summary>
-        public SubredditManager SubredditMan { get; }
-
-        /// <summary>
-        /// Responsible for managing settings
-        /// </summary>
-        public SettingsManager SettingsMan { get; }
-
-        /// <summary>
-        /// Responsible for managing network calls
-        /// </summary>
-        public NetworkManager NetworkMan { get; }
-
-        /// <summary>
-        /// Responsible for dealing with user messages
-        /// </summary>
-        public MessageManager MessageMan { get; }
-
-        /// <summary>
-        /// Responsible for dealing with the user information
-        /// </summary>
-        public UserManager UserMan { get; }
-
-        /// <summary>
-        /// Responsible for dealing with images
-        /// </summary>
-        public ImageManager ImageMan { get; }
-
-        /// <summary>
-        /// Holds settings for the UI classes
-        /// </summary>
-        public UiSettingManager UiSettingsMan { get; }
-
-        /// <summary>
-        /// Manages all background tasks
-        /// </summary>
-        public BackgroundManager BackgroundMan { get; }
-
-        /// <summary>
-        /// Manages the tiles on the start screen
-        /// </summary>
-        public TileManager TileMan { get; }
-
-        /// <summary>
-        /// Used for draft management.
-        /// </summary>
-        public DraftManager DraftMan { get; }
-
-        /// <summary>
-        /// Used for watching the current app's memory.
-        /// </summary>
-        public MemoryManager MemoryMan { get; }
-
-        /// <summary>
         /// Holds a connection to the front end, a way for things back here to
         /// interact with the front end.
         /// </summary>
@@ -141,23 +98,10 @@ namespace Pancetta
         /// Create a new BaconManager.
         /// </summary>
         /// <param name="isBackgroundTask">If this Manager should be run in the background.</param>
-        public BaconManager(bool isBackgroundTask)
+        private BaconManager(bool isBackgroundTask)
         {
             // Set background task flag
             IsBackgroundTask = isBackgroundTask;
-
-            // Init managers
-            UserMan = new UserManager(this);
-            ImageMan = new ImageManager(this);
-            SubredditMan = new SubredditManager(this);
-            SettingsMan = new SettingsManager(this);
-            NetworkMan = new NetworkManager(this);
-            MessageMan = new MessageManager(this);
-            UiSettingsMan = new UiSettingManager(this);
-            BackgroundMan = new BackgroundManager(this);
-            TileMan = new TileManager(this);
-            DraftMan = new DraftManager(this);
-            MemoryMan = new MemoryManager(this);
 
             // Don't do this if we are a background task; it will
             // call this when it is ready.
@@ -189,7 +133,7 @@ namespace Pancetta
                     Task.Run(async () =>
                     {
                         // Flush out the local settings
-                        await SettingsMan.FlushLocalSettings();
+                        await SettingsManager.Instance.FlushLocalSettings();
                         are.Set();
                     });
                     are.WaitOne();
@@ -270,7 +214,7 @@ namespace Pancetta
             {
                 // Call update on background man and give him a null deferral
                 // since this won't be called from the background.
-                await BackgroundMan.RunUpdate(new RefCountedDeferral(null));
+                await BackgroundManager.Instance.RunUpdate(new RefCountedDeferral(null));
             });
         }
 

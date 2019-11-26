@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Pancetta.Helpers;
+using Pancetta.Managers;
+using Pancetta.Managers.Background;
 
 namespace Pancetta.Collectors
 {
@@ -21,7 +23,7 @@ namespace Pancetta.Collectors
             // Sub ourselves to the on updated event.
             OnCollectionUpdated += MessageCollector_OnCollectionUpdated;
 
-            m_baconMan.UserMan.OnUserUpdated += OnUserUpdated;
+            UserManager.Instance.OnUserUpdated += OnUserUpdated;
         }
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace Pancetta.Collectors
                     postData.Add(new KeyValuePair<string, string>("id", collectionMessage.GetFullName()));
 
                     // Make the call
-                    string str = await m_baconMan.NetworkMan.MakeRedditPostRequestAsString(request, postData);
+                    string str = await NetworkManager.Instance.MakeRedditPostRequestAsString(request, postData);
 
                     // Do some super simple validation
                     if (str != "{}")
@@ -102,7 +104,7 @@ namespace Pancetta.Collectors
                 }
                 catch (Exception ex)
                 {
-                    m_baconMan.MessageMan.DebugDia("failed to set message status!", ex);
+                    MessageManager.Instance.DebugDia("failed to set message status!", ex);
                 }
             });
         }
@@ -173,12 +175,12 @@ namespace Pancetta.Collectors
             if (messages.Count != 0 || forceUiSet)
             {
                 // Update the UI
-                m_baconMan.UserMan.UpdateUnReadMessageCount(unreadCount);
+                UserManager.Instance.UpdateUnReadMessageCount(unreadCount);
 
                 // Update the notifications in the background
                 Task.Run(() =>
                 {
-                    m_baconMan.BackgroundMan.MessageUpdaterMan.UpdateNotifications(messages);
+                    BackgroundMessageUpdater.Instance.UpdateNotifications(messages);
                 });
             }
         }

@@ -103,7 +103,7 @@ namespace Pancetta.Windows.Panels
                     break;
                 case 6:
                 case 7:
-                    App.BaconMan.ShowGlobalContent("https://aaron85176.wixsite.com/pancettaprivacy");
+                    BaconManager.Instance.ShowGlobalContent("https://aaron85176.wixsite.com/pancettaprivacy");
                     break;
                 case 8:
                     m_host.Navigate(typeof(AboutSettings), "AboutSettings");

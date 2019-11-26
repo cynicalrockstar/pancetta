@@ -17,6 +17,17 @@ namespace Pancetta.Managers
 {
     public class ImageManager
     {
+        private static ImageManager _instance = null;
+        public static ImageManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new ImageManager();
+                return _instance;
+            }
+        }
+
         /// <summary>
         /// The max number of image request allowed in parallel
         /// </summary>
@@ -87,9 +98,8 @@ namespace Pancetta.Managers
         BaconManager m_baconMan;
         List<ImageManagerRequestInternal> m_requestList = new List<ImageManagerRequestInternal>();
 
-        public ImageManager(BaconManager baconMan)
+        private ImageManager()
         {
-            m_baconMan = baconMan;
         }
 
         /// <summary>
@@ -151,7 +161,7 @@ namespace Pancetta.Managers
                     string fileName = MakeFileNameFromUrl(currentRequest.Context.Url);
 
                     // If not we have to get the image
-                    IBuffer imgBuffer = await m_baconMan.NetworkMan.MakeRawGetRequest(currentRequest.Context.Url);
+                    IBuffer imgBuffer = await NetworkManager.Instance.MakeRawGetRequest(currentRequest.Context.Url);
 
                     // Turn the stream into an image
                     InMemoryRandomAccessStream imageStream = new InMemoryRandomAccessStream();
@@ -180,7 +190,7 @@ namespace Pancetta.Managers
                 catch (Exception e)
                 {
                     // Report the error
-                    m_baconMan.MessageMan.DebugDia("Error getting image", e);
+                    MessageManager.Instance.DebugDia("Error getting image", e);
 
                     // Create a response
                     ImageManagerResponseEventArgs response = new ImageManagerResponseEventArgs()
@@ -308,19 +318,19 @@ namespace Pancetta.Managers
                             }
 
                             // Tell the user
-                            m_baconMan.MessageMan.ShowMessageSimple("Image Saved", "You can find the image in the 'Saved Pictures' folder in your photos library.");
+                            MessageManager.Instance.ShowMessageSimple("Image Saved", "You can find the image in the 'Saved Pictures' folder in your photos library.");
                         }
                     }
                     catch(Exception ex)
                     {
-                        m_baconMan.MessageMan.DebugDia("failed to save image locally in callback", ex);
+                        MessageManager.Instance.DebugDia("failed to save image locally in callback", ex);
                     }
                 };
                 QueueImageRequest(request);
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("failed to save image locally", e);
+                MessageManager.Instance.DebugDia("failed to save image locally", e);
             }
         }
 

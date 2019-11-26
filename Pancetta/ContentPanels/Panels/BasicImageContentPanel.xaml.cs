@@ -86,7 +86,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
             m_base = panelBase;
 
             // Register for back button presses
-            App.BaconMan.OnBackButton += BaconMan_OnBackButton;
+            BaconManager.Instance.OnBackButton += BaconMan_OnBackButton;
 
             // Set the max zoom for the scroller
             ui_scrollViewer.MaxZoomFactor = MAX_ZOOM_FACTOR;
@@ -179,7 +179,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
                    Url = imageUrl
                };
                request.OnRequestComplete += OnRequestComplete;
-               App.BaconMan.ImageMan.QueueImageRequest(request);
+               ImageManager.Instance.QueueImageRequest(request);
            });
 
             votesText.Text = m_base.Source.post.Score.ToString();
@@ -207,7 +207,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
                 m_imageSourceStream = null;
 
                 // Kill some listeners
-                App.BaconMan.OnBackButton -= BaconMan_OnBackButton;
+                BaconManager.Instance.OnBackButton -= BaconMan_OnBackButton;
                 ui_contentRoot.SizeChanged -= ContentRoot_SizeChanged;
 
                 // Make sure the image was created, if it never loaded
@@ -392,7 +392,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
             // the image will decode to the width of the control in physical pixels, so the image size to control size will be one to one.
             // But since this is scaled, the control size is something like 3 physical pixels for each logical pixel, so the image is lower res
             // if we use physical.
-            bitmapImage.DecodePixelType = App.BaconMan.MemoryMan.MemoryPressure < MemoryPressureStates.Medium ? DecodePixelType.Logical : DecodePixelType.Physical;
+            bitmapImage.DecodePixelType = MemoryManager.Instance.MemoryPressure < MemoryPressureStates.Medium ? DecodePixelType.Logical : DecodePixelType.Physical;
 
             // Destroy the old image.
             if (m_image.Source != null)
@@ -482,7 +482,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
         {
             if (!String.IsNullOrWhiteSpace(m_base.Source.Url))
             {
-                App.BaconMan.ImageMan.SaveImageLocally(m_base.Source.Url);
+                ImageManager.Instance.SaveImageLocally(m_base.Source.Url);
             }
         }
 

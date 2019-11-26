@@ -20,6 +20,17 @@ namespace Pancetta.Managers
 
     public class SubredditManager
     {
+        private static SubredditManager _instance = null;
+        public static SubredditManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new SubredditManager();
+                return _instance;
+            }
+        }
+
         /// <summary>
         /// Fired when the subreddit list updates.
         /// </summary>
@@ -33,7 +44,6 @@ namespace Pancetta.Managers
         //
         // Private Vars
         //
-        BaconManager m_baconMan;
         object objectLock = new object();
         bool m_isUpdateRunning = false;
 
@@ -43,11 +53,9 @@ namespace Pancetta.Managers
         /// </summary>
         List<Subreddit> m_tempSubredditCache = new List<Subreddit>();
 
-        public SubredditManager(BaconManager baconMan)
+        private SubredditManager()
         {
-            m_baconMan = baconMan;
-
-            m_baconMan.UserMan.OnUserUpdated += UserMan_OnUserUpdated;
+            UserManager.Instance.OnUserUpdated += UserMan_OnUserUpdated;
         }
 
         /// <summary>
@@ -78,9 +86,9 @@ namespace Pancetta.Managers
                 {
                     // Get the entire list of subreddits. We will give the helper a super high limit so it
                     // will return all it can find.
-                    string baseUrl = m_baconMan.UserMan.IsUserSignedIn ? "/subreddits/mine.json" : "/subreddits/default.json";
-                    int maxLimit = m_baconMan.UserMan.IsUserSignedIn ? 99999 : 100;
-                    RedditListHelper <Subreddit> listHelper = new RedditListHelper<Subreddit>(baseUrl, m_baconMan.NetworkMan);
+                    string baseUrl = UserManager.Instance.IsUserSignedIn ? "/subreddits/mine.json" : "/subreddits/default.json";
+                    int maxLimit = UserManager.Instance.IsUserSignedIn ? 99999 : 100;
+                    RedditListHelper <Subreddit> listHelper = new RedditListHelper<Subreddit>(baseUrl, NetworkManager.Instance);
 
                     // Get the list
                     List<Element<Subreddit>> elements = await listHelper.FetchElements(0, maxLimit);
@@ -98,7 +106,7 @@ namespace Pancetta.Managers
                 }
                 catch(Exception e)
                 {
-                    m_baconMan.MessageMan.DebugDia("Failed to get subreddit list", e);
+                    MessageManager.Instance.DebugDia("Failed to get subreddit list", e);
                 }
 
                 // Indicate we aren't running anymore
@@ -182,14 +190,14 @@ namespace Pancetta.Managers
             try
             {
                 // Make the call
-                string jsonResponse = await m_baconMan.NetworkMan.MakeRedditGetRequestAsString($"/r/{displayName}/about/.json");
+                string jsonResponse = await NetworkManager.Instance.MakeRedditGetRequestAsString($"/r/{displayName}/about/.json");
 
                 // Parse the new subreddit
-                foundSubreddit = MiscellaneousHelper.ParseOutRedditDataElement<Subreddit>(m_baconMan, jsonResponse);
+                foundSubreddit = MiscellaneousHelper.ParseOutRedditDataElement<Subreddit>(BaconManager.Instance, jsonResponse);
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("failed to get subreddit", e);
+                MessageManager.Instance.DebugDia("failed to get subreddit", e);
             }
 
             // If we found it add it to the cache.
@@ -241,7 +249,7 @@ namespace Pancetta.Managers
                 postData.Add(new KeyValuePair<string, string>("sr", "t5_"+subredditId));
 
                 // Make the call
-                string jsonResponse = await m_baconMan.NetworkMan.MakeRedditPostRequestAsString($"/api/subscribe", postData);
+                string jsonResponse = await NetworkManager.Instance.MakeRedditPostRequestAsString($"/api/subscribe", postData);
 
                 // Validate the response
                 if (jsonResponse.Contains("{}"))
@@ -251,12 +259,12 @@ namespace Pancetta.Managers
                 }
 
                 // Report the error
-                m_baconMan.MessageMan.DebugDia("failed to subscribe / unsub subreddit, reddit returned an expected value");
+                MessageManager.Instance.DebugDia("failed to subscribe / unsub subreddit, reddit returned an expected value");
                 return false;
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("failed to subscribe / unsub subreddit", e);
+                MessageManager.Instance.DebugDia("failed to subscribe / unsub subreddit", e);
             }
             return false;
         }
@@ -340,7 +348,7 @@ namespace Pancetta.Managers
             };
             subreddits.Add(subreddit);
 
-            if(!m_baconMan.UserMan.IsUserSignedIn)
+            if(!UserManager.Instance.IsUserSignedIn)
             {
                 // If the user isn't signed in add baconit, windowsphone, and windows for free!
                 subreddit = new Subreddit()
@@ -475,9 +483,9 @@ namespace Pancetta.Managers
             {
                 if(m_subredditList == null)
                 {
-                    if(m_baconMan.SettingsMan.LocalSettings.ContainsKey("SubredditManager.SubredditList"))
+                    if(SettingsManager.Instance.LocalSettings.ContainsKey("SubredditManager.SubredditList"))
                     {
-                        m_subredditList = m_baconMan.SettingsMan.ReadFromLocalSettings<List<Subreddit>>("SubredditManager.SubredditList");
+                        m_subredditList = SettingsManager.Instance.ReadFromLocalSettings<List<Subreddit>>("SubredditManager.SubredditList");
                     }
                     else
                     {
@@ -500,7 +508,7 @@ namespace Pancetta.Managers
             private set
             {
                 m_subredditList = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<List<Subreddit>>("SubredditManager.SubredditList", m_subredditList);
+                SettingsManager.Instance.WriteToLocalSettings<List<Subreddit>>("SubredditManager.SubredditList", m_subredditList);
             }
         }
         private List<Subreddit> m_subredditList = null;
@@ -514,9 +522,9 @@ namespace Pancetta.Managers
             {
                 if (m_lastUpdated.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("SubredditManager.LastUpdate"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("SubredditManager.LastUpdate"))
                     {
-                        m_lastUpdated = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("SubredditManager.LastUpdate");
+                        m_lastUpdated = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("SubredditManager.LastUpdate");
                     }
                 }
                 return m_lastUpdated;
@@ -524,7 +532,7 @@ namespace Pancetta.Managers
             private set
             {
                 m_lastUpdated = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>("SubredditManager.LastUpdate", m_lastUpdated);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>("SubredditManager.LastUpdate", m_lastUpdated);
             }
         }
         private DateTime m_lastUpdated = new DateTime(0);
@@ -545,9 +553,9 @@ namespace Pancetta.Managers
             {
                 if (m_favoriteSubreddits == null)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("SubredditManager.FavoriteSubreddits"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("SubredditManager.FavoriteSubreddits"))
                     {
-                        m_favoriteSubreddits = m_baconMan.SettingsMan.ReadFromRoamingSettings<Dictionary<string, bool>>("SubredditManager.FavoriteSubreddits");
+                        m_favoriteSubreddits = SettingsManager.Instance.ReadFromRoamingSettings<Dictionary<string, bool>>("SubredditManager.FavoriteSubreddits");
                     }
                     else
                     {
@@ -564,7 +572,7 @@ namespace Pancetta.Managers
             set
             {
                 m_favoriteSubreddits = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<Dictionary<string, bool>>("SubredditManager.FavoriteSubreddits", m_favoriteSubreddits);
+                SettingsManager.Instance.WriteToRoamingSettings<Dictionary<string, bool>>("SubredditManager.FavoriteSubreddits", m_favoriteSubreddits);
             }
         }
         private Dictionary<string, bool> m_favoriteSubreddits = null;

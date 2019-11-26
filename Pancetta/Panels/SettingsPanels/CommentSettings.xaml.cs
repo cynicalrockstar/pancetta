@@ -1,4 +1,5 @@
 ﻿using Pancetta.Collectors;
+using Pancetta.Managers;
 using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -54,8 +55,8 @@ namespace Pancetta.Windows.Panels.SettingsPanels
 
             m_takeChangeAction = false;
 
-            SetDefaultSortType(App.BaconMan.UiSettingsMan.Comments_DefaultSortType);
-            SetCount(App.BaconMan.UiSettingsMan.Comments_DefaultCount);
+            SetDefaultSortType(UiSettingManager.Instance.Comments_DefaultSortType);
+            SetCount(UiSettingManager.Instance.Comments_DefaultCount);
 
             m_takeChangeAction = true;
         }
@@ -84,22 +85,22 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             switch (ui_defaultSort.SelectedIndex)
             {
                 case 0:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultSortType = CommentSortTypes.Best;
+                    UiSettingManager.Instance.Comments_DefaultSortType = CommentSortTypes.Best;
                     break;
                 case 1:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultSortType = CommentSortTypes.Top;
+                    UiSettingManager.Instance.Comments_DefaultSortType = CommentSortTypes.Top;
                     break;
                 case 2:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultSortType = CommentSortTypes.Controversial;
+                    UiSettingManager.Instance.Comments_DefaultSortType = CommentSortTypes.Controversial;
                     break;
                 case 3:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultSortType = CommentSortTypes.New;
+                    UiSettingManager.Instance.Comments_DefaultSortType = CommentSortTypes.New;
                     break;
                 case 4:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultSortType = CommentSortTypes.Old;
+                    UiSettingManager.Instance.Comments_DefaultSortType = CommentSortTypes.Old;
                     break;
                 case 5:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultSortType = CommentSortTypes.QA;
+                    UiSettingManager.Instance.Comments_DefaultSortType = CommentSortTypes.QA;
                     break;
             }
         }
@@ -114,21 +115,21 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             switch (ui_defaultCommentCount.SelectedIndex)
             {
                 case 0:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultCount = 50;
+                    UiSettingManager.Instance.Comments_DefaultCount = 50;
                     break;
                 case 1:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultCount = 150;
+                    UiSettingManager.Instance.Comments_DefaultCount = 150;
                     break;
                 case 2:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultCount = 200;
+                    UiSettingManager.Instance.Comments_DefaultCount = 200;
                     break;
                 case 3:
-                    App.BaconMan.UiSettingsMan.Comments_DefaultCount = 300;
+                    UiSettingManager.Instance.Comments_DefaultCount = 300;
                     break;
                 case 4:
                     // We don't allow setting the default to 500 even though the user can still do so
                     // per post.
-                    //App.BaconMan.UiSettingsMan.Comments_DefaultCount = 500;
+                    //UiSettingManager.Instance.Comments_DefaultCount = 500;
                     break;
             }
         }

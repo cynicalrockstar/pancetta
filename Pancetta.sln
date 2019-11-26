@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pancetta", "Pancetta\Pancet
 		{760D26FA-938B-4B0A-9C87-915ADAED244D} = {760D26FA-938B-4B0A-9C87-915ADAED244D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PancettaCommon", "BaconBackend\PancettaCommon.csproj", "{760D26FA-938B-4B0A-9C87-915ADAED244D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pancetta.Common", "BaconBackend\Pancetta.Common.csproj", "{760D26FA-938B-4B0A-9C87-915ADAED244D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalMarkdown", "UniversalMarkdown\UniversalMarkdown.csproj", "{9FFC3B68-696A-4342-A2B8-2EADDDEF7FF9}"
 EndProject

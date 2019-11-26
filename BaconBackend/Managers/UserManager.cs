@@ -26,7 +26,19 @@ namespace Pancetta.Managers
     }
 
     public class UserManager
-    {        
+    {
+        private static UserManager _instance = null;
+        public static UserManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new UserManager();
+
+                return _instance;
+            }
+        }
+
         /// <summary>
         /// Fired when the user is updated, added, or removed
         /// </summary>
@@ -48,13 +60,11 @@ namespace Pancetta.Managers
             public string Message = "";
         }
 
-        private BaconManager m_baconMan;
+        //private BaconManager m_baconMan;
         private AuthManager m_authMan;
 
-        public UserManager(BaconManager baconMan)
+        private UserManager()
         {
-            m_baconMan = baconMan;
-            m_authMan = new AuthManager(m_baconMan);
         }
 
         /// <summary>
@@ -118,10 +128,10 @@ namespace Pancetta.Managers
                 string lastUserName = CurrentUser == null ? "" : CurrentUser.Name;
 
                 // Make the web call
-                IHttpContent resonse = await m_baconMan.NetworkMan.MakeRedditGetRequest("/api/v1/me/.json");
+                IHttpContent resonse = await NetworkManager.Instance.MakeRedditGetRequest("/api/v1/me/.json");
 
                 // Parse the user
-                User user = await m_baconMan.NetworkMan.DeseralizeObject<User>(resonse);
+                User user = await NetworkManager.Instance.DeseralizeObject<User>(resonse);
 
                 // Set the new user
                 CurrentUser = user;
@@ -131,7 +141,7 @@ namespace Pancetta.Managers
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Failed to parse user", e);
+                MessageManager.Instance.DebugDia("Failed to parse user", e);
                 return new SignInResult()
                 {
                     Message = "Failed to parse user"
@@ -167,7 +177,7 @@ namespace Pancetta.Managers
             }
             catch (Exception ex)
             {
-                m_baconMan.MessageMan.DebugDia("Failed to notify user listener of update", ex);
+                MessageManager.Instance.DebugDia("Failed to notify user listener of update", ex);
             }
         }
 
@@ -191,9 +201,9 @@ namespace Pancetta.Managers
             {
                 if (m_currentUser == null)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UserManager.CurrentUser"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UserManager.CurrentUser"))
                     {
-                        m_currentUser = m_baconMan.SettingsMan.ReadFromRoamingSettings<User>("UserManager.CurrentUser");
+                        m_currentUser = SettingsManager.Instance.ReadFromRoamingSettings<User>("UserManager.CurrentUser");
                     }
                     else
                     {
@@ -205,7 +215,7 @@ namespace Pancetta.Managers
             private set
             {
                 m_currentUser = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<User>("UserManager.CurrentUser", m_currentUser);
+                SettingsManager.Instance.WriteToRoamingSettings<User>("UserManager.CurrentUser", m_currentUser);
             }
         }
         private User m_currentUser = null;
@@ -219,9 +229,9 @@ namespace Pancetta.Managers
             {
                 if (m_lastUpdated.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("UserManager.LastUpdate"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("UserManager.LastUpdate"))
                     {
-                        m_lastUpdated = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("UserManager.LastUpdate");
+                        m_lastUpdated = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("UserManager.LastUpdate");
                     }
                 }
                 return m_lastUpdated;
@@ -229,7 +239,7 @@ namespace Pancetta.Managers
             set
             {
                 m_lastUpdated = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>("UserManager.LastUpdate", m_lastUpdated);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>("UserManager.LastUpdate", m_lastUpdated);
             }
         }
         private DateTime m_lastUpdated = new DateTime(0);

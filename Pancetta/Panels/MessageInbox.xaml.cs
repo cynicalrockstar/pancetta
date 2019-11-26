@@ -1,5 +1,6 @@
 ﻿using Pancetta.Collectors;
 using Pancetta.DataObjects;
+using Pancetta.Managers;
 using Pancetta.Windows.HelperControls;
 using Pancetta.Windows.Interfaces;
 using Pancetta.Windows.Panels.FlipView;
@@ -49,7 +50,7 @@ namespace Pancetta.Windows.Panels
             m_panelHost = host;
 
             // Make a new collector
-            m_collector = new MessageCollector(App.BaconMan);
+            m_collector = new MessageCollector(BaconManager.Instance);
 
             // Sub to the collector callbacks
             m_collector.OnCollectionUpdated += Collector_OnCollectionUpdated;
@@ -106,7 +107,7 @@ namespace Pancetta.Windows.Panels
 
                 if(e.State == CollectorState.Error && e.ErrorState == CollectorErrorState.ServiceDown)
                 {
-                    App.BaconMan.MessageMan.ShowRedditDownMessage();
+                    MessageManager.Instance.ShowRedditDownMessage();
                 }
             });
         }
@@ -248,8 +249,8 @@ namespace Pancetta.Windows.Panels
             }
             catch(Exception ex)
             {
-                App.BaconMan.MessageMan.DebugDia("failed to parse message context", ex);
-                App.BaconMan.MessageMan.ShowMessageSimple("Oops", "Something is wrong and we can't show this context right now.");
+                MessageManager.Instance.DebugDia("failed to parse message context", ex);
+                MessageManager.Instance.ShowMessageSimple("Oops", "Something is wrong and we can't show this context right now.");
                 return;
             }
 
@@ -301,7 +302,7 @@ namespace Pancetta.Windows.Panels
             else
             {
                 ui_replyBox.HideLoadingOverlay();
-                App.BaconMan.MessageMan.ShowMessageSimple("That's Not Good", "We can't send this message right now, reddit returned an unexpected result. Try again later.");
+                MessageManager.Instance.ShowMessageSimple("That's Not Good", "We can't send this message right now, reddit returned an unexpected result. Try again later.");
             }
         }
 
@@ -351,7 +352,7 @@ namespace Pancetta.Windows.Panels
         /// <param name="e"></param>
         private void MarkdownTextBlock_OnMarkdownLinkTapped(object sender, UniversalMarkdown.OnMarkdownLinkTappedArgs e)
         {
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Pancetta.Windows.Interfaces;
+﻿using Pancetta.Managers;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,13 +53,13 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             ui_contentRoot.Padding = new Thickness(0, statusBarHeight, 0, 0);
 
             m_takeAction = false;
-            ui_debuggingOn.IsOn = App.BaconMan.UiSettingsMan.Developer_Debug;
-            ui_preventAppCrashes.IsOn = App.BaconMan.UiSettingsMan.Developer_StopFatalCrashesAndReport;
-            ui_showMemoryOverlay.IsOn = App.BaconMan.UiSettingsMan.Developer_ShowMemoryOverlay;
+            ui_debuggingOn.IsOn = UiSettingManager.Instance.Developer_Debug;
+            ui_preventAppCrashes.IsOn = UiSettingManager.Instance.Developer_StopFatalCrashesAndReport;
+            ui_showMemoryOverlay.IsOn = UiSettingManager.Instance.Developer_ShowMemoryOverlay;
             m_takeAction = true;
 
             // Set the clean up text
-            ui_numberPagesCleanedUp.Text = $"Pages cleaned up for memory pressure: {App.BaconMan.UiSettingsMan.PagesMemoryCleanedUp}";
+            ui_numberPagesCleanedUp.Text = $"Pages cleaned up for memory pressure: {UiSettingManager.Instance.PagesMemoryCleanedUp}";
         }
 
         public void OnCleanupPanel()
@@ -81,7 +82,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             {
                 return;
             }
-            App.BaconMan.UiSettingsMan.Developer_Debug = ui_debuggingOn.IsOn;
+            UiSettingManager.Instance.Developer_Debug = ui_debuggingOn.IsOn;
         }
 
         private void PreventAppCrashes_Toggled(object sender, RoutedEventArgs e)
@@ -90,7 +91,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             {
                 return;
             }
-            App.BaconMan.UiSettingsMan.Developer_StopFatalCrashesAndReport = ui_preventAppCrashes.IsOn;
+            UiSettingManager.Instance.Developer_StopFatalCrashesAndReport = ui_preventAppCrashes.IsOn;
         }
 
         private void ShowMemoryOverlay_Toggled(object sender, RoutedEventArgs e)
@@ -99,17 +100,17 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             {
                 return;
             }
-            App.BaconMan.UiSettingsMan.Developer_ShowMemoryOverlay = ui_showMemoryOverlay.IsOn;
+            UiSettingManager.Instance.Developer_ShowMemoryOverlay = ui_showMemoryOverlay.IsOn;
 
             if (!ui_showMemoryOverlay.IsOn)
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Restart", "The UI will not be removed until the app is restarted.");
+                MessageManager.Instance.ShowMessageSimple("Restart", "The UI will not be removed until the app is restarted.");
             }
         }
 
         private void RateAndReviewReset_Click(object sender, RoutedEventArgs e)
         {
-            App.BaconMan.UiSettingsMan.MainPage_NextReviewAnnoy = 0;
+            UiSettingManager.Instance.MainPage_NextReviewAnnoy = 0;
         }
     }
 }

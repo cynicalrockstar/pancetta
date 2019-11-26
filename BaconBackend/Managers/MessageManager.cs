@@ -11,11 +11,20 @@ namespace Pancetta.Managers
 #pragma warning disable CS4014
     public class MessageManager
     {
-        BaconManager m_baconMan;
-
-        public MessageManager(BaconManager baconMan)
+        private static MessageManager _instance = null;
+        public static MessageManager Instance
         {
-            m_baconMan = baconMan;
+            get
+            {
+                if (_instance == null)
+                    _instance = new MessageManager();
+
+                return _instance;
+            }
+        }
+
+        private MessageManager()
+        {
         }
 
         public void ShowMessageSimple(string title, string content)
@@ -30,7 +39,7 @@ namespace Pancetta.Managers
                 bool? showStatus = await ShowYesNoMessage("Reddit is Down", "It looks like reddit is down right now. Go outside for a while and try again in a few minutes.", "Check Reddit's Status", "Go Outside");
                 if (showStatus.HasValue && showStatus.Value)
                 {
-                    m_baconMan.ShowGlobalContent("http://www.redditstatus.com/");
+                    BaconManager.Instance.ShowGlobalContent("http://www.redditstatus.com/");
                 }
             });
         }
@@ -44,7 +53,7 @@ namespace Pancetta.Managers
 
                 if(response.HasValue && response.Value)
                 {
-                    m_baconMan.NavigateToLogin();
+                    BaconManager.Instance.NavigateToLogin();
                 }
             });
         }
@@ -52,7 +61,7 @@ namespace Pancetta.Managers
 
         public void DebugDia(string str, Exception ex = null)
         {
-            if (m_baconMan.UiSettingsMan.Developer_Debug)
+            if (UiSettingManager.Instance.Developer_Debug)
             {
                 System.Diagnostics.Debug.WriteLine("Error, " + str + " Message: " + (ex == null ? "" : ex.Message));
                 ShowMessaage("DebugDia: str " + str + " \n\nMessage: " + (ex == null ? "" : ex.Message) + "\n\nCall Stack:\n"+(ex== null? "" : ex.StackTrace), "DebugDia");
@@ -62,7 +71,7 @@ namespace Pancetta.Managers
         private async void ShowMessaage(string content, string title)
         {
             // Don't show messages if we are in the background.
-            if(m_baconMan.IsBackgroundTask)
+            if(BaconManager.Instance.IsBackgroundTask)
             {
                 return;
             }
@@ -84,7 +93,7 @@ namespace Pancetta.Managers
         public async Task<bool?> ShowYesNoMessage(string title, string content, string postiveButton = "Yes", string negativeButton = "No")
         {
             // Don't show messages if we are in the background.
-            if (m_baconMan.IsBackgroundTask)
+            if (BaconManager.Instance.IsBackgroundTask)
             {
                 return null;
             }

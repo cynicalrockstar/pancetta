@@ -92,7 +92,7 @@ namespace Pancetta.Windows
             VisualStateManager.GoToState(this, "HideQuichSeachResults", false);
 
             // Set ourselves as the backend action listener
-            App.BaconMan.SetBackendActionListener(this);
+            BaconManager.Instance.SetBackendActionListener(this);
 
             // Set the title bar color
             ApplicationView.GetForCurrentView().TitleBar.BackgroundColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundAccentBrush"]).Color;// Color.FromArgb(255, 51, 51, 51);
@@ -110,15 +110,15 @@ namespace Pancetta.Windows
             // Create the panel manager
             m_panelManager = new PanelManager(this, (IPanel)panel);
             ui_contentRoot.Children.Add(m_panelManager);
-            App.BaconMan.OnBackButton += BaconMan_OnBackButton;
+            BaconManager.Instance.OnBackButton += BaconMan_OnBackButton;
 
             // Sub to callbacks
-            App.BaconMan.SubredditMan.OnSubredditsUpdated += SubredditMan_OnSubredditUpdate;
-            App.BaconMan.UserMan.OnUserUpdated += UserMan_OnUserUpdated;
+            SubredditManager.Instance.OnSubredditsUpdated += SubredditMan_OnSubredditUpdate;
+            UserManager.Instance.OnUserUpdated += UserMan_OnUserUpdated;
 
             // Sub to loaded
             Loaded += MainPage_Loaded;
-            App.BaconMan.OnResuming += App_OnResuming;
+            BaconManager.Instance.OnResuming += App_OnResuming;
 
             // Set the subreddit list
             ui_subredditList.ItemsSource = m_subreddits;
@@ -131,7 +131,7 @@ namespace Pancetta.Windows
             m_panelManager.OnNavigationComplete += PanelManager_OnNavigationComplete;
 
             // Sub to the memory report
-            App.BaconMan.MemoryMan.OnMemoryReport += MemoryMan_OnMemoryReport;
+            MemoryManager.Instance.OnMemoryReport += MemoryMan_OnMemoryReport;
         }
 
         /// <summary>
@@ -142,15 +142,15 @@ namespace Pancetta.Windows
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             // Set the current information to the UI.
-            UpdateSubredditList(App.BaconMan.SubredditMan.SubredditList);
+            UpdateSubredditList(SubredditManager.Instance.SubredditList);
             UpdateAccount();
 
             // Request an update if needed
-            App.BaconMan.SubredditMan.Update();
-            App.BaconMan.UserMan.UpdateUser();
+            SubredditManager.Instance.Update();
+            UserManager.Instance.UpdateUser();
 
             // Get the default subreddit.
-            string defaultDisplayName = App.BaconMan.UiSettingsMan.SubredditList_DefaultSubredditDisplayName;
+            string defaultDisplayName = UiSettingManager.Instance.SubredditList_DefaultSubredditDisplayName;
             if (String.IsNullOrWhiteSpace(defaultDisplayName))
             {
                 defaultDisplayName = "frontpage";
@@ -222,7 +222,7 @@ namespace Pancetta.Windows
                 RedditContentContainer content = new RedditContentContainer();
                 content.Subreddit = subredditDisplayName;
                 content.Type = RedditContentType.Subreddit;
-                App.BaconMan.ShowGlobalContent(content);
+                BaconManager.Instance.ShowGlobalContent(content);
             }
             else if(arguments != null && arguments.StartsWith(BackgroundMessageUpdater.c_messageInboxOpenArgument))
             {
@@ -342,7 +342,7 @@ namespace Pancetta.Windows
             }
             catch(Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia("UpdateSubredditListFailed", e);
+                MessageManager.Instance.DebugDia("UpdateSubredditListFailed", e);
             }
         }
 
@@ -352,28 +352,28 @@ namespace Pancetta.Windows
         private void UpdateAccount()
         {
             // Set the defaults
-            string userName = App.BaconMan.UserMan.IsUserSignedIn && App.BaconMan.UserMan.CurrentUser != null && App.BaconMan.UserMan.CurrentUser.Name != null ? App.BaconMan.UserMan.CurrentUser.Name : "Unknown";
-            ui_accountHeader.Text = App.BaconMan.UserMan.IsUserSignedIn ? userName : "Account";
-            ui_signInText.Text = App.BaconMan.UserMan.IsUserSignedIn ? "Sign Out" : "Sign In";
-            ui_inboxGrid.Visibility = App.BaconMan.UserMan.IsUserSignedIn ? Visibility.Visible : Visibility.Collapsed;
-            ui_profileGrid.Visibility = App.BaconMan.UserMan.IsUserSignedIn ? Visibility.Visible : Visibility.Collapsed;
+            string userName = UserManager.Instance.IsUserSignedIn && UserManager.Instance.CurrentUser != null && UserManager.Instance.CurrentUser.Name != null ? UserManager.Instance.CurrentUser.Name : "Unknown";
+            ui_accountHeader.Text = UserManager.Instance.IsUserSignedIn ? userName : "Account";
+            ui_signInText.Text = UserManager.Instance.IsUserSignedIn ? "Sign Out" : "Sign In";
+            ui_inboxGrid.Visibility = UserManager.Instance.IsUserSignedIn ? Visibility.Visible : Visibility.Collapsed;
+            ui_profileGrid.Visibility = UserManager.Instance.IsUserSignedIn ? Visibility.Visible : Visibility.Collapsed;
             ui_accountHeaderMailBox.Visibility = Visibility.Collapsed;
             ui_accountHeaderKarmaHolder.Visibility = Visibility.Collapsed;
 
-            if (App.BaconMan.UserMan.IsUserSignedIn && App.BaconMan.UserMan.CurrentUser != null)
+            if (UserManager.Instance.IsUserSignedIn && UserManager.Instance.CurrentUser != null)
             {
                 // If we have mail so the mail icon.
-                if (App.BaconMan.UserMan.CurrentUser.HasMail)
+                if (UserManager.Instance.CurrentUser.HasMail)
                 {
                     ui_accountHeaderMailBox.Visibility = Visibility.Visible;
-                    ui_inboxCountTextBlock.Text = App.BaconMan.UserMan.CurrentUser.InboxCount.ToString();
+                    ui_inboxCountTextBlock.Text = UserManager.Instance.CurrentUser.InboxCount.ToString();
                 }
                 else
                 {
                     ui_accountHeaderKarmaHolder.Visibility = Visibility.Visible;
-                    ui_accountHeaderKaramaLink.Text = App.BaconMan.UserMan.CurrentUser.LinkKarma.ToString();
+                    ui_accountHeaderKaramaLink.Text = UserManager.Instance.CurrentUser.LinkKarma.ToString();
                     // The space is need to ensure the UI looks correct.
-                    ui_accountHeaderKaramaComment.Text = " "+App.BaconMan.UserMan.CurrentUser.CommentKarma;
+                    ui_accountHeaderKaramaComment.Text = " "+ UserManager.Instance.CurrentUser.CommentKarma;
                 }
             }
         }
@@ -388,7 +388,7 @@ namespace Pancetta.Windows
             Subreddit sub = ((sender as Grid).DataContext as Subreddit);
 
             // Reverse the status
-            App.BaconMan.SubredditMan.SetFavorite(sub.Id, !sub.IsFavorite);
+            SubredditManager.Instance.SetFavorite(sub.Id, !sub.IsFavorite);
         }
 
         /// <summary>
@@ -517,15 +517,15 @@ namespace Pancetta.Windows
 
         private async void SigninGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (App.BaconMan.UserMan.IsUserSignedIn)
+            if (UserManager.Instance.IsUserSignedIn)
             {
                 // Confirm with the user
-                bool? response = await App.BaconMan.MessageMan.ShowYesNoMessage("Are You Sure?", "Are you sure you want to sign out? Was it something I did?");
+                bool? response = await MessageManager.Instance.ShowYesNoMessage("Are You Sure?", "Are you sure you want to sign out? Was it something I did?");
 
                 if (response.HasValue && response.Value)
                 {
                     // Sign out the user
-                    App.BaconMan.UserMan.SignOut();
+                    UserManager.Instance.SignOut();
                 }
             }
             else
@@ -559,12 +559,12 @@ namespace Pancetta.Windows
         /// <param name="e"></param>
         private void ProfileGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (App.BaconMan.UserMan.IsUserSignedIn)
+            if (UserManager.Instance.IsUserSignedIn)
             {
                 // Navigate to the user.
                 Dictionary<string, object> args = new Dictionary<string, object>();
-                args.Add(PanelManager.NAV_ARGS_USER_NAME, App.BaconMan.UserMan.CurrentUser.Name);
-                m_panelManager.Navigate(typeof(UserProfile), App.BaconMan.UserMan.CurrentUser.Name, args);
+                args.Add(PanelManager.NAV_ARGS_USER_NAME, UserManager.Instance.CurrentUser.Name);
+                m_panelManager.Navigate(typeof(UserProfile), UserManager.Instance.CurrentUser.Name, args);
             }
             ToggleMenu(false);
         }
@@ -683,7 +683,7 @@ namespace Pancetta.Windows
             }
 
             // Get the subreddits
-            List<Subreddit> subreddits = App.BaconMan.SubredditMan.SubredditList;
+            List<Subreddit> subreddits = SubredditManager.Instance.SubredditList;
 
             // Go through all of the subreddits and set the text
             int placementPos = 0;
@@ -834,7 +834,7 @@ namespace Pancetta.Windows
                     {
                         return;
                     }
-                    m_trendingSubsHelper = new TrendingSubredditsHelper(App.BaconMan);
+                    m_trendingSubsHelper = new TrendingSubredditsHelper(BaconManager.Instance);
                 }
 
                 // Delay for a little while, give app time to process things it needs to.
@@ -904,7 +904,7 @@ namespace Pancetta.Windows
                 // Get the subreddit and show it.
                 // Note since this will have caps it is important to remove them.
                 string subreddit = textBlock.Text.ToLower();
-                App.BaconMan.ShowGlobalContent(subreddit);
+                BaconManager.Instance.ShowGlobalContent(subreddit);
             }
 
             // Close the panels
@@ -1102,7 +1102,7 @@ namespace Pancetta.Windows
         private void KeyboardShortcutHepler_OnGoBackActivation(object sender, EventArgs e)
         {
             bool isHandled = false;
-            App.BaconMan.OnBackButton_Fired(ref isHandled);
+            BaconManager.Instance.OnBackButton_Fired(ref isHandled);
         }
     }
 }

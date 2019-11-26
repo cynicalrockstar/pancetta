@@ -268,7 +268,7 @@ namespace Pancetta.Windows.Panels
         {
             lock (this)
             {
-                m_currentSubCollector = new SearchSubredditCollector(App.BaconMan, searchTerm);
+                m_currentSubCollector = new SearchSubredditCollector(BaconManager.Instance, searchTerm);
                 m_currentSubCollector.OnCollectionUpdated += CurrentSubCollector_OnCollectionUpdated;
                 m_currentSubCollector.OnCollectorStateChange += CurrentSubCollector_OnCollectorStateChange;
                 m_currentSubCollector.Update(true);
@@ -403,7 +403,7 @@ namespace Pancetta.Windows.Panels
 
             lock (this)
             {
-                m_currentPostCollector = new SearchPostCollector(App.BaconMan, searchTerm, sort, times, subredditFilter, authorFilter, websiteFilter, selftextFilter, isSelfPost, isNsfw);
+                m_currentPostCollector = new SearchPostCollector(BaconManager.Instance, searchTerm, sort, times, subredditFilter, authorFilter, websiteFilter, selftextFilter, isSelfPost, isNsfw);
                 m_currentPostCollector.OnCollectionUpdated += CurrentPostCollector_OnCollectionUpdated;
                 m_currentPostCollector.OnCollectorStateChange += CurrentPostCollector_OnCollectorStateChange;
                 m_currentPostCollector.Update(true);
@@ -554,7 +554,7 @@ namespace Pancetta.Windows.Panels
         private async void DoUserSearch(string searchTerm)
         {
             // Make a request for the user
-            User userResult = await MiscellaneousHelper.GetRedditUser(App.BaconMan, searchTerm);
+            User userResult = await MiscellaneousHelper.GetRedditUser(BaconManager.Instance, searchTerm);
 
             // Else put it in the list
             lock(m_searchResultsList)
@@ -799,7 +799,7 @@ namespace Pancetta.Windows.Panels
         private void MarkdownTextBlock_OnMarkdownLinkTapped(object sender, UniversalMarkdown.OnMarkdownLinkTappedArgs e)
         {
             // Show the link
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
         }
     }
 }

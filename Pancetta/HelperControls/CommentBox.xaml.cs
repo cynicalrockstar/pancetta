@@ -1,6 +1,7 @@
 ﻿using Pancetta.Collectors;
 using Pancetta.DataObjects;
 using Pancetta.Helpers;
+using Pancetta.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -151,9 +152,9 @@ namespace Pancetta.Windows.HelperControls
         public void ShowBox(string redditId, string editText = null, object context = null)
         {
             // Make sure we are logged in
-            if (!App.BaconMan.UserMan.IsUserSignedIn)
+            if (!UserManager.Instance.IsUserSignedIn)
             {
-                App.BaconMan.MessageMan.ShowSigninMessage("comment");
+                MessageManager.Instance.ShowSigninMessage("comment");
                 return;
             }
 
@@ -344,7 +345,7 @@ namespace Pancetta.Windows.HelperControls
             string comment = ui_textBox.Text;
             if(String.IsNullOrWhiteSpace(comment) && !m_itemRedditId.StartsWith("t3_") && !m_isEdit)
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("\"Silence is a source of great strength.\" - Lao Tzu", "Except on reddit. Go on, say something.");
+                MessageManager.Instance.ShowMessageSimple("\"Silence is a source of great strength.\" - Lao Tzu", "Except on reddit. Go on, say something.");
                 return;
             }
 
@@ -353,7 +354,7 @@ namespace Pancetta.Windows.HelperControls
             VisualStateManager.GoToState(this, "ShowOverlay", true);
 
             // Try to send the comment
-            string response = await Task.Run(() => MiscellaneousHelper.SendRedditComment(App.BaconMan, m_itemRedditId, comment, m_isEdit));
+            string response = await Task.Run(() => MiscellaneousHelper.SendRedditComment(BaconManager.Instance, m_itemRedditId, comment, m_isEdit));
 
             if (response != null)
             {
@@ -371,13 +372,13 @@ namespace Pancetta.Windows.HelperControls
                 }
                 catch (Exception ex)
                 {
-                    App.BaconMan.MessageMan.DebugDia("failed to fire OnCommentSubmitted", ex);
+                    MessageManager.Instance.DebugDia("failed to fire OnCommentSubmitted", ex);
                 }
             }
             else
             {
                 // The network call failed.
-                App.BaconMan.MessageMan.ShowMessageSimple("Can't Submit", "We can't seem to submit this right now, check your internet connection.");
+                MessageManager.Instance.ShowMessageSimple("Can't Submit", "We can't seem to submit this right now, check your internet connection.");
                 HideLoadingOverlay();
             }
         }
@@ -393,7 +394,7 @@ namespace Pancetta.Windows.HelperControls
         /// <param name="e"></param>
         private void LivePreviewBox_OnMarkdownLinkTapped(object sender, UniversalMarkdown.OnMarkdownLinkTappedArgs e)
         {
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
         }
 
         /// <summary>

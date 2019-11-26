@@ -46,7 +46,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
             m_base = panelBase;
 
             // Listen for back presses
-            App.BaconMan.OnBackButton += BaconMan_OnBackButton;
+            BaconManager.Instance.OnBackButton += BaconMan_OnBackButton;
         }
 
         #region IContentPanel

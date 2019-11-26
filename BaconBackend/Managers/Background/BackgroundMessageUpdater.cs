@@ -16,15 +16,24 @@ namespace Pancetta.Managers.Background
 {
     public class BackgroundMessageUpdater
     {
+        private static BackgroundMessageUpdater _instance = null;
+        public static BackgroundMessageUpdater Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new BackgroundMessageUpdater();
+                return _instance;
+            }
+        }
+
         public const string c_messageInboxOpenArgument = "goToInbox";
 
-        BaconManager m_baconMan;
         MessageCollector m_collector;
         RefCountedDeferral m_refDeferral;
 
-        public BackgroundMessageUpdater(BaconManager baconMan)
+        private BackgroundMessageUpdater()
         {
-            m_baconMan = baconMan;
         }
 
         /// <summary>
@@ -34,7 +43,7 @@ namespace Pancetta.Managers.Background
         /// <param name="force"></param>
         public void RunUpdate(RefCountedDeferral refDeferral, bool force = false)
         {
-            if (IsEnabled && m_baconMan.UserMan.IsUserSignedIn)
+            if (IsEnabled && UserManager.Instance.IsUserSignedIn)
             {
                 TimeSpan timeSinceLastRun = DateTime.Now - LastUpdateTime;
                 if (timeSinceLastRun.TotalMinutes > 10 || force)
@@ -44,7 +53,7 @@ namespace Pancetta.Managers.Background
                     m_refDeferral.AddRef();
 
                     // Make the collector
-                    m_collector = new MessageCollector(m_baconMan);
+                    m_collector = new MessageCollector(BaconManager.Instance);
 
                     // We don't need to sub to the collection update because we will get
                     // called automatically when it updates
@@ -62,10 +71,10 @@ namespace Pancetta.Managers.Background
         /// <param name="newMessages"></param>
         public void UpdateNotifications(List<Message> newMessages)
         {
-            bool updateSliently = !m_baconMan.IsBackgroundTask;
+            bool updateSliently = !BaconManager.Instance.IsBackgroundTask;
 
             // Check if we are disabled.
-            if (!IsEnabled || !m_baconMan.UserMan.IsUserSignedIn)
+            if (!IsEnabled || !UserManager.Instance.IsUserSignedIn)
             {
                 // Clear things out
                 ToastNotificationManager.History.Clear();
@@ -219,14 +228,14 @@ namespace Pancetta.Managers.Background
                 }
 
                 // Make sure the main tile is an iconic tile.
-                m_baconMan.TileMan.UpdateMainTile(unreadCount);
-
+                TileManager.Instance.UpdateMainTile(unreadCount);
+                
                 // If all was successful update the last time we updated
                 LastUpdateTime = DateTime.Now;
             }
             catch (Exception ex)
             {
-                m_baconMan.MessageMan.DebugDia("failed to update message notifications", ex);
+                MessageManager.Instance.DebugDia("failed to update message notifications", ex);
             }
 
             // When we are done release the deferral
@@ -270,9 +279,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_isEnabled.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("BackgroundMessageUpdater.IsEnabled"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("BackgroundMessageUpdater.IsEnabled"))
                     {
-                        m_isEnabled = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("BackgroundMessageUpdater.IsEnabled");
+                        m_isEnabled = SettingsManager.Instance.ReadFromRoamingSettings<bool>("BackgroundMessageUpdater.IsEnabled");
                     }
                     else
                     {
@@ -284,7 +293,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_isEnabled = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("BackgroundMessageUpdater.IsEnabled", m_isEnabled.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("BackgroundMessageUpdater.IsEnabled", m_isEnabled.Value);
             }
         }
         private bool? m_isEnabled = null;
@@ -298,9 +307,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_addSilently.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("BackgroundMessageUpdater.AddToNotificationCenterSilently"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("BackgroundMessageUpdater.AddToNotificationCenterSilently"))
                     {
-                        m_addSilently = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("BackgroundMessageUpdater.AddToNotificationCenterSilently");
+                        m_addSilently = SettingsManager.Instance.ReadFromRoamingSettings<bool>("BackgroundMessageUpdater.AddToNotificationCenterSilently");
                     }
                     else
                     {
@@ -312,7 +321,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_addSilently = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("BackgroundMessageUpdater.AddToNotificationCenterSilently", m_addSilently.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("BackgroundMessageUpdater.AddToNotificationCenterSilently", m_addSilently.Value);
             }
         }
         private bool? m_addSilently = null;
@@ -326,9 +335,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_notificationType.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("BackgroundMessageUpdater.NotificationType"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("BackgroundMessageUpdater.NotificationType"))
                     {
-                        m_notificationType = m_baconMan.SettingsMan.ReadFromRoamingSettings<int>("BackgroundMessageUpdater.NotificationType");
+                        m_notificationType = SettingsManager.Instance.ReadFromRoamingSettings<int>("BackgroundMessageUpdater.NotificationType");
                     }
                     else
                     {
@@ -340,7 +349,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_notificationType = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<int>("BackgroundMessageUpdater.NotificationType", m_notificationType.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<int>("BackgroundMessageUpdater.NotificationType", m_notificationType.Value);
             }
         }
         private int? m_notificationType = null;
@@ -355,9 +364,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_lastKnownUnreadCount.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundMessageUpdater.LastKnownUnreadCount"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundMessageUpdater.LastKnownUnreadCount"))
                     {
-                        m_lastKnownUnreadCount = m_baconMan.SettingsMan.ReadFromLocalSettings<int>("BackgroundMessageUpdater.LastKnownUnreadCount");
+                        m_lastKnownUnreadCount = SettingsManager.Instance.ReadFromLocalSettings<int>("BackgroundMessageUpdater.LastKnownUnreadCount");
                     }
                     else
                     {
@@ -369,7 +378,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_lastKnownUnreadCount = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<int>("BackgroundMessageUpdater.LastKnownUnreadCount", m_lastKnownUnreadCount.Value);
+                SettingsManager.Instance.WriteToLocalSettings<int>("BackgroundMessageUpdater.LastKnownUnreadCount", m_lastKnownUnreadCount.Value);
             }
         }
         private int? m_lastKnownUnreadCount = null;
@@ -383,9 +392,9 @@ namespace Pancetta.Managers.Background
             {
                 if (m_lastUpdateTime.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundMessageUpdater.LastUpdateTime"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundMessageUpdater.LastUpdateTime"))
                     {
-                        m_lastUpdateTime = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("BackgroundMessageUpdater.LastUpdateTime");
+                        m_lastUpdateTime = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("BackgroundMessageUpdater.LastUpdateTime");
                     }
                 }
                 return m_lastUpdateTime;
@@ -393,7 +402,7 @@ namespace Pancetta.Managers.Background
             private set
             {
                 m_lastUpdateTime = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>("BackgroundMessageUpdater.LastUpdateTime", m_lastUpdateTime);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>("BackgroundMessageUpdater.LastUpdateTime", m_lastUpdateTime);
             }
         }
         private DateTime m_lastUpdateTime = new DateTime(0);
@@ -408,9 +417,9 @@ namespace Pancetta.Managers.Background
             {
                 if (m_ShownMessageNotifications == null)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("BackgroundMessageUpdater.ShownMessageNotifications"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("BackgroundMessageUpdater.ShownMessageNotifications"))
                     {
-                        m_ShownMessageNotifications = m_baconMan.SettingsMan.ReadFromRoamingSettings<HashList<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications");
+                        m_ShownMessageNotifications = SettingsManager.Instance.ReadFromRoamingSettings<HashList<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications");
                     }
                     else
                     {
@@ -422,7 +431,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_ShownMessageNotifications = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<HashList<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications", m_ShownMessageNotifications);
+                SettingsManager.Instance.WriteToRoamingSettings<HashList<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications", m_ShownMessageNotifications);
             }
         }
         private HashList<string, bool> m_ShownMessageNotifications = null;

@@ -16,23 +16,33 @@ namespace Pancetta.Managers
 {
     public class SettingsManager
     {
+        private static SettingsManager _instance = null;
+        public static SettingsManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new SettingsManager();
+
+                return _instance;
+            }
+        }
+
         private const string LOCAL_SETTINGS_FILE = "LocalSettings.data";
         object objectLock = new object();
         BaconManager m_baconMan;
         ManualResetEvent m_localSettingsReady = new ManualResetEvent(false);
 
-        public SettingsManager(BaconManager baconMan)
+        private SettingsManager()
         {
-            m_baconMan = baconMan;
-
             // Setup the local settings.
             InitLocalSettings();
 
             // We can't do this from a background task
-            if (!baconMan.IsBackgroundTask)
+            if (!BaconManager.Instance.IsBackgroundTask)
             {
                 // Register for resuming callbacks.
-                m_baconMan.OnResuming += BaconMan_OnResuming;
+                BaconManager.Instance.OnResuming += BaconMan_OnResuming;
             }
         }
 
@@ -85,7 +95,7 @@ namespace Pancetta.Managers
             }
             catch(Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("failed to write setting " + name, e);
+                MessageManager.Instance.DebugDia("failed to write setting " + name, e);
             }            
         }
 
@@ -156,7 +166,7 @@ namespace Pancetta.Managers
             }
             catch(Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Unable to load settings file! "+e.Message);
+                MessageManager.Instance.DebugDia("Unable to load settings file! "+e.Message);
                 m_localSettings = new Dictionary<string, object>();
             }
 
@@ -190,7 +200,7 @@ namespace Pancetta.Managers
             }
             catch (Exception ex)
             {
-                m_baconMan.MessageMan.DebugDia("Failed to write settings", ex);
+                MessageManager.Instance.DebugDia("Failed to write settings", ex);
             }      
         }
     }

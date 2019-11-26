@@ -75,7 +75,7 @@ namespace Pancetta.Windows.ContentPanels
         public ContentPanelMaster()
         {
             // When created register to listen for memory updates.
-            App.BaconMan.MemoryMan.OnMemoryCleanUpRequest += MemoryMan_OnMemoryCleanUpRequest;
+            MemoryManager.Instance.OnMemoryCleanUpRequest += MemoryMan_OnMemoryCleanUpRequest;
         }
 
         #region Content Control
@@ -603,7 +603,7 @@ namespace Pancetta.Windows.ContentPanels
                     else
                     {
                         // This is odd, report it.
-                        App.BaconMan.MessageMan.DebugDia("panel removed that wasn't active or in the panel stack");
+                        MessageManager.Instance.DebugDia("panel removed that wasn't active or in the panel stack");
                         if (Debugger.IsAttached)
                         {
                             Debugger.Break();
@@ -955,7 +955,7 @@ namespace Pancetta.Windows.ContentPanels
         private bool CanLoadLaregePanel(bool isVisible)
         {
             // If we are visible only don't load if we are on high, if not visible only load if not medium or high.
-            return App.BaconMan.MemoryMan.MemoryPressure < (isVisible ? MemoryPressureStates.HighNoAllocations : MemoryPressureStates.Medium);
+            return MemoryManager.Instance.MemoryPressure < (isVisible ? MemoryPressureStates.HighNoAllocations : MemoryPressureStates.Medium);
         }
 
         #endregion
@@ -981,7 +981,7 @@ namespace Pancetta.Windows.ContentPanels
                 }
                 catch (Exception e)
                 {
-                    App.BaconMan.MessageMan.DebugDia("FireOnPanelAvailable failed", e);
+                    MessageManager.Instance.DebugDia("FireOnPanelAvailable failed", e);
                 }
             });
         }
@@ -1005,7 +1005,7 @@ namespace Pancetta.Windows.ContentPanels
                 }
                 catch (Exception e)
                 {
-                    App.BaconMan.MessageMan.DebugDia("FireOnRemovePanel failed", e);
+                    MessageManager.Instance.DebugDia("FireOnRemovePanel failed", e);
                 }
             });
         }
@@ -1025,7 +1025,7 @@ namespace Pancetta.Windows.ContentPanels
                 }
                 catch (Exception e)
                 {
-                    App.BaconMan.MessageMan.DebugDia("FireOnRemovePanel failed", e);
+                    MessageManager.Instance.DebugDia("FireOnRemovePanel failed", e);
                 }
             });
         }
@@ -1047,7 +1047,7 @@ namespace Pancetta.Windows.ContentPanels
                 }
                 catch (Exception e)
                 {
-                    App.BaconMan.MessageMan.DebugDia("FireOnContentPreloading failed", e);
+                    MessageManager.Instance.DebugDia("FireOnContentPreloading failed", e);
                 }
             });
         }
@@ -1068,7 +1068,7 @@ namespace Pancetta.Windows.ContentPanels
                 }
                 catch (Exception e)
                 {
-                    App.BaconMan.MessageMan.DebugDia("FireOnPanelUnloaded failed", e);
+                    MessageManager.Instance.DebugDia("FireOnPanelUnloaded failed", e);
                 }
             });
         }

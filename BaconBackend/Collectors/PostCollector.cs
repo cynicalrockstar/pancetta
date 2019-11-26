@@ -109,7 +109,7 @@ namespace Pancetta.Collectors
                 else if (m_subreddit.DisplayName.ToLower() == "saved")
                 {
                     // Special case for the saved posts
-                    postCollectionUrl = $"/user/{m_baconMan.UserMan.CurrentUser.Name}/saved/.json";
+                    postCollectionUrl = $"/user/{UserManager.Instance.CurrentUser.Name}/saved/.json";
                 }
                 else if (!String.IsNullOrWhiteSpace(collectorContext.forcePostId))
                 {
@@ -150,7 +150,7 @@ namespace Pancetta.Collectors
             InitListHelper(postCollectionUrl, hasEmptyRoot, true, optionalArgs);
 
             // Listen to user changes so we will update the subreddits
-            m_baconMan.UserMan.OnUserUpdated += OnUserUpdated;
+            UserManager.Instance.OnUserUpdated += OnUserUpdated;
         }
 
 
@@ -262,9 +262,9 @@ namespace Pancetta.Collectors
         public void ChangePostVote(Post post, PostVoteAction action, int postPosition = 0)
         {
             // Ensure we are signed in.
-            if(!m_baconMan.UserMan.IsUserSignedIn)
+            if(!UserManager.Instance.IsUserSignedIn)
             {
-                m_baconMan.MessageMan.ShowSigninMessage("vote");
+                MessageManager.Instance.ShowSigninMessage("vote");
                 return;
             }
 
@@ -318,7 +318,7 @@ namespace Pancetta.Collectors
                     postData.Add(new KeyValuePair<string, string>("dir", voteDir));
 
                     // Make the call
-                    string str = await m_baconMan.NetworkMan.MakeRedditPostRequestAsString("api/vote", postData);
+                    string str = await NetworkManager.Instance.MakeRedditPostRequestAsString("api/vote", postData);
 
                     // Do some super simple validation
                     if(str != "{}")
@@ -328,8 +328,8 @@ namespace Pancetta.Collectors
                 }
                 catch(Exception ex)
                 {
-                    m_baconMan.MessageMan.DebugDia("failed to vote!", ex);
-                    m_baconMan.MessageMan.ShowMessageSimple("That's Not Right", "Something went wrong while trying to cast your vote, try again later.");
+                    MessageManager.Instance.DebugDia("failed to vote!", ex);
+                    MessageManager.Instance.ShowMessageSimple("That's Not Right", "Something went wrong while trying to cast your vote, try again later.");
                 }
             });
         }
@@ -454,7 +454,7 @@ namespace Pancetta.Collectors
                 catch (Exception e)
                 {
                     // We fucked up updating the UI for the post edit.
-                    m_baconMan.MessageMan.DebugDia("Failed updating selftext in UI", e);
+                    MessageManager.Instance.DebugDia("Failed updating selftext in UI", e);
                 }
 
                 // If the response was ok always return true.
@@ -463,7 +463,7 @@ namespace Pancetta.Collectors
             else
             {
                 // Reddit returned something wrong
-                m_baconMan.MessageMan.ShowMessageSimple("That's not right", "We can't edit your post right now, reddit returned and unexpected message.");
+                MessageManager.Instance.ShowMessageSimple("That's not right", "We can't edit your post right now, reddit returned and unexpected message.");
                 return false;
             }
         }
@@ -478,11 +478,11 @@ namespace Pancetta.Collectors
 
             if(success)
             {
-                m_baconMan.MessageMan.ShowMessageSimple("Bye Bye", "Your post has been deleted.");
+                MessageManager.Instance.ShowMessageSimple("Bye Bye", "Your post has been deleted.");
             }
             else
             {
-                m_baconMan.MessageMan.ShowMessageSimple("That's not right", "We can't edit your post right now, check your Internet connection.");
+                MessageManager.Instance.ShowMessageSimple("That's not right", "We can't edit your post right now, check your Internet connection.");
             }
         }
 
@@ -564,15 +564,15 @@ namespace Pancetta.Collectors
                 post.FlipViewSecondary = showSubreddit ? $"r/{post.Subreddit.ToLower()}" : TimeToTextHelper.TimeElapseToText(postTime) + " ago";
 
                 // Set the title size
-                post.TitleMaxLines = m_baconMan.UiSettingsMan.SubredditList_ShowFullTitles ? 99 : 2;
+                post.TitleMaxLines = UiSettingManager.Instance.SubredditList_ShowFullTitles ? 99 : 2;
 
                 // Set if we should show the save image or not
                 post.ShowSaveImageMenu = String.IsNullOrWhiteSpace(ImageManager.GetImageUrl(post.Url)) ? Windows.UI.Xaml.Visibility.Collapsed : Windows.UI.Xaml.Visibility.Visible;
 
                 // Set if this is owned by the current user
-                if(m_baconMan.UserMan.IsUserSignedIn && m_baconMan.UserMan.CurrentUser != null)
+                if(UserManager.Instance.IsUserSignedIn && UserManager.Instance.CurrentUser != null)
                 {
-                    post.IsPostOwnedByUser = post.Author.Equals(m_baconMan.UserMan.CurrentUser.Name, StringComparison.OrdinalIgnoreCase);
+                    post.IsPostOwnedByUser = post.Author.Equals(UserManager.Instance.CurrentUser.Name, StringComparison.OrdinalIgnoreCase);
                 }
 
                 // Check if it has been read
@@ -632,9 +632,9 @@ namespace Pancetta.Collectors
             {
                 if (m_readPostsList == null)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("SubredditPostCollector.ReadPostsList"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("SubredditPostCollector.ReadPostsList"))
                     {
-                        m_readPostsList = m_baconMan.SettingsMan.ReadFromRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList");
+                        m_readPostsList = SettingsManager.Instance.ReadFromRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList");
                     }
                     else
                     {
@@ -646,7 +646,7 @@ namespace Pancetta.Collectors
             set
             {
                 m_readPostsList = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList", m_readPostsList);
+                SettingsManager.Instance.WriteToRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList", m_readPostsList);
             }
         }
         private HashList<string, int> m_readPostsList = null;

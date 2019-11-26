@@ -7,8 +7,8 @@
     <ProjectGuid>{760D26FA-938B-4B0A-9C87-915ADAED244D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pancetta</RootNamespace>
-    <AssemblyName>BaconBackend</AssemblyName>
+    <RootNamespace>Pancetta.Common</RootNamespace>
+    <AssemblyName>Pancetta.Common</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>

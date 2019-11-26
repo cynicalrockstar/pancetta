@@ -1,5 +1,7 @@
 ﻿using Pancetta;
 using Pancetta.Helpers;
+using Pancetta.Managers;
+using Pancetta.Managers.Background;
 using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -41,11 +43,6 @@ namespace Pancetta.Windows
         private const string c_protocolPreventCrashesDisabled = "preventcrashes=false";
 
         /// <summary>
-        /// The main reference in the app to the backend of Baconit
-        /// </summary>
-        public static BaconManager BaconMan;
-
-        /// <summary>
         /// Indicates if we have already registered for back.
         /// </summary>
         private bool m_hasRegisteredForBack = false;
@@ -60,9 +57,6 @@ namespace Pancetta.Windows
 
             // Setup the exception handler first
             this.UnhandledException += OnUnhandledException;
-
-            // Now setup the baconman
-            BaconMan = new BaconManager(false);
 
             // Init the app
             this.InitializeComponent();
@@ -121,11 +115,11 @@ namespace Pancetta.Windows
                 string lowerArgs = arguments.ToLower();
                 if(lowerArgs.Contains(c_protocolPreventCrashesDisabled))
                 {
-                    BaconMan.UiSettingsMan.Developer_StopFatalCrashesAndReport = false;
+                    UiSettingManager.Instance.Developer_StopFatalCrashesAndReport = false;
                 }
                 else if (lowerArgs.Contains(c_protocolPreventCrashesEnabled))
                 {
-                    BaconMan.UiSettingsMan.Developer_StopFatalCrashesAndReport = true;
+                    UiSettingManager.Instance.Developer_StopFatalCrashesAndReport = true;
                 }
             }
 
@@ -188,7 +182,7 @@ namespace Pancetta.Windows
             var scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
 
             //This blocks and seems unnecessary
-            BaconMan.BackgroundMan.ImageUpdaterMan.LastKnownScreenResoultion = new Size(bounds.Width * scaleFactor, bounds.Height * scaleFactor);
+            BackgroundImageUpdater.Instance.LastKnownScreenResoultion = new Size(bounds.Width * scaleFactor, bounds.Height * scaleFactor);
 
             // Ensure the current window is active
             Window.Current.Activate();
@@ -213,7 +207,7 @@ namespace Pancetta.Windows
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending_Fired(object sender, SuspendingEventArgs e)
         {
-            BaconMan.OnSuspending_Fired(sender, e);
+            BaconManager.Instance.OnSuspending_Fired(sender, e);
         }
 
         /// <summary>
@@ -223,7 +217,7 @@ namespace Pancetta.Windows
         /// <param name="e"></param>
         private void OnResuming_Fired(object sender, object e)
         {
-            BaconMan.OnResuming_Fired(sender, e);
+            BaconManager.Instance.OnResuming_Fired(sender, e);
         }
 
         /// <summary>
@@ -234,7 +228,7 @@ namespace Pancetta.Windows
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
             bool isHandled = false;
-            BaconMan.OnBackButton_Fired(ref isHandled);
+            BaconManager.Instance.OnBackButton_Fired(ref isHandled);
             e.Handled = isHandled;
         }
 
@@ -250,11 +244,11 @@ namespace Pancetta.Windows
                 Debugger.Break();
             }
 
-            if (App.BaconMan.UiSettingsMan.Developer_StopFatalCrashesAndReport)
+            if (UiSettingManager.Instance.Developer_StopFatalCrashesAndReport)
             {
                 // Warning this will report the error but leave us in a very bad state. Only use this for debugging.
                 e.Handled = true;
-                BaconMan.MessageMan.ShowMessageSimple("Fatal Crash", "The app tried to crash. \n\nMessage: " + e.Message + "\n\nException Msg: " + e.Exception.Message + "\n\nStack Trace:\n"+e.Exception.StackTrace);
+                MessageManager.Instance.ShowMessageSimple("Fatal Crash", "The app tried to crash. \n\nMessage: " + e.Message + "\n\nException Msg: " + e.Exception.Message + "\n\nStack Trace:\n"+e.Exception.StackTrace);
             }
         }
     }

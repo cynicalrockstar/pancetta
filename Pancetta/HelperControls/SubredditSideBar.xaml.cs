@@ -1,5 +1,6 @@
 ﻿using Pancetta.DataObjects;
 using Pancetta.Helpers;
+using Pancetta.Managers;
 using Pancetta.Windows.Interfaces;
 using Pancetta.Windows.Panels;
 using System;
@@ -150,7 +151,7 @@ namespace Pancetta.Windows.HelperControls
             }
 
             // If we are being forced to show something show it, if not check if the user is subed or not.
-            bool isSubed = forcedState.HasValue ? forcedState.Value : App.BaconMan.SubredditMan.IsSubredditSubscribedTo(m_currentSubreddit.DisplayName);
+            bool isSubed = forcedState.HasValue ? forcedState.Value : SubredditManager.Instance.IsSubredditSubscribedTo(m_currentSubreddit.DisplayName);
 
             // Set the text
             ui_subscribeButton.Content = isSubed ? "unsubscribe" : "subscribe";
@@ -168,9 +169,9 @@ namespace Pancetta.Windows.HelperControls
         {
             // Ensure we are signed in.
             // #todo should we disable the button if they aren't signed in?
-            if (!App.BaconMan.UserMan.IsUserSignedIn)
+            if (!UserManager.Instance.IsUserSignedIn)
             {
-                App.BaconMan.MessageMan.ShowSigninMessage("subscribe to reddits");
+                MessageManager.Instance.ShowSigninMessage("subscribe to reddits");
                 return;
             }
 
@@ -182,11 +183,11 @@ namespace Pancetta.Windows.HelperControls
             SetSubButton(subscribe);
 
             // Make the request
-            bool success = await App.BaconMan.SubredditMan.ChangeSubscriptionStatus(m_currentSubreddit.Id, subscribe);
+            bool success = await SubredditManager.Instance.ChangeSubscriptionStatus(m_currentSubreddit.Id, subscribe);
 
             if (!success)
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Oops", "We can't subscribe or unsubscribe to this subreddit right now. Check your Internet connection.");
+                MessageManager.Instance.ShowMessageSimple("Oops", "We can't subscribe or unsubscribe to this subreddit right now. Check your Internet connection.");
 
                 // Fix the button
                 SetSubButton(!subscribe);
@@ -203,7 +204,7 @@ namespace Pancetta.Windows.HelperControls
         private void SetPinButton(bool? forcedState = null)
         {
             // If we are being forced to show something show it, if not check if the user is subed or not.
-            bool isPinned = forcedState.HasValue ? forcedState.Value : App.BaconMan.TileMan.IsSubredditPinned(m_currentSubreddit.DisplayName);
+            bool isPinned = forcedState.HasValue ? forcedState.Value : TileManager.Instance.IsSubredditPinned(m_currentSubreddit.DisplayName);
 
             // Set the text
             ui_pinToStartButton.Content = isPinned ? "unpin from start" : "pin to start";
@@ -231,11 +232,11 @@ namespace Pancetta.Windows.HelperControls
             bool success = false;
             if(pin)
             {
-                success = await App.BaconMan.TileMan.CreateSubredditTile(m_currentSubreddit);
+                success = await TileManager.Instance.CreateSubredditTile(m_currentSubreddit);
             }
             else
             {
-                success = await App.BaconMan.TileMan.RemoveSubredditTile(m_currentSubreddit);
+                success = await TileManager.Instance.RemoveSubredditTile(m_currentSubreddit);
             }
 
             if (!success)
@@ -278,9 +279,9 @@ namespace Pancetta.Windows.HelperControls
 
         private void SubmitPostButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!App.BaconMan.UserMan.IsUserSignedIn)
+            if (!UserManager.Instance.IsUserSignedIn)
             {
-                App.BaconMan.MessageMan.ShowSigninMessage("submit a new post");
+                MessageManager.Instance.ShowSigninMessage("submit a new post");
                 return;
             }
 
@@ -310,7 +311,7 @@ namespace Pancetta.Windows.HelperControls
 
         private void MarkdownTextBox_OnMarkdownLinkTapped(object sender, UniversalMarkdown.OnMarkdownLinkTappedArgs e)
         {
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
             FireShouldClose();
         }
 

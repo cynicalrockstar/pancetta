@@ -15,11 +15,21 @@ namespace Pancetta.Managers
 
     public class NetworkManager
     {
-        BaconManager m_baconMan;
 
-        public NetworkManager(BaconManager baconMan)
+        private static NetworkManager _instance = null;
+        public static NetworkManager Instance
         {
-            m_baconMan = baconMan;
+            get
+            {
+                if (_instance == null)
+                    _instance = new NetworkManager();
+
+                return _instance;
+            }
+        }
+
+        private NetworkManager()
+        {
         }
 
         /// <summary>
@@ -41,9 +51,9 @@ namespace Pancetta.Managers
         /// <returns></returns>
         public async Task<IHttpContent> MakeRedditGetRequest(string apiUrl)
         {
-            if(m_baconMan.UserMan.IsUserSignedIn)
+            if(UserManager.Instance.IsUserSignedIn)
             {
-                string accessToken = await m_baconMan.UserMan.GetAccessToken();
+                string accessToken = await UserManager.Instance.GetAccessToken();
                 if(String.IsNullOrWhiteSpace(accessToken))
                 {
                     throw new Exception("Failed to get (most likely refresh) the access token");
@@ -78,9 +88,9 @@ namespace Pancetta.Managers
         /// <returns></returns>
         public async Task<IHttpContent> MakeRedditPostRequest(string apiUrl, List<KeyValuePair<string, string>> postData)
         {
-            if (m_baconMan.UserMan.IsUserSignedIn)
+            if (UserManager.Instance.IsUserSignedIn)
             {
-                string accessToken = await m_baconMan.UserMan.GetAccessToken();
+                string accessToken = await UserManager.Instance.GetAccessToken();
                 var byteArray = Encoding.UTF8.GetBytes(accessToken);
                 var authHeader = "bearer " + accessToken;
                 return await MakePostRequest("https://oauth.reddit.com/" + apiUrl, postData, authHeader);

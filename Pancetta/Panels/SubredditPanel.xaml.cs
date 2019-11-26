@@ -70,7 +70,7 @@ namespace Pancetta.Windows.Panels
             if (arguments.ContainsKey(PanelManager.NAV_ARGS_SUBREDDIT_NAME))
             {
                 // Try to get the subreddit locally
-                subreddit = App.BaconMan.SubredditMan.GetSubredditByDisplayName((string)arguments[PanelManager.NAV_ARGS_SUBREDDIT_NAME]);
+                subreddit = SubredditManager.Instance.GetSubredditByDisplayName((string)arguments[PanelManager.NAV_ARGS_SUBREDDIT_NAME]);
 
                 // If that failed try to get it from the web
                 if(subreddit == null)
@@ -79,7 +79,7 @@ namespace Pancetta.Windows.Panels
                     ShowFullScreenLoading();
 
                     // Try to get the subreddit from the web
-                    subreddit = await App.BaconMan.SubredditMan.GetSubredditFromWebByDisplayName((string)arguments[PanelManager.NAV_ARGS_SUBREDDIT_NAME]);
+                    subreddit = await SubredditManager.Instance.GetSubredditFromWebByDisplayName((string)arguments[PanelManager.NAV_ARGS_SUBREDDIT_NAME]);
 
                     // Hide the loading UI
                     // The loading ring will be set inactive by the animation complete
@@ -91,7 +91,7 @@ namespace Pancetta.Windows.Panels
             {
                 // Hmmmm. We can't load the subreddit. Show a message and go back
                 ShowFullScreenLoading();
-                App.BaconMan.MessageMan.ShowMessageSimple("Hmmm, That's Not Right", "We can't load this subreddit right now, check your Internet connection.");
+                MessageManager.Instance.ShowMessageSimple("Hmmm, That's Not Right", "We can't load this subreddit right now, check your Internet connection.");
 
                 // We can't call go back with navigating, so use the dispatcher to make a delayed call.
                 await Task.Run(async () =>
@@ -111,8 +111,8 @@ namespace Pancetta.Windows.Panels
             }
 
             // Get the sort type
-            SortTypes sortType = arguments.ContainsKey(PanelManager.NAV_ARGS_SUBREDDIT_SORT) ? (SortTypes)arguments[PanelManager.NAV_ARGS_SUBREDDIT_SORT] : App.BaconMan.UiSettingsMan.SubredditList_DefaultSortType;
-            SortTimeTypes postSortTime = arguments.ContainsKey(PanelManager.NAV_ARGS_SUBREDDIT_SORT_TIME) ? (SortTimeTypes)arguments[PanelManager.NAV_ARGS_SUBREDDIT_SORT_TIME] : App.BaconMan.UiSettingsMan.SubredditList_DefaultSortTimeType;
+            SortTypes sortType = arguments.ContainsKey(PanelManager.NAV_ARGS_SUBREDDIT_SORT) ? (SortTypes)arguments[PanelManager.NAV_ARGS_SUBREDDIT_SORT] : UiSettingManager.Instance.SubredditList_DefaultSortType;
+            SortTimeTypes postSortTime = arguments.ContainsKey(PanelManager.NAV_ARGS_SUBREDDIT_SORT_TIME) ? (SortTimeTypes)arguments[PanelManager.NAV_ARGS_SUBREDDIT_SORT_TIME] : UiSettingManager.Instance.SubredditList_DefaultSortTimeType;
 
             // Do the rest of the setup
             SetupPage(subreddit, sortType, postSortTime);
@@ -175,7 +175,7 @@ namespace Pancetta.Windows.Panels
             SetCurrentTimeSort(sortTimeType);
 
             // Get the collector and register for updates.
-            m_collector = PostCollector.GetCollector(m_subreddit, App.BaconMan, m_currentSortType, m_currentSortTimeType);
+            m_collector = PostCollector.GetCollector(m_subreddit, BaconManager.Instance, m_currentSortType, m_currentSortTimeType);
             m_collector.OnCollectorStateChange += Collector_OnCollectorStateChange;
             m_collector.OnCollectionUpdated += Collector_OnCollectionUpdated;
 
@@ -210,11 +210,11 @@ namespace Pancetta.Windows.Panels
             {
                 if(args.ErrorState == CollectorErrorState.ServiceDown)
                 {
-                    App.BaconMan.MessageMan.ShowRedditDownMessage();
+                    MessageManager.Instance.ShowRedditDownMessage();
                 }
                 else
                 {
-                    App.BaconMan.MessageMan.ShowMessageSimple("That's Not Right", "We can't update this subreddit right now, check your Internet connection.");
+                    MessageManager.Instance.ShowMessageSimple("That's Not Right", "We can't update this subreddit right now, check your Internet connection.");
                 }
             }
 
@@ -249,7 +249,7 @@ namespace Pancetta.Windows.Panels
             // Dispatch to the UI thread
             await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("Oops", "Pancetta can't load any posts right now, check your Internet connection.");
+                MessageManager.Instance.ShowMessageSimple("Oops", "Pancetta can't load any posts right now, check your Internet connection.");
                 ToggleLoadingBar(false);
             });
         }
@@ -293,7 +293,7 @@ namespace Pancetta.Windows.Panels
                                     ImageId = post.Id
                                 };
                                 request.OnRequestComplete += OnRequestComplete;
-                                App.BaconMan.ImageMan.QueueImageRequest(request);
+                                ImageManager.Instance.QueueImageRequest(request);
                             }
                         }
 

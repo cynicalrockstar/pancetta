@@ -13,6 +13,7 @@ using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
+using Pancetta.Managers;
 
 namespace Pancetta.Helpers
 {
@@ -178,11 +179,11 @@ namespace Pancetta.Helpers
                 string apiString = isEdit ? "api/editusertext" : "api/comment";
 
                 // Make the call
-                returnString = await baconMan.NetworkMan.MakeRedditPostRequestAsString(apiString, postData);
+                returnString = await NetworkManager.Instance.MakeRedditPostRequestAsString(apiString, postData);
             }
             catch (Exception e)
             {
-                baconMan.MessageMan.DebugDia("failed to send message", e);
+                MessageManager.Instance.DebugDia("failed to send message", e);
             }
             return returnString;
         }      
@@ -197,14 +198,14 @@ namespace Pancetta.Helpers
             try
             {
                 // Make the call
-                string jsonResponse = await baconMan.NetworkMan.MakeRedditGetRequestAsString($"user/{userName}/about/.json");
+                string jsonResponse = await NetworkManager.Instance.MakeRedditGetRequestAsString($"user/{userName}/about/.json");
 
                 // Parse the new user
                 foundUser = MiscellaneousHelper.ParseOutRedditDataElement<User>(baconMan, jsonResponse);
             }
             catch (Exception e)
             {
-                baconMan.MessageMan.DebugDia("failed to search for user", e);
+                MessageManager.Instance.DebugDia("failed to search for user", e);
             }
             return foundUser;
         }
@@ -225,7 +226,7 @@ namespace Pancetta.Helpers
                 postData.Add(new KeyValuePair<string, string>("id", "t3_"+postId));   
 
                 // Make the call
-                returnString = await baconMan.NetworkMan.MakeRedditPostRequestAsString("api/del", postData);
+                returnString = await NetworkManager.Instance.MakeRedditPostRequestAsString("api/del", postData);
 
                 if(returnString.Equals("{}"))
                 {
@@ -234,7 +235,7 @@ namespace Pancetta.Helpers
             }
             catch (Exception e)
             {
-                baconMan.MessageMan.DebugDia("failed to delete post", e);
+                MessageManager.Instance.DebugDia("failed to delete post", e);
             }
             return false;
         }
@@ -245,9 +246,9 @@ namespace Pancetta.Helpers
         /// <returns>Returns null if it fails or the user doesn't exist.</returns>
         public static async Task<bool> SaveOrHideRedditItem(BaconManager baconMan, string redditId, bool? save, bool? hide)
         {
-            if(!baconMan.UserMan.IsUserSignedIn)
+            if(!UserManager.Instance.IsUserSignedIn)
             {
-                baconMan.MessageMan.ShowSigninMessage(save.HasValue ? "save item" : "hide item");
+                MessageManager.Instance.ShowSigninMessage(save.HasValue ? "save item" : "hide item");
                 return false;
             }
 
@@ -273,7 +274,7 @@ namespace Pancetta.Helpers
                 }
 
                 // Make the call
-                string jsonResponse = await baconMan.NetworkMan.MakeRedditPostRequestAsString(url, data);
+                string jsonResponse = await NetworkManager.Instance.MakeRedditPostRequestAsString(url, data);
 
                 if(jsonResponse.Contains("{}"))
                 {
@@ -281,12 +282,12 @@ namespace Pancetta.Helpers
                 }
                 else
                 {
-                    baconMan.MessageMan.DebugDia("failed to save or hide item, unknown response");
+                    MessageManager.Instance.DebugDia("failed to save or hide item, unknown response");
                 }
             }
             catch (Exception e)
             {
-                baconMan.MessageMan.DebugDia("failed to save or hide item", e);
+                MessageManager.Instance.DebugDia("failed to save or hide item", e);
             }
             return wasSuccess;
         }
@@ -296,9 +297,9 @@ namespace Pancetta.Helpers
         /// </summary>
         public static async Task<SubmitNewPostResponse> SubmitNewPost(BaconManager baconMan, string title, string urlOrText, string subredditDisplayName, bool isSelfText, bool sendRepliesToInbox)
         {
-            if (!baconMan.UserMan.IsUserSignedIn)
+            if (!UserManager.Instance.IsUserSignedIn)
             {
-                baconMan.MessageMan.ShowSigninMessage("submit a new post");
+                MessageManager.Instance.ShowSigninMessage("submit a new post");
                 return new SubmitNewPostResponse(){ Success = false };
             }
 
@@ -320,7 +321,7 @@ namespace Pancetta.Helpers
                 data.Add(new KeyValuePair<string, string>("title", title));
 
                 // Make the call
-                string jsonResponse = await baconMan.NetworkMan.MakeRedditPostRequestAsString("/api/submit/", data);
+                string jsonResponse = await NetworkManager.Instance.MakeRedditPostRequestAsString("/api/submit/", data);
 
                 // Try to see if we can find the word redirect and if we can find the subreddit url
                 string responseLower = jsonResponse.ToLower();
@@ -353,18 +354,18 @@ namespace Pancetta.Helpers
                         string enumName = Enum.GetName(typeof(SubmitNewPostErrors), i).ToLower(); ;
                         if (responseLower.Contains(enumName))
                         {
-                            baconMan.MessageMan.DebugDia("failed to submit post; error: "+ enumName);
+                            MessageManager.Instance.DebugDia("failed to submit post; error: "+ enumName);
                             return new SubmitNewPostResponse() { Success = false, RedditError = (SubmitNewPostErrors)i};
                         }
                     }
 
-                    baconMan.MessageMan.DebugDia("failed to submit post; unknown reddit error");
+                    MessageManager.Instance.DebugDia("failed to submit post; unknown reddit error");
                     return new SubmitNewPostResponse() { Success = false, RedditError = SubmitNewPostErrors.UNKNOWN };
                 }
             }
             catch (Exception e)
             {
-                baconMan.MessageMan.DebugDia("failed to submit post", e);
+                MessageManager.Instance.DebugDia("failed to submit post", e);
                 return new SubmitNewPostResponse() { Success = false };
             }
         }
@@ -389,12 +390,12 @@ namespace Pancetta.Helpers
             //    byte[] imageData = new byte[str.Length];
             //    await str.ReadAsync(imageData, 0, (int)str.Length);
             //    data.Add(new KeyValuePair<string, string>("image", WebUtility.UrlEncode(Convert.ToBase64String(imageData))));
-            //    string repsonse = await baconMan.NetworkMan.MakePostRequest("https://api.imgur.com/2/upload.json", data);
+            //    string repsonse = await NetworkManager.Instance.MakePostRequest("https://api.imgur.com/2/upload.json", data);
             //}
             //catch (Exception e)
             //{
             //    baconMan.TelemetryMan.ReportUnexpectedEvent("MisHelper", "failed to submit post", e);
-            //    baconMan.MessageMan.DebugDia("failed to submit post", e);
+            //    MessageManager.Instance.DebugDia("failed to submit post", e);
             //    return new SubmitNewPostResponse() { Success = false };
             //}
             throw new NotImplementedException("This function isn't complete!");

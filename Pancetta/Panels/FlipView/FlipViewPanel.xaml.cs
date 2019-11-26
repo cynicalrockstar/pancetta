@@ -127,7 +127,7 @@ namespace Pancetta.Windows.Panels.FlipView
             Task.Run(async () =>
             {
                 // Try to get the subreddit from the local cache.
-                Subreddit subreddit = App.BaconMan.SubredditMan.GetSubredditByDisplayName(subredditName);
+                Subreddit subreddit = SubredditManager.Instance.GetSubredditByDisplayName(subredditName);
 
                 // It is very rare that we can't get it from the cache because something
                 // else usually request it from the web and then it will be cached.
@@ -137,14 +137,14 @@ namespace Pancetta.Windows.Panels.FlipView
                     ShowFullScreenLoading();
 
                     // Try to get the subreddit from the web
-                    subreddit = await App.BaconMan.SubredditMan.GetSubredditFromWebByDisplayName((string)arguments[PanelManager.NAV_ARGS_SUBREDDIT_NAME]);
+                    subreddit = await SubredditManager.Instance.GetSubredditFromWebByDisplayName((string)arguments[PanelManager.NAV_ARGS_SUBREDDIT_NAME]);
                 }
 
                 // Check again.
                 if (subreddit == null)
                 {
                     // Hmmmm. We can't load the subreddit. Show a message and go back
-                    App.BaconMan.MessageMan.ShowMessageSimple("Hmmm, That's Not Right", "We can't load this subreddit right now, check your Internet connection.");
+                    MessageManager.Instance.ShowMessageSimple("Hmmm, That's Not Right", "We can't load this subreddit right now, check your Internet connection.");
 
                     // We need to wait some time until the transition animation is done or we can't go back.
                     // If we call GoBack while we are still navigating it will be ignored.
@@ -194,7 +194,7 @@ namespace Pancetta.Windows.Panels.FlipView
                 }
 
                 // Get the collector and register for updates.
-                m_collector = PostCollector.GetCollector(m_subreddit, App.BaconMan, m_currentSort, m_currentSortTime, forcePostId);
+                m_collector = PostCollector.GetCollector(m_subreddit, BaconManager.Instance, m_currentSort, m_currentSortTime, forcePostId);
                 m_collector.OnCollectionUpdated += Collector_OnCollectionUpdated;
 
                 // Kick off an update of the subreddits if needed.
@@ -443,7 +443,7 @@ namespace Pancetta.Windows.Panels.FlipView
                                     }
                                     catch (Exception e)
                                     {
-                                        App.BaconMan.MessageMan.DebugDia("Adding to m_postList failed! " + (post == null ? "post was null!" : "post IS NOT NULL"), e);
+                                        MessageManager.Instance.DebugDia("Adding to m_postList failed! " + (post == null ? "post was null!" : "post IS NOT NULL"), e);
                                     }
                                 }
 
@@ -461,7 +461,7 @@ namespace Pancetta.Windows.Panels.FlipView
                                 }
                                 catch(Exception e)
                                 {
-                                    App.BaconMan.MessageMan.DebugDia("Adding to m_postList failed! " + (post == null ? "post was null!" : "post IS NOT NULL"), e);
+                                    MessageManager.Instance.DebugDia("Adding to m_postList failed! " + (post == null ? "post was null!" : "post IS NOT NULL"), e);
                                 }
                             }
                         }
@@ -617,7 +617,7 @@ namespace Pancetta.Windows.Panels.FlipView
             // Get the min and max number of posts to load.
             int minContentLoad = ui_flipView.SelectedIndex;
             int maxContentLoad = ui_flipView.SelectedIndex;
-            if (App.BaconMan.UiSettingsMan.FlipView_PreloadFutureContent)
+            if (UiSettingManager.Instance.FlipView_PreloadFutureContent)
             {
                 maxContentLoad++;
             }
@@ -894,7 +894,7 @@ namespace Pancetta.Windows.Panels.FlipView
             item.IsVisible = isVisiblePost;
 
             // Only load the content if we are doing it with out action. (most of the time)
-            if (App.BaconMan.UiSettingsMan.FlipView_LoadPostContentWithoutAction)
+            if (UiSettingManager.Instance.FlipView_LoadPostContentWithoutAction)
             {
                 await Task.Run(() =>
                 {

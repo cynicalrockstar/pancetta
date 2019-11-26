@@ -174,11 +174,11 @@ namespace Pancetta.Windows
             UpdateBackButton();
 
             // Register for app suspend commands
-            App.BaconMan.OnSuspending += OnSuspending;
-            App.BaconMan.OnResuming += OnResuming;
+            BaconManager.Instance.OnSuspending += OnSuspending;
+            BaconManager.Instance.OnResuming += OnResuming;
 
             // Register for memory pressure callbacks
-            App.BaconMan.MemoryMan.OnMemoryCleanUpRequest += MemoryMan_OnMemoryCleanUpRequest;
+            MemoryManager.Instance.OnMemoryCleanUpRequest += MemoryMan_OnMemoryCleanUpRequest;
         }
 
         #region Suspend and Resume
@@ -892,7 +892,7 @@ namespace Pancetta.Windows
             }
             catch(Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia("Exception in FireOnScreenModeChanged", e);
+                MessageManager.Instance.DebugDia("Exception in FireOnScreenModeChanged", e);
             }
         }
 
@@ -1089,7 +1089,7 @@ namespace Pancetta.Windows
             if (cleanupPanelList.Count > 0)
             {
                 // Keep track of how many pages have been cleaned up.
-                App.BaconMan.UiSettingsMan.PagesMemoryCleanedUp += cleanupPanelList.Count;
+                UiSettingManager.Instance.PagesMemoryCleanedUp += cleanupPanelList.Count;
 
                 // Jump to the UI thread to do this.
                 await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -1147,7 +1147,7 @@ namespace Pancetta.Windows
             }
             catch (Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia("OnNavigationComplete failed!", e);
+                MessageManager.Instance.DebugDia("OnNavigationComplete failed!", e);
             }
         }
 
@@ -1164,7 +1164,7 @@ namespace Pancetta.Windows
             }
             catch (Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia("OnNavigatingFrom failed!", e);
+                MessageManager.Instance.DebugDia("OnNavigatingFrom failed!", e);
             }
         }
 
@@ -1181,7 +1181,7 @@ namespace Pancetta.Windows
             }
             catch (Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia("OnNavigatingTo failed!", e);
+                MessageManager.Instance.DebugDia("OnNavigatingTo failed!", e);
             }
         }
 
@@ -1199,7 +1199,7 @@ namespace Pancetta.Windows
             }
             catch (Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia("FireOnCleanupPanel failed!", e);
+                MessageManager.Instance.DebugDia("FireOnCleanupPanel failed!", e);
             }
         }
 
@@ -1216,7 +1216,7 @@ namespace Pancetta.Windows
             }
             catch (Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia("FireOnReduceMemory failed!", e);
+                MessageManager.Instance.DebugDia("FireOnReduceMemory failed!", e);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Pancetta.Interfaces;
+using Pancetta.Managers;
 using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -328,7 +329,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
                 catch (Exception e)
                 {
                     // If we fail here we will fall back to the web browser.
-                    App.BaconMan.MessageMan.DebugDia("Failed to query can handle post", e);
+                    MessageManager.Instance.DebugDia("Failed to query can handle post", e);
                 }
             }
 
@@ -350,7 +351,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
                     {
                         loadedPanel = false;
                         HasError = true;
-                        App.BaconMan.MessageMan.DebugDia("failed to create content control", e);
+                        MessageManager.Instance.DebugDia("failed to create content control", e);
                     }
                 });
             }

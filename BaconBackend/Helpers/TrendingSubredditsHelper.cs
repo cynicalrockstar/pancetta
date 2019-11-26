@@ -1,5 +1,6 @@
 ﻿using Pancetta.Collectors;
 using Pancetta.DataObjects;
+using Pancetta.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,7 +141,7 @@ namespace Pancetta.Helpers
                 }
                 catch(Exception ex)
                 {
-                    m_baconMan.MessageMan.DebugDia("failed to parse trending subs post", ex);
+                    MessageManager.Instance.DebugDia("failed to parse trending subs post", ex);
                 }
             }
 
@@ -166,7 +167,7 @@ namespace Pancetta.Helpers
             }
             catch(Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("failed to fire trending subs ready event", e);
+                MessageManager.Instance.DebugDia("failed to fire trending subs ready event", e);
             }
         }
 
@@ -181,9 +182,9 @@ namespace Pancetta.Helpers
             {
                 if (m_lastUpdate.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("TrendingSubredditsHelper.LastUpdate"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("TrendingSubredditsHelper.LastUpdate"))
                     {
-                        m_lastUpdate = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("TrendingSubredditsHelper.LastUpdate");
+                        m_lastUpdate = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("TrendingSubredditsHelper.LastUpdate");
                     }
                 }
                 return m_lastUpdate;
@@ -191,7 +192,7 @@ namespace Pancetta.Helpers
             set
             {
                 m_lastUpdate = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>("TrendingSubredditsHelper.LastUpdate", m_lastUpdate);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>("TrendingSubredditsHelper.LastUpdate", m_lastUpdate);
             }
         }
         private DateTime m_lastUpdate = new DateTime(0);
@@ -206,9 +207,9 @@ namespace Pancetta.Helpers
             {
                 if (m_lastTrendingSubs == null)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("MessageOfTheDayManager.LastTrendingSubs"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("MessageOfTheDayManager.LastTrendingSubs"))
                     {
-                        m_lastTrendingSubs = m_baconMan.SettingsMan.ReadFromLocalSettings<List<string>>("MessageOfTheDayManager.LastTrendingSubs");
+                        m_lastTrendingSubs = SettingsManager.Instance.ReadFromLocalSettings<List<string>>("MessageOfTheDayManager.LastTrendingSubs");
                     }
                     else
                     {
@@ -220,7 +221,7 @@ namespace Pancetta.Helpers
             set
             {
                 m_lastTrendingSubs = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<List<string>>("MessageOfTheDayManager.LastTrendingSubs", m_lastTrendingSubs);
+                SettingsManager.Instance.WriteToLocalSettings<List<string>>("MessageOfTheDayManager.LastTrendingSubs", m_lastTrendingSubs);
             }
         }
         private List<string> m_lastTrendingSubs = null;

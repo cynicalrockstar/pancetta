@@ -484,9 +484,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaconBackend\PancettaCommon.csproj">
+    <ProjectReference Include="..\BaconBackend\Pancetta.Common.csproj">
       <Project>{760d26fa-938b-4b0a-9c87-915adaed244d}</Project>
-      <Name>PancettaCommon</Name>
+      <Name>Pancetta.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalMarkdown\UniversalMarkdown.csproj">
       <Project>{9ffc3b68-696a-4342-a2b8-2eadddef7ff9}</Project>

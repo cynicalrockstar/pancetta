@@ -15,14 +15,22 @@ namespace Pancetta.Managers
 {
     public class TileManager
     {
+        private static TileManager _instance = null;
+        public static TileManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new TileManager();
+                return _instance;
+            }
+        }
+
         public const string c_subredditOpenArgument = "goToSubreddit?displayName=";
         const string c_subredditTitleId = "subreddit.";
 
-        BaconManager m_baconMan;
-
-        public TileManager(BaconManager baconMan)
+        private TileManager()
         {
-            m_baconMan = baconMan;
         }
 
         /// <summary>
@@ -126,7 +134,7 @@ namespace Pancetta.Managers
             };
 
             // If the user is signed in we will do more for large and wide.
-            if(m_baconMan.UserMan.IsUserSignedIn && m_baconMan.UserMan.CurrentUser != null && !String.IsNullOrWhiteSpace(m_baconMan.UserMan.CurrentUser.Name))
+            if(UserManager.Instance.IsUserSignedIn && UserManager.Instance.CurrentUser != null && !String.IsNullOrWhiteSpace(UserManager.Instance.CurrentUser.Name))
             {
                 content.Visual.TileWide = new TileBinding()
                 {
@@ -136,17 +144,17 @@ namespace Pancetta.Managers
                         {
                             new AdaptiveText
                             {
-                                Text = m_baconMan.UserMan.CurrentUser.Name,
+                                Text = UserManager.Instance.CurrentUser.Name,
                                 HintStyle = AdaptiveTextStyle.Caption
                             },
                             new AdaptiveText
                             {
-                                Text = String.Format("{0:N0}", m_baconMan.UserMan.CurrentUser.CommentKarma) + " comment karma",
+                                Text = String.Format("{0:N0}", UserManager.Instance.CurrentUser.CommentKarma) + " comment karma",
                                 HintStyle = AdaptiveTextStyle.Caption
                             },
                             new AdaptiveText
                             {
-                                Text = String.Format("{0:N0}", m_baconMan.UserMan.CurrentUser.LinkKarma) + " link karma",
+                                Text = String.Format("{0:N0}", UserManager.Instance.CurrentUser.LinkKarma) + " link karma",
                                 HintStyle = AdaptiveTextStyle.Caption
                             },                           
                         }
@@ -166,7 +174,7 @@ namespace Pancetta.Managers
 
                 // Also set the cake day if it is today
                 DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                DateTime userCreationTime = origin.AddSeconds(m_baconMan.UserMan.CurrentUser.CreatedUtc).ToLocalTime();
+                DateTime userCreationTime = origin.AddSeconds(UserManager.Instance.CurrentUser.CreatedUtc).ToLocalTime();
                 TimeSpan elapsed = DateTime.Now - userCreationTime;
                 double fullYears = Math.Floor((elapsed.TotalDays / 365));
                 int daysUntil = (int)(elapsed.TotalDays - (fullYears * 365));

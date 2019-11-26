@@ -1,6 +1,7 @@
 ﻿using Pancetta.Collectors;
 using Pancetta.DataObjects;
 using Pancetta.Helpers;
+using Pancetta.Managers;
 using Pancetta.Windows.Interfaces;
 using Pancetta.Windows.Panels.FlipView;
 using System;
@@ -108,7 +109,7 @@ namespace Pancetta.Windows.Panels
             Task.Run(async () =>
             {
                 // Make the request
-                m_user = await MiscellaneousHelper.GetRedditUser(App.BaconMan, userName);
+                m_user = await MiscellaneousHelper.GetRedditUser(BaconManager.Instance, userName);
 
                 // Jump back to the UI thread, we will use low priority so we don't make any animations choppy.
                 await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
@@ -151,7 +152,7 @@ namespace Pancetta.Windows.Panels
         private async void ReportUserLoadFailed()
         {
             // Show a message
-            App.BaconMan.MessageMan.ShowMessageSimple("Failed To Load", "Check your Internet connection.");
+            MessageManager.Instance.ShowMessageSimple("Failed To Load", "Check your Internet connection.");
 
             // Report
 
@@ -233,7 +234,7 @@ namespace Pancetta.Windows.Panels
 
                 if (m_postCollector == null)
                 {
-                    m_postCollector = PostCollector.GetCollector(m_user, App.BaconMan, m_postSort);
+                    m_postCollector = PostCollector.GetCollector(m_user, BaconManager.Instance, m_postSort);
                     m_postCollector.OnCollectionUpdated += PostCollector_OnCollectionUpdated;
                     m_postCollector.OnCollectorStateChange += PostCollector_OnCollectorStateChange;
                 }
@@ -501,7 +502,7 @@ namespace Pancetta.Windows.Panels
 
                 if (m_commentCollector == null)
                 {
-                    m_commentCollector = CommentCollector.GetCollector(m_user, App.BaconMan, m_commentSort);
+                    m_commentCollector = CommentCollector.GetCollector(m_user, BaconManager.Instance, m_commentSort);
                     m_commentCollector.OnCollectionUpdated += CommentCollector_OnCollectionUpdated;
                     m_commentCollector.OnCollectorStateChange += CommentCollector_OnCollectorStateChange;
                 }
@@ -650,7 +651,7 @@ namespace Pancetta.Windows.Panels
         /// <param name="e"></param>
         private void MarkdownTextBlock_OnMarkdownLinkTapped(object sender, UniversalMarkdown.OnMarkdownLinkTappedArgs e)
         {
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
         }
 
         /// <summary>

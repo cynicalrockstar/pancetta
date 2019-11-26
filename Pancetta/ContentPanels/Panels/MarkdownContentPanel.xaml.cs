@@ -142,7 +142,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
         /// <param name="e"></param>
         private void MarkdownBlock_OnMarkdownLinkTapped(object sender, OnMarkdownLinkTappedArgs e)
         {
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
         }
 
         /// <summary>

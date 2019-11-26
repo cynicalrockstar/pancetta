@@ -53,9 +53,9 @@ namespace Pancetta.Windows.Panels.SettingsPanels
 
             m_takeChangeAction = false;
 
-            ui_showHelpTips.IsOn = App.BaconMan.UiSettingsMan.FlipView_ShowCommentScrollTip;
-            ui_flipViewNsfwType.SelectedIndex = (int)App.BaconMan.UiSettingsMan.FlipView_NsfwBlockingType;
-            ui_preloadPost.IsOn = App.BaconMan.UiSettingsMan.FlipView_PreloadFutureContent;
+            ui_showHelpTips.IsOn = UiSettingManager.Instance.FlipView_ShowCommentScrollTip;
+            ui_flipViewNsfwType.SelectedIndex = (int)UiSettingManager.Instance.FlipView_NsfwBlockingType;
+            ui_preloadPost.IsOn = UiSettingManager.Instance.FlipView_PreloadFutureContent;
 
             m_takeChangeAction = true;
         }
@@ -81,7 +81,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 return;
             }
 
-            App.BaconMan.UiSettingsMan.FlipView_ShowCommentScrollTip = ui_showHelpTips.IsOn;
+            UiSettingManager.Instance.FlipView_ShowCommentScrollTip = ui_showHelpTips.IsOn;
         }
 
         private void FlipViewNsfwType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -91,7 +91,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 return;
             }
 
-            App.BaconMan.UiSettingsMan.FlipView_NsfwBlockingType = (NsfwBlockType)ui_flipViewNsfwType.SelectedIndex;
+            UiSettingManager.Instance.FlipView_NsfwBlockingType = (NsfwBlockType)ui_flipViewNsfwType.SelectedIndex;
         }
 
         private void PreloadPost_Toggled(object sender, RoutedEventArgs e)
@@ -101,7 +101,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 return;
             }
 
-            App.BaconMan.UiSettingsMan.FlipView_PreloadFutureContent = ui_preloadPost.IsOn;
+            UiSettingManager.Instance.FlipView_PreloadFutureContent = ui_preloadPost.IsOn;
         }
     }
 }

@@ -90,9 +90,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaconBackend\PancettaCommon.csproj">
+    <ProjectReference Include="..\BaconBackend\Pancetta.Common.csproj">
       <Project>{760d26fa-938b-4b0a-9c87-915adaed244d}</Project>
-      <Name>PancettaCommon</Name>
+      <Name>Pancetta.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

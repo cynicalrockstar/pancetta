@@ -491,8 +491,8 @@ namespace Pancetta.Windows.ContentPanels
             if (panelBase != null &&
                 panelBase.Source.IsNSFW &&
                 !s_previousLoweredNsfwBlocks.ContainsKey(panelBase.Source.Id) &&
-                    (App.BaconMan.UiSettingsMan.FlipView_NsfwBlockingType == NsfwBlockType.Always ||
-                        (App.BaconMan.UiSettingsMan.FlipView_NsfwBlockingType == NsfwBlockType.PerSubreddit &&
+                    (UiSettingManager.Instance.FlipView_NsfwBlockingType == NsfwBlockType.Always ||
+                        (UiSettingManager.Instance.FlipView_NsfwBlockingType == NsfwBlockType.PerSubreddit &&
                          !String.IsNullOrWhiteSpace(panelBase.Source.Subreddit) &&
                          !s_previousLoweredNsfwSubreddits.ContainsKey(panelBase.Source.Subreddit))))
             {
@@ -643,7 +643,7 @@ namespace Pancetta.Windows.ContentPanels
         private bool ShowContentLoadBlockIfNeeded()
         {
             // If we are blocking content show the request block.
-            m_isShowingContentLoadBlock = !App.BaconMan.UiSettingsMan.FlipView_LoadPostContentWithoutAction;
+            m_isShowingContentLoadBlock = !UiSettingManager.Instance.FlipView_LoadPostContentWithoutAction;
             if (m_isShowingContentLoadBlock)
             {
                 // Show the message

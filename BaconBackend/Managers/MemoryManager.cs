@@ -50,6 +50,17 @@ namespace Pancetta.Managers
     /// </summary>
     public class MemoryManager
     {
+        private static MemoryManager _instance = null;
+        public static MemoryManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new MemoryManager();
+                return _instance;
+            }
+        }
+
         //
         // Const
         //
@@ -111,11 +122,6 @@ namespace Pancetta.Managers
         //
 
         /// <summary>
-        /// Holds a ref to the manager
-        /// </summary>
-        BaconManager m_baconMan;
-
-        /// <summary>
         /// Indicates if we are running or not.
         /// </summary>
         bool m_isRunning = false;
@@ -131,10 +137,8 @@ namespace Pancetta.Managers
         /// </summary>
         int m_cleanupTick = 0;
 
-        public MemoryManager(BaconManager baconMan)
+        private MemoryManager()
         {
-            m_baconMan = baconMan;
-
             // Start the watching thread.
             StartMemoryWatch();
         }
@@ -284,7 +288,7 @@ namespace Pancetta.Managers
             }
             catch(Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Memory report fire failed", e);
+                MessageManager.Instance.DebugDia("Memory report fire failed", e);
             }
         }
 
@@ -307,7 +311,7 @@ namespace Pancetta.Managers
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Memory cleanup fire failed", e);
+                MessageManager.Instance.DebugDia("Memory cleanup fire failed", e);
             }
         }
     }

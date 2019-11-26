@@ -1,4 +1,5 @@
-﻿using Pancetta.Windows.Interfaces;
+﻿using Pancetta.Managers;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -153,7 +154,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
                 }
                 catch (Exception ex)
                 {
-                    App.BaconMan.MessageMan.DebugDia("failed to parse app id", ex);
+                    MessageManager.Instance.DebugDia("failed to parse app id", ex);
                 }
 
                 // If we failed use the web browser

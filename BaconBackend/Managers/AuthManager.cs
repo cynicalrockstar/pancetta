@@ -15,6 +15,18 @@ namespace Pancetta.Managers
 
     public class AuthManager
     {
+        private static AuthManager _instance = null;
+        public static AuthManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new AuthManager();
+
+                return _instance;
+            }
+        }
+
         private const string BACONIT_APP_ID = "EU5cWoJCJ5HcPQ";
         private const string BACONIT_REDIRECT_URL = "http://www.quinndamerell.com/Baconit/OAuth/Auth.php";
 
@@ -36,14 +48,12 @@ namespace Pancetta.Managers
             public DateTime ExpiresAt;
         }
 
-        private BaconManager m_baconMan;
         ManualResetEvent m_refreshEvent = new ManualResetEvent(false);
         bool m_isTokenRefreshing = false;
         bool m_tokenRefreshFailed = false;
 
-        public AuthManager(BaconManager baconMan)
+        private AuthManager()
         {
-            m_baconMan = baconMan;
         }
 
         /// <summary>
@@ -130,7 +140,7 @@ namespace Pancetta.Managers
                     }
                     catch (Exception e)
                     {
-                        m_baconMan.MessageMan.DebugDia("Failed to auto refresh token", e);
+                        MessageManager.Instance.DebugDia("Failed to auto refresh token", e);
                         m_tokenRefreshFailed = true;
                     }
 
@@ -258,7 +268,7 @@ namespace Pancetta.Managers
             }
             catch(Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Failed to get request token", e);
+                MessageManager.Instance.DebugDia("Failed to get request token", e);
                 return new UserManager.SignInResult()
                 {
                     WasErrorNetwork = true
@@ -285,7 +295,7 @@ namespace Pancetta.Managers
                 // Create the auth header
                 var byteArray = Encoding.UTF8.GetBytes(BACONIT_APP_ID+":");
                 var base64String = "Basic " + Convert.ToBase64String(byteArray);
-                IHttpContent response = await m_baconMan.NetworkMan.MakePostRequest(accessTokenRequest, postData, base64String);
+                IHttpContent response = await NetworkManager.Instance.MakePostRequest(accessTokenRequest, postData, base64String);
                 string responseString = await response.ReadAsStringAsync();
 
                 // Parse the response.
@@ -293,7 +303,7 @@ namespace Pancetta.Managers
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Failed to get access token", e);
+                MessageManager.Instance.DebugDia("Failed to get access token", e);
                 return null;
             }
         }
@@ -354,9 +364,9 @@ namespace Pancetta.Managers
             {
                 if (m_accessTokenData == null)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("AuthManager.AccessToken"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("AuthManager.AccessToken"))
                     {
-                        m_accessTokenData = m_baconMan.SettingsMan.ReadFromRoamingSettings<AccessTokenResult>("AuthManager.AccessToken");
+                        m_accessTokenData = SettingsManager.Instance.ReadFromRoamingSettings<AccessTokenResult>("AuthManager.AccessToken");
                     }
                     else
                     {
@@ -375,7 +385,7 @@ namespace Pancetta.Managers
                     Debugger.Break();
                 }
 
-                m_baconMan.SettingsMan.WriteToRoamingSettings<AccessTokenResult>("AuthManager.AccessToken", m_accessTokenData);
+                SettingsManager.Instance.WriteToRoamingSettings<AccessTokenResult>("AuthManager.AccessToken", m_accessTokenData);
             }
         }
         private AccessTokenResult m_accessTokenData = null;

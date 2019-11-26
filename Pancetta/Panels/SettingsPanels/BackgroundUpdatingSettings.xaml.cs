@@ -1,5 +1,7 @@
 ﻿using Pancetta.DataObjects;
 using Pancetta.Helpers;
+using Pancetta.Managers;
+using Pancetta.Managers.Background;
 using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -51,25 +53,25 @@ namespace Pancetta.Windows.Panels.SettingsPanels
         public async void OnNavigatingFrom()
         {
             // Update the settings
-            App.BaconMan.BackgroundMan.ImageUpdaterMan.UpdateFrquency = FrequencyListIndexToSettings(ui_imageFrequency.SelectedIndex);
-            App.BaconMan.BackgroundMan.ImageUpdaterMan.IsDeskopEnabled = ui_enableDesktop.IsOn;
-            App.BaconMan.BackgroundMan.ImageUpdaterMan.IsLockScreenEnabled = ui_enableLockScreen.IsOn;
-            App.BaconMan.BackgroundMan.ImageUpdaterMan.DesktopSubredditName = (string)ui_desktopSource.SelectedItem;
-            App.BaconMan.BackgroundMan.ImageUpdaterMan.LockScreenSubredditName = (string)ui_lockScreenSource.SelectedItem;
+            BackgroundImageUpdater.Instance.UpdateFrquency = FrequencyListIndexToSettings(ui_imageFrequency.SelectedIndex);
+            BackgroundImageUpdater.Instance.IsDeskopEnabled = ui_enableDesktop.IsOn;
+            BackgroundImageUpdater.Instance.IsLockScreenEnabled = ui_enableLockScreen.IsOn;
+            BackgroundImageUpdater.Instance.DesktopSubredditName = (string)ui_desktopSource.SelectedItem;
+            BackgroundImageUpdater.Instance.LockScreenSubredditName = (string)ui_lockScreenSource.SelectedItem;
 
             // See below for a full comment on this. But if the user isn't logged in we want to clean up the name
             // a little.
-            if(App.BaconMan.BackgroundMan.ImageUpdaterMan.DesktopSubredditName.Equals(c_earthPornReplace))
+            if(BackgroundImageUpdater.Instance.DesktopSubredditName.Equals(c_earthPornReplace))
             {
-                App.BaconMan.BackgroundMan.ImageUpdaterMan.DesktopSubredditName = "earthporn";
+                BackgroundImageUpdater.Instance.DesktopSubredditName = "earthporn";
             }
-            if (App.BaconMan.BackgroundMan.ImageUpdaterMan.LockScreenSubredditName.Equals(c_earthPornReplace))
+            if (BackgroundImageUpdater.Instance.LockScreenSubredditName.Equals(c_earthPornReplace))
             {
-                App.BaconMan.BackgroundMan.ImageUpdaterMan.LockScreenSubredditName = "earthporn";
+                BackgroundImageUpdater.Instance.LockScreenSubredditName = "earthporn";
             }
 
             // Kill the listener
-            App.BaconMan.SubredditMan.OnSubredditsUpdated -= SubredditMan_OnSubredditsUpdated;
+            SubredditManager.Instance.OnSubredditsUpdated -= SubredditMan_OnSubredditsUpdated;
 
             // When we leave run an update
             if(m_hasChanges)
@@ -77,14 +79,14 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 m_hasChanges = false;
 
                 // Make sure the updater is enabled
-                await App.BaconMan.BackgroundMan.EnsureBackgroundSetup();
+                await BackgroundManager.Instance.EnsureBackgroundSetup();
 
                 // On a background thread kick off an update. This call will block so it has to be done in
                 // the background.
                 await Task.Run(async () =>
                 {
                     // Force a update, give it a null deferral since this isn't a background task.
-                    await App.BaconMan.BackgroundMan.ImageUpdaterMan.RunUpdate(new RefCountedDeferral(null), true);
+                    await BackgroundImageUpdater.Instance.RunUpdate(new RefCountedDeferral(null), true);
                 });
             }
         }
@@ -100,20 +102,20 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             m_ingoreUpdates = true;
 
             // Setup the UI
-            ui_enableLockScreen.IsOn = App.BaconMan.BackgroundMan.ImageUpdaterMan.IsLockScreenEnabled;
-            ui_enableDesktop.IsOn = App.BaconMan.BackgroundMan.ImageUpdaterMan.IsDeskopEnabled;
+            ui_enableLockScreen.IsOn = BackgroundImageUpdater.Instance.IsLockScreenEnabled;
+            ui_enableDesktop.IsOn = BackgroundImageUpdater.Instance.IsDeskopEnabled;
             SetupSubredditLists();
             ui_imageFrequency.ItemsSource = m_updateFrequencys;
-            ui_imageFrequency.SelectedIndex = FrequencySettingToListIndex(App.BaconMan.BackgroundMan.ImageUpdaterMan.UpdateFrquency);
+            ui_imageFrequency.SelectedIndex = FrequencySettingToListIndex(BackgroundImageUpdater.Instance.UpdateFrquency);
 
             m_ingoreUpdates = false;
 
             // Set our status
-            ui_lastUpdate.Text = "Last Update: " + (App.BaconMan.BackgroundMan.LastUpdateTime.Equals(new DateTime(0)) ? "Never" : App.BaconMan.BackgroundMan.LastUpdateTime.ToString("g"));
-            ui_currentSystemUpdateStatus.Text = "System State: " + (App.BaconMan.BackgroundMan.LastSystemBackgroundUpdateStatus != 3 ? "Allowed" : "Denied");
+            ui_lastUpdate.Text = "Last Update: " + (BackgroundManager.Instance.LastUpdateTime.Equals(new DateTime(0)) ? "Never" : BackgroundManager.Instance.LastUpdateTime.ToString("g"));
+            ui_currentSystemUpdateStatus.Text = "System State: " + (BackgroundManager.Instance.LastSystemBackgroundUpdateStatus != 3 ? "Allowed" : "Denied");
 
             // Setup the listener
-            App.BaconMan.SubredditMan.OnSubredditsUpdated += SubredditMan_OnSubredditsUpdated;
+            SubredditManager.Instance.OnSubredditsUpdated += SubredditMan_OnSubredditsUpdated;
         }
 
         public void OnCleanupPanel()
@@ -244,10 +246,10 @@ namespace Pancetta.Windows.Panels.SettingsPanels
         private void SetupSubredditLists()
         {
             // Get the current name list.
-            m_subredditNameList = SubredditListToNameList(App.BaconMan.SubredditMan.SubredditList);
+            m_subredditNameList = SubredditListToNameList(SubredditManager.Instance.SubredditList);
 
             // See if the user is signed in.
-            bool isUserSignedIn = App.BaconMan.UserMan.IsUserSignedIn;
+            bool isUserSignedIn = UserManager.Instance.IsUserSignedIn;
 
             // Try to find the indexes
             int desktopIndex = -1;
@@ -258,14 +260,14 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             {
                 if(desktopIndex == -1)
                 {
-                    if(name.Equals(App.BaconMan.BackgroundMan.ImageUpdaterMan.DesktopSubredditName))
+                    if(name.Equals(BackgroundImageUpdater.Instance.DesktopSubredditName))
                     {
                         desktopIndex = count;
                     }
                 }
                 if (lockScreenIndex == -1)
                 {
-                    if (name.Equals(App.BaconMan.BackgroundMan.ImageUpdaterMan.LockScreenSubredditName))
+                    if (name.Equals(BackgroundImageUpdater.Instance.LockScreenSubredditName))
                     {
                         lockScreenIndex = count;
                     }
@@ -298,12 +300,12 @@ namespace Pancetta.Windows.Panels.SettingsPanels
             // Fix up the subs if they weren't found.
             if (lockScreenIndex == -1)
             {
-                m_subredditNameList.Add(App.BaconMan.BackgroundMan.ImageUpdaterMan.LockScreenSubredditName);
+                m_subredditNameList.Add(BackgroundImageUpdater.Instance.LockScreenSubredditName);
                 lockScreenIndex = m_subredditNameList.Count - 1;
             }
             if(desktopIndex == -1)
             {
-                m_subredditNameList.Add(App.BaconMan.BackgroundMan.ImageUpdaterMan.DesktopSubredditName);
+                m_subredditNameList.Add(BackgroundImageUpdater.Instance.DesktopSubredditName);
                 desktopIndex = m_subredditNameList.Count - 1;
             }
 

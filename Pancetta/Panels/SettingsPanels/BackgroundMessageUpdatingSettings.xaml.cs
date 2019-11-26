@@ -1,4 +1,6 @@
-﻿using Pancetta.Windows.Interfaces;
+﻿using Pancetta.Managers;
+using Pancetta.Managers.Background;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,9 +52,9 @@ namespace Pancetta.Windows.Panels.SettingsPanels
 
             m_ignoreUpdates = true;
 
-            ui_enableBackgroundMessages.IsOn = App.BaconMan.BackgroundMan.MessageUpdaterMan.IsEnabled;
-            ui_messageNotificationType.SelectedIndex = App.BaconMan.BackgroundMan.MessageUpdaterMan.NotificationType;
-            ui_addNotesSliently.IsOn = App.BaconMan.BackgroundMan.MessageUpdaterMan.AddToNotificationCenterSilently;
+            ui_enableBackgroundMessages.IsOn = BackgroundMessageUpdater.Instance.IsEnabled;
+            ui_messageNotificationType.SelectedIndex = BackgroundMessageUpdater.Instance.NotificationType;
+            ui_addNotesSliently.IsOn = BackgroundMessageUpdater.Instance.AddToNotificationCenterSilently;
 
             m_ignoreUpdates = false;
         }
@@ -65,7 +67,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 m_hasChanges = false;
 
                 // Make sure the updater is enabled if it should be.
-                await App.BaconMan.BackgroundMan.EnsureBackgroundSetup();
+                await BackgroundManager.Instance.EnsureBackgroundSetup();
             }
         }
 
@@ -90,7 +92,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 return;
             }
 
-            App.BaconMan.BackgroundMan.MessageUpdaterMan.NotificationType = ui_messageNotificationType.SelectedIndex;
+            BackgroundMessageUpdater.Instance.NotificationType = ui_messageNotificationType.SelectedIndex;
         }
 
         private void EnableBackgroundMessages_Toggled(object sender, RoutedEventArgs e)
@@ -100,7 +102,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 return;
             }
 
-            App.BaconMan.BackgroundMan.MessageUpdaterMan.IsEnabled = ui_enableBackgroundMessages.IsOn;
+            BackgroundMessageUpdater.Instance.IsEnabled = ui_enableBackgroundMessages.IsOn;
             m_hasChanges = true;
         }
 
@@ -111,7 +113,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
                 return;
             }
 
-            App.BaconMan.BackgroundMan.MessageUpdaterMan.AddToNotificationCenterSilently = ui_addNotesSliently.IsOn;
+            BackgroundMessageUpdater.Instance.AddToNotificationCenterSilently = ui_addNotesSliently.IsOn;
         }
     }
 }

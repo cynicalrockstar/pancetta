@@ -108,7 +108,7 @@ namespace Pancetta.Windows.Panels.SettingsPanels
 
         private void OpenGlobalPresenter(string url)
         {
-            App.BaconMan.ShowGlobalContent(url);
+            BaconManager.Instance.ShowGlobalContent(url);
         }
     }
 }

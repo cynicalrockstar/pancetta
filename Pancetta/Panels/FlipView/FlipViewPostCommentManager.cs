@@ -1,6 +1,7 @@
 ﻿using Pancetta.Collectors;
 using Pancetta.DataObjects;
 using Pancetta.Helpers;
+using Pancetta.Managers;
 using Pancetta.Windows.HelperControls;
 using Pancetta.Windows.Interfaces;
 using System;
@@ -87,8 +88,8 @@ namespace Pancetta.Windows.Panels
             if (!m_post.HaveCommentDefaultsBeenSet)
             {
                 // Set the default count and sort for comments
-                post.CurrentCommentShowingCount = App.BaconMan.UiSettingsMan.Comments_DefaultCount;
-                post.CommentSortType = App.BaconMan.UiSettingsMan.Comments_DefaultSortType;
+                post.CurrentCommentShowingCount = UiSettingManager.Instance.Comments_DefaultCount;
+                post.CommentSortType = UiSettingManager.Instance.Comments_DefaultSortType;
                 m_post.HaveCommentDefaultsBeenSet = true;
             }
         }
@@ -175,7 +176,7 @@ namespace Pancetta.Windows.Panels
                 if (m_commentCollector == null)
                 {
                     // Get the comment collector, if we don't want to show a subset don't give it the target comment
-                    m_commentCollector = new DeferredCollector<Comment>(CommentCollector.GetCollector(m_post, App.BaconMan, m_showThreadSubset ? m_targetComment : null));
+                    m_commentCollector = new DeferredCollector<Comment>(CommentCollector.GetCollector(m_post, BaconManager.Instance, m_showThreadSubset ? m_targetComment : null));
 
                     // Sub to collection callbacks for the comments.
                     m_commentCollector.OnCollectionUpdated += CommentCollector_OnCollectionUpdated;
@@ -544,7 +545,7 @@ namespace Pancetta.Windows.Panels
             comment.IsSaved = !comment.IsSaved;
 
             // Make the call
-            bool success = await MiscellaneousHelper.SaveOrHideRedditItem(App.BaconMan, "t1_" + comment.Id, comment.IsSaved, null);
+            bool success = await MiscellaneousHelper.SaveOrHideRedditItem(BaconManager.Instance, "t1_" + comment.Id, comment.IsSaved, null);
 
             // If we failed revert
             if (!success)

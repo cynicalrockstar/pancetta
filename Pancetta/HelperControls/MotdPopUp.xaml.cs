@@ -1,4 +1,5 @@
 ﻿using Pancetta.Helpers;
+using Pancetta.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,7 +49,7 @@ namespace Pancetta.Windows.HelperControls
             VisualStateManager.GoToState(this, "ShowDialog", true);
 
             // Sub to back button callbacks
-            App.BaconMan.OnBackButton += BaconMan_OnBackButton;
+            BaconManager.Instance.OnBackButton += BaconMan_OnBackButton;
         }
 
         private void Close_OnIconTapped(object sender, EventArgs e)
@@ -57,7 +58,7 @@ namespace Pancetta.Windows.HelperControls
             VisualStateManager.GoToState(this, "HideDialog", true);
 
             // UnSub to back button callbacks
-            App.BaconMan.OnBackButton -= BaconMan_OnBackButton;
+            BaconManager.Instance.OnBackButton -= BaconMan_OnBackButton;
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace Pancetta.Windows.HelperControls
                 if(redditContent != null && redditContent.Type != RedditContentType.Website)
                 {
                     // If we are opening a reddit link show the content and hide hide the message.
-                    App.BaconMan.ShowGlobalContent(redditContent);
+                    BaconManager.Instance.ShowGlobalContent(redditContent);
 
                     // Hide the box
                     Close_OnIconTapped(null, null);
@@ -107,12 +108,12 @@ namespace Pancetta.Windows.HelperControls
                 else
                 {
                     // If we have a link show it but don't close the message.
-                    App.BaconMan.ShowGlobalContent(e.Link);
+                    BaconManager.Instance.ShowGlobalContent(e.Link);
                 }                
             }
             catch (Exception ex)
             {
-                App.BaconMan.MessageMan.DebugDia("MOTDLinkFailedToOpen", ex);
+                MessageManager.Instance.DebugDia("MOTDLinkFailedToOpen", ex);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Pancetta.Helpers;
+using Pancetta.Managers;
 using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -122,7 +123,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
                             break;
                         case RedditContentType.Website:
                             // This shouldn't happen
-                            App.BaconMan.MessageMan.DebugDia("Got website back when prepare on reddit content control");
+                            MessageManager.Instance.DebugDia("Got website back when prepare on reddit content control");
                             break;
                     }
                 }
@@ -171,7 +172,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
             if (m_content != null)
             {
                 // If we have content pass it!
-                App.BaconMan.ShowGlobalContent(m_content);
+                BaconManager.Instance.ShowGlobalContent(m_content);
             }
         }
     }

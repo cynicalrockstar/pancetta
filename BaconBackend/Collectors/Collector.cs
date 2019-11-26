@@ -240,7 +240,7 @@ namespace Pancetta.Collectors
         /// <param name="hasEmptyArrrayRoot"></param>
         protected void InitListHelper(string baseUrl, bool hasEmptyArrrayRoot = false, bool takeFirstArrayRoot = false, string optionalGetArgs = "")
         {
-            m_listHelper = new RedditListHelper<T>(baseUrl, m_baconMan.NetworkMan, hasEmptyArrrayRoot, takeFirstArrayRoot, optionalGetArgs);
+            m_listHelper = new RedditListHelper<T>(baseUrl, NetworkManager.Instance, hasEmptyArrrayRoot, takeFirstArrayRoot, optionalGetArgs);
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace Pancetta.Collectors
                 }
                 catch (Exception e)
                 {
-                    m_baconMan.MessageMan.DebugDia("Collector failed to update id:"+ m_uniqueId, e);
+                    MessageManager.Instance.DebugDia("Collector failed to update id:"+ m_uniqueId, e);
 
                     // Update the state
                     lock (m_listHelper)
@@ -371,7 +371,7 @@ namespace Pancetta.Collectors
                 }
                 catch (Exception e)
                 {
-                    m_baconMan.MessageMan.DebugDia("Subreddit extension failed", e);
+                    MessageManager.Instance.DebugDia("Subreddit extension failed", e);
 
                     // Update the state
                     lock (m_listHelper)
@@ -436,7 +436,7 @@ namespace Pancetta.Collectors
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Exception during OnCollectorStateChange", e);
+                MessageManager.Instance.DebugDia("Exception during OnCollectorStateChange", e);
             }
         }
 
@@ -454,7 +454,7 @@ namespace Pancetta.Collectors
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Exception during OnCollectionUpdated", e);
+                MessageManager.Instance.DebugDia("Exception during OnCollectionUpdated", e);
             }
         }
 
@@ -467,9 +467,9 @@ namespace Pancetta.Collectors
             {
                 if (m_lastUpdateTime.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("Collector.LastUpdateTime_" + m_uniqueId))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("Collector.LastUpdateTime_" + m_uniqueId))
                     {
-                        m_lastUpdateTime = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("Collector.LastUpdateTime_" + m_uniqueId);
+                        m_lastUpdateTime = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("Collector.LastUpdateTime_" + m_uniqueId);
                     }
                 }
                 return m_lastUpdateTime;
@@ -477,7 +477,7 @@ namespace Pancetta.Collectors
             set
             {
                 m_lastUpdateTime = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>(("Collector.LastUpdateTime_" + m_uniqueId), m_lastUpdateTime);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>(("Collector.LastUpdateTime_" + m_uniqueId), m_lastUpdateTime);
             }
         }
         private DateTime m_lastUpdateTime = new DateTime(0);

@@ -1,5 +1,6 @@
 ﻿using Pancetta;
 using Pancetta.Helpers;
+using Pancetta.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,8 @@ namespace Pancetta.Windows.Background
 {
     public sealed class BackgroundEntry : IBackgroundTask
     {
-        BaconManager m_baconMan;
-
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            // Create the baconit manager
-            m_baconMan = new BaconManager(true);
-
             // Setup the ref counted deferral
             RefCountedDeferral refDeferral = new RefCountedDeferral(taskInstance.GetDeferral(), OnDeferralCleanup);
 
@@ -26,7 +22,7 @@ namespace Pancetta.Windows.Background
             refDeferral.AddRef();
 
             // Fire off the update
-            await m_baconMan.BackgroundMan.RunUpdate(refDeferral);
+            await BackgroundManager.Instance.RunUpdate(refDeferral);
 
             // After this returns the deferral will call complete unless someone else took a ref on it.
             refDeferral.ReleaseRef();
@@ -44,7 +40,7 @@ namespace Pancetta.Windows.Background
                 Task.Run(async () =>
                 {
                     // Flush out the local settings
-                    await m_baconMan.SettingsMan.FlushLocalSettings();
+                    await SettingsManager.Instance.FlushLocalSettings();
                     are.Set();
                 });
                 are.WaitOne();

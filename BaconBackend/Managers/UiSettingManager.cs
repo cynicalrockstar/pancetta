@@ -17,19 +17,27 @@ namespace Pancetta.Managers
 
     public class UiSettingManager
     {
-        BaconManager m_baconMan;
-
-        public UiSettingManager(BaconManager baconMan)
+        private static UiSettingManager _instance = null;
+        public static UiSettingManager Instance
         {
-            m_baconMan = baconMan;
+            get
+            {
+                if (_instance == null)
+                    _instance = new UiSettingManager();
 
+                return _instance;
+            }
+        }
+
+        public UiSettingManager()
+        {
             // If we aren't a background +1 app opened.
-            if(!baconMan.IsBackgroundTask)
+            if(!BaconManager.Instance.IsBackgroundTask)
             {
                 AppOpenedCount++;
             }
 
-            baconMan.OnResuming += BaconMan_OnResuming;
+            BaconManager.Instance.OnResuming += BaconMan_OnResuming;
         }
 
         private void BaconMan_OnResuming(object sender, object e)
@@ -47,9 +55,9 @@ namespace Pancetta.Managers
             {
                 if (!m_appOpenedCount.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.AppOpenedCount"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.AppOpenedCount"))
                     {
-                        m_appOpenedCount = m_baconMan.SettingsMan.ReadFromRoamingSettings<int>("UiSettingManager.AppOpenedCount");
+                        m_appOpenedCount = SettingsManager.Instance.ReadFromRoamingSettings<int>("UiSettingManager.AppOpenedCount");
                     }
                     else
                     {
@@ -61,7 +69,7 @@ namespace Pancetta.Managers
             set
             {
                 m_appOpenedCount = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<int>("UiSettingManager.AppOpenedCount", m_appOpenedCount.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<int>("UiSettingManager.AppOpenedCount", m_appOpenedCount.Value);
             }
         }
         private int? m_appOpenedCount = null;
@@ -77,9 +85,9 @@ namespace Pancetta.Managers
             {
                 if (!m_developer_Debug.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.Developer_Debug"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.Developer_Debug"))
                     {
-                        m_developer_Debug = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("UiSettingManager.Developer_Debug");
+                        m_developer_Debug = SettingsManager.Instance.ReadFromRoamingSettings<bool>("UiSettingManager.Developer_Debug");
                     }
                     else
                     {
@@ -91,7 +99,7 @@ namespace Pancetta.Managers
             set
             {
                 m_developer_Debug = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("UiSettingManager.Developer_Debug", m_developer_Debug.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("UiSettingManager.Developer_Debug", m_developer_Debug.Value);
             }
         }
         private bool? m_developer_Debug = null;
@@ -105,9 +113,9 @@ namespace Pancetta.Managers
             {
                 if (!m_developer_StopFatalCrashesAndReport.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.Developer_StopFatalCrashesAndReport"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.Developer_StopFatalCrashesAndReport"))
                     {
-                        m_developer_StopFatalCrashesAndReport = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("UiSettingManager.Developer_StopFatalCrashesAndReport");
+                        m_developer_StopFatalCrashesAndReport = SettingsManager.Instance.ReadFromRoamingSettings<bool>("UiSettingManager.Developer_StopFatalCrashesAndReport");
                     }
                     else
                     {
@@ -119,7 +127,7 @@ namespace Pancetta.Managers
             set
             {
                 m_developer_StopFatalCrashesAndReport = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("UiSettingManager.Developer_StopFatalCrashesAndReport", m_developer_StopFatalCrashesAndReport.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("UiSettingManager.Developer_StopFatalCrashesAndReport", m_developer_StopFatalCrashesAndReport.Value);
             }
         }
         private bool? m_developer_StopFatalCrashesAndReport = null;
@@ -133,9 +141,9 @@ namespace Pancetta.Managers
             {
                 if (!m_developer_ShowMemoryOverlay.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.Developer_ShowMemoryOverlay"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.Developer_ShowMemoryOverlay"))
                     {
-                        m_developer_ShowMemoryOverlay = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("UiSettingManager.Developer_ShowMemoryOverlay");
+                        m_developer_ShowMemoryOverlay = SettingsManager.Instance.ReadFromRoamingSettings<bool>("UiSettingManager.Developer_ShowMemoryOverlay");
                     }
                     else
                     {
@@ -147,7 +155,7 @@ namespace Pancetta.Managers
             set
             {
                 m_developer_ShowMemoryOverlay = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("UiSettingManager.Developer_ShowMemoryOverlay", m_developer_ShowMemoryOverlay.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("UiSettingManager.Developer_ShowMemoryOverlay", m_developer_ShowMemoryOverlay.Value);
             }
         }
         private bool? m_developer_ShowMemoryOverlay = null;
@@ -165,9 +173,9 @@ namespace Pancetta.Managers
             {
                 if (!m_mainPage_NextReviewAnnoy.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.MainPage_NextReviewAnnoy"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.MainPage_NextReviewAnnoy"))
                     {
-                        m_mainPage_NextReviewAnnoy = m_baconMan.SettingsMan.ReadFromRoamingSettings<int>("UiSettingManager.MainPage_NextReviewAnnoy");
+                        m_mainPage_NextReviewAnnoy = SettingsManager.Instance.ReadFromRoamingSettings<int>("UiSettingManager.MainPage_NextReviewAnnoy");
                     }
                     else
                     {
@@ -179,7 +187,7 @@ namespace Pancetta.Managers
             set
             {
                 m_mainPage_NextReviewAnnoy = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<int>("UiSettingManager.MainPage_NextReviewAnnoy", m_mainPage_NextReviewAnnoy.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<int>("UiSettingManager.MainPage_NextReviewAnnoy", m_mainPage_NextReviewAnnoy.Value);
             }
         }
         private int? m_mainPage_NextReviewAnnoy = null;
@@ -197,9 +205,9 @@ namespace Pancetta.Managers
             {
                 if (!m_subredditList_ShowFullTitles.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_ShowFullTitles"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_ShowFullTitles"))
                     {
-                        m_subredditList_ShowFullTitles = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("UiSettingManager.SubredditList_ShowFullTitles");
+                        m_subredditList_ShowFullTitles = SettingsManager.Instance.ReadFromRoamingSettings<bool>("UiSettingManager.SubredditList_ShowFullTitles");
                     }
                     else
                     {
@@ -211,7 +219,7 @@ namespace Pancetta.Managers
             set
             {
                 m_subredditList_ShowFullTitles = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("UiSettingManager.SubredditList_ShowFullTitles", m_subredditList_ShowFullTitles.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("UiSettingManager.SubredditList_ShowFullTitles", m_subredditList_ShowFullTitles.Value);
             }
         }
         private bool? m_subredditList_ShowFullTitles = null;
@@ -225,9 +233,9 @@ namespace Pancetta.Managers
             {
                 if (!m_subredditList_DefaultSortType.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_DefaultSortType"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_DefaultSortType"))
                     {
-                        m_subredditList_DefaultSortType = m_baconMan.SettingsMan.ReadFromRoamingSettings<SortTypes>("UiSettingManager.SubredditList_DefaultSortType");
+                        m_subredditList_DefaultSortType = SettingsManager.Instance.ReadFromRoamingSettings<SortTypes>("UiSettingManager.SubredditList_DefaultSortType");
                     }
                     else
                     {
@@ -239,7 +247,7 @@ namespace Pancetta.Managers
             set
             {
                 m_subredditList_DefaultSortType = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<SortTypes>("UiSettingManager.SubredditList_DefaultSortType", m_subredditList_DefaultSortType.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<SortTypes>("UiSettingManager.SubredditList_DefaultSortType", m_subredditList_DefaultSortType.Value);
             }
         }
         private SortTypes? m_subredditList_DefaultSortType = null;
@@ -253,9 +261,9 @@ namespace Pancetta.Managers
             {
                 if (!m_subredditList_DefaultSortTimeType.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_DefaultSortTimeType"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_DefaultSortTimeType"))
                     {
-                        m_subredditList_DefaultSortTimeType = m_baconMan.SettingsMan.ReadFromRoamingSettings<SortTimeTypes>("UiSettingManager.SubredditList_DefaultSortTimeType");
+                        m_subredditList_DefaultSortTimeType = SettingsManager.Instance.ReadFromRoamingSettings<SortTimeTypes>("UiSettingManager.SubredditList_DefaultSortTimeType");
                     }
                     else
                     {
@@ -267,7 +275,7 @@ namespace Pancetta.Managers
             set
             {
                 m_subredditList_DefaultSortTimeType = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<SortTimeTypes>("UiSettingManager.SubredditList_DefaultSortTimeType", m_subredditList_DefaultSortTimeType.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<SortTimeTypes>("UiSettingManager.SubredditList_DefaultSortTimeType", m_subredditList_DefaultSortTimeType.Value);
             }
         }
         private SortTimeTypes? m_subredditList_DefaultSortTimeType = null;
@@ -281,9 +289,9 @@ namespace Pancetta.Managers
             {
                 if (m_subredditList_DefaultSubreddit == null)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_DefaultSubredditDisplayName"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.SubredditList_DefaultSubredditDisplayName"))
                     {
-                        m_subredditList_DefaultSubreddit = m_baconMan.SettingsMan.ReadFromRoamingSettings<string>("UiSettingManager.SubredditList_DefaultSubredditDisplayName");
+                        m_subredditList_DefaultSubreddit = SettingsManager.Instance.ReadFromRoamingSettings<string>("UiSettingManager.SubredditList_DefaultSubredditDisplayName");
                     }
                     else
                     {
@@ -301,7 +309,7 @@ namespace Pancetta.Managers
                 }
 
                 m_subredditList_DefaultSubreddit = value.ToLower();
-                m_baconMan.SettingsMan.WriteToRoamingSettings<string>("UiSettingManager.SubredditList_DefaultSubredditDisplayName", m_subredditList_DefaultSubreddit);
+                SettingsManager.Instance.WriteToRoamingSettings<string>("UiSettingManager.SubredditList_DefaultSubredditDisplayName", m_subredditList_DefaultSubreddit);
             }
         }
         private string m_subredditList_DefaultSubreddit = null;
@@ -319,9 +327,9 @@ namespace Pancetta.Managers
             {
                 if (!m_comments_DefaultSortType.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.Comments_DefaultSortType"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.Comments_DefaultSortType"))
                     {
-                        m_comments_DefaultSortType = m_baconMan.SettingsMan.ReadFromRoamingSettings<CommentSortTypes>("UiSettingManager.Comments_DefaultSortType");
+                        m_comments_DefaultSortType = SettingsManager.Instance.ReadFromRoamingSettings<CommentSortTypes>("UiSettingManager.Comments_DefaultSortType");
                     }
                     else
                     {
@@ -333,7 +341,7 @@ namespace Pancetta.Managers
             set
             {
                 m_comments_DefaultSortType = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<CommentSortTypes>("UiSettingManager.Comments_DefaultSortType", m_comments_DefaultSortType.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<CommentSortTypes>("UiSettingManager.Comments_DefaultSortType", m_comments_DefaultSortType.Value);
             }
         }
         private CommentSortTypes? m_comments_DefaultSortType = null;
@@ -348,9 +356,9 @@ namespace Pancetta.Managers
             {
                 if (!m_comments_DefaultCount.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.Comments_DefaultCount"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.Comments_DefaultCount"))
                     {
-                        m_comments_DefaultCount = m_baconMan.SettingsMan.ReadFromRoamingSettings<int>("UiSettingManager.Comments_DefaultCount");
+                        m_comments_DefaultCount = SettingsManager.Instance.ReadFromRoamingSettings<int>("UiSettingManager.Comments_DefaultCount");
                     }
                     else
                     {
@@ -362,7 +370,7 @@ namespace Pancetta.Managers
             set
             {
                 m_comments_DefaultCount = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<int>("UiSettingManager.Comments_DefaultCount", m_comments_DefaultCount.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<int>("UiSettingManager.Comments_DefaultCount", m_comments_DefaultCount.Value);
             }
         }
         private int? m_comments_DefaultCount = null;
@@ -380,9 +388,9 @@ namespace Pancetta.Managers
             {
                 if (!m_flipView_NsfwBlockingType.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.FlipView_NsfwBlockingType"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.FlipView_NsfwBlockingType"))
                     {
-                        m_flipView_NsfwBlockingType = m_baconMan.SettingsMan.ReadFromRoamingSettings<NsfwBlockType>("UiSettingManager.FlipView_NsfwBlockingType");
+                        m_flipView_NsfwBlockingType = SettingsManager.Instance.ReadFromRoamingSettings<NsfwBlockType>("UiSettingManager.FlipView_NsfwBlockingType");
                     }
                     else
                     {
@@ -394,7 +402,7 @@ namespace Pancetta.Managers
             set
             {
                 m_flipView_NsfwBlockingType = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<NsfwBlockType>("UiSettingManager.FlipView_NsfwBlockingType", m_flipView_NsfwBlockingType.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<NsfwBlockType>("UiSettingManager.FlipView_NsfwBlockingType", m_flipView_NsfwBlockingType.Value);
             }
         }
         private NsfwBlockType? m_flipView_NsfwBlockingType = null;
@@ -408,9 +416,9 @@ namespace Pancetta.Managers
             {
                 if (!m_flipView_PreloadComments.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("UiSettingManager.FlipView_PreloadComments"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("UiSettingManager.FlipView_PreloadComments"))
                     {
-                        m_flipView_PreloadComments = m_baconMan.SettingsMan.ReadFromLocalSettings<bool>("UiSettingManager.FlipView_PreloadComments");
+                        m_flipView_PreloadComments = SettingsManager.Instance.ReadFromLocalSettings<bool>("UiSettingManager.FlipView_PreloadComments");
                     }
                     else
                     {
@@ -422,7 +430,7 @@ namespace Pancetta.Managers
             set
             {
                 m_flipView_PreloadComments = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<bool>("UiSettingManager.FlipView_PreloadComments", m_flipView_PreloadComments.Value);
+                SettingsManager.Instance.WriteToLocalSettings<bool>("UiSettingManager.FlipView_PreloadComments", m_flipView_PreloadComments.Value);
             }
         }
         private bool? m_flipView_PreloadComments = null;
@@ -436,9 +444,9 @@ namespace Pancetta.Managers
             {
                 if (!m_flipView_LoadPostContentWithoutAction.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("UiSettingManager.FlipView_LoadPostContentWithoutAction"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("UiSettingManager.FlipView_LoadPostContentWithoutAction"))
                     {
-                        m_flipView_LoadPostContentWithoutAction = m_baconMan.SettingsMan.ReadFromLocalSettings<bool>("UiSettingManager.FlipView_LoadPostContentWithoutAction");
+                        m_flipView_LoadPostContentWithoutAction = SettingsManager.Instance.ReadFromLocalSettings<bool>("UiSettingManager.FlipView_LoadPostContentWithoutAction");
                     }
                     else
                     {
@@ -450,7 +458,7 @@ namespace Pancetta.Managers
             set
             {
                 m_flipView_LoadPostContentWithoutAction = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<bool>("UiSettingManager.FlipView_LoadPostContentWithoutAction", m_flipView_LoadPostContentWithoutAction.Value);
+                SettingsManager.Instance.WriteToLocalSettings<bool>("UiSettingManager.FlipView_LoadPostContentWithoutAction", m_flipView_LoadPostContentWithoutAction.Value);
             }
         }
         private bool? m_flipView_LoadPostContentWithoutAction = null;
@@ -464,9 +472,9 @@ namespace Pancetta.Managers
             {
                 if (!m_flipView_PreloadFutureContent.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("UiSettingManager.FlipView_PreloadFutureContent"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("UiSettingManager.FlipView_PreloadFutureContent"))
                     {
-                        m_flipView_PreloadFutureContent = m_baconMan.SettingsMan.ReadFromLocalSettings<bool>("UiSettingManager.FlipView_PreloadFutureContent");
+                        m_flipView_PreloadFutureContent = SettingsManager.Instance.ReadFromLocalSettings<bool>("UiSettingManager.FlipView_PreloadFutureContent");
                     }
                     else
                     {
@@ -478,7 +486,7 @@ namespace Pancetta.Managers
             set
             {
                 m_flipView_PreloadFutureContent = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<bool>("UiSettingManager.FlipView_PreloadFutureContent", m_flipView_PreloadFutureContent.Value);
+                SettingsManager.Instance.WriteToLocalSettings<bool>("UiSettingManager.FlipView_PreloadFutureContent", m_flipView_PreloadFutureContent.Value);
             }
         }
         private bool? m_flipView_PreloadFutureContent = null;
@@ -492,9 +500,9 @@ namespace Pancetta.Managers
             {
                 if (!m_flipView_ShowCommentScrollTip.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.FlipView_ShowCommentScrollTip"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.FlipView_ShowCommentScrollTip"))
                     {
-                        m_flipView_ShowCommentScrollTip = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("UiSettingManager.FlipView_ShowCommentScrollTip");
+                        m_flipView_ShowCommentScrollTip = SettingsManager.Instance.ReadFromRoamingSettings<bool>("UiSettingManager.FlipView_ShowCommentScrollTip");
                     }
                     else
                     {
@@ -506,7 +514,7 @@ namespace Pancetta.Managers
             set
             {
                 m_flipView_ShowCommentScrollTip = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("UiSettingManager.FlipView_ShowCommentScrollTip", m_flipView_ShowCommentScrollTip.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("UiSettingManager.FlipView_ShowCommentScrollTip", m_flipView_ShowCommentScrollTip.Value);
             }
         }
         private bool? m_flipView_ShowCommentScrollTip = null;
@@ -520,9 +528,9 @@ namespace Pancetta.Managers
             {
                 if (!m_flipView_MinimizeStoryHeader.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("UiSettingManager.FlipView_MinimizeStoryHeader"))
+                    if (SettingsManager.Instance.RoamingSettings.ContainsKey("UiSettingManager.FlipView_MinimizeStoryHeader"))
                     {
-                        m_flipView_MinimizeStoryHeader = m_baconMan.SettingsMan.ReadFromRoamingSettings<bool>("UiSettingManager.FlipView_MinimizeStoryHeader");
+                        m_flipView_MinimizeStoryHeader = SettingsManager.Instance.ReadFromRoamingSettings<bool>("UiSettingManager.FlipView_MinimizeStoryHeader");
                     }
                     else
                     {
@@ -534,7 +542,7 @@ namespace Pancetta.Managers
             set
             {
                 m_flipView_MinimizeStoryHeader = value;
-                m_baconMan.SettingsMan.WriteToRoamingSettings<bool>("UiSettingManager.FlipView_MinimizeStoryHeader", m_flipView_MinimizeStoryHeader.Value);
+                SettingsManager.Instance.WriteToRoamingSettings<bool>("UiSettingManager.FlipView_MinimizeStoryHeader", m_flipView_MinimizeStoryHeader.Value);
             }
         }
         private bool? m_flipView_MinimizeStoryHeader = null;

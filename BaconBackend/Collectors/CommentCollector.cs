@@ -124,7 +124,7 @@ namespace Pancetta.Collectors
             // first element, the second element is the comment tree.
             InitListHelper(commentBaseUrl, hasEmptyRoot, takeFirstArray, optionalParams);
 
-            m_baconMan.UserMan.OnUserUpdated += OnUserUpdated;
+            UserManager.Instance.OnUserUpdated += OnUserUpdated;
         }
 
         /// <summary>
@@ -191,9 +191,9 @@ namespace Pancetta.Collectors
                 comment.IsCommentFromOp = m_post != null && comment.Author.Equals(m_post.Author);
 
                 // Set if this comment is from the current user
-                if (m_baconMan.UserMan.IsUserSignedIn && m_baconMan.UserMan.CurrentUser != null)
+                if (UserManager.Instance.IsUserSignedIn && UserManager.Instance.CurrentUser != null)
                 {
-                    comment.IsCommentOwnedByUser = m_baconMan.UserMan.CurrentUser.Name.Equals(comment.Author, StringComparison.OrdinalIgnoreCase);
+                    comment.IsCommentOwnedByUser = UserManager.Instance.CurrentUser.Name.Equals(comment.Author, StringComparison.OrdinalIgnoreCase);
                 }
             }
         }
@@ -335,9 +335,9 @@ namespace Pancetta.Collectors
         public void ChangeCommentVote(Comment comment, PostVoteAction action, int postPosition = 0)
         {
             // Ensure we are signed in.
-            if (!m_baconMan.UserMan.IsUserSignedIn)
+            if (!UserManager.Instance.IsUserSignedIn)
             {
-                m_baconMan.MessageMan.ShowSigninMessage("vote");
+                MessageManager.Instance.ShowSigninMessage("vote");
                 return;
             }
 
@@ -391,7 +391,7 @@ namespace Pancetta.Collectors
                     postData.Add(new KeyValuePair<string, string>("dir", voteDir));
 
                     // Make the call
-                    string str = await m_baconMan.NetworkMan.MakeRedditPostRequestAsString("api/vote", postData);
+                    string str = await NetworkManager.Instance.MakeRedditPostRequestAsString("api/vote", postData);
 
                     // Do some super simple validation
                     if (str != "{}")
@@ -401,8 +401,8 @@ namespace Pancetta.Collectors
                 }
                 catch (Exception ex)
                 {
-                    m_baconMan.MessageMan.DebugDia("failed to vote!", ex);
-                    m_baconMan.MessageMan.ShowMessageSimple("That's Not Right", "Something went wrong while trying to cast your vote, try again later.");
+                    MessageManager.Instance.DebugDia("failed to vote!", ex);
+                    MessageManager.Instance.ShowMessageSimple("That's Not Right", "Something went wrong while trying to cast your vote, try again later.");
                 }
             }).Start();
         }
@@ -436,7 +436,7 @@ namespace Pancetta.Collectors
                 catch (Exception e)
                 {
                     // We fucked up adding the comment to the UI.
-                    m_baconMan.MessageMan.DebugDia("Failed injecting comment", e);
+                    MessageManager.Instance.DebugDia("Failed injecting comment", e);
                 }
 
                 // If we get to adding to the UI return true because reddit has the comment.
@@ -445,7 +445,7 @@ namespace Pancetta.Collectors
             else
             {
                 // Reddit returned something wrong
-                m_baconMan.MessageMan.ShowMessageSimple("That's not right", "Sorry we can't post your comment right now, reddit returned and unexpected message.");
+                MessageManager.Instance.ShowMessageSimple("That's not right", "Sorry we can't post your comment right now, reddit returned and unexpected message.");
                 return false;
             }
         }   
@@ -466,7 +466,7 @@ namespace Pancetta.Collectors
                     postData.Add(new KeyValuePair<string, string>("id", "t1_" + comment.Id));
 
                     // Make the call
-                    string str = await m_baconMan.NetworkMan.MakeRedditPostRequestAsString("/api/del", postData);
+                    string str = await NetworkManager.Instance.MakeRedditPostRequestAsString("/api/del", postData);
 
                     // Do some super simple validation
                     if (str != "{}")
@@ -484,8 +484,8 @@ namespace Pancetta.Collectors
                 }
                 catch (Exception ex)
                 {
-                    m_baconMan.MessageMan.DebugDia("failed to vote!", ex);
-                    m_baconMan.MessageMan.ShowMessageSimple("That's Not Right", "Something went wrong while trying to delete your comment, check your internet connection.");
+                    MessageManager.Instance.DebugDia("failed to vote!", ex);
+                    MessageManager.Instance.ShowMessageSimple("That's Not Right", "Something went wrong while trying to delete your comment, check your internet connection.");
                 }
             }).Start();
         }

@@ -12,28 +12,24 @@ namespace Pancetta.Managers
 {
     public class BackgroundManager
     {
+        private static BackgroundManager _instance = null;
+        public static BackgroundManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new BackgroundManager();
+
+                return _instance;
+            }
+        }
         // Since this updater will do multiple things, it will always fire at 30 minutes
         // and each action will check if they should act or not.
         private const int c_backgroundUpdateTime = 30;
         private const string c_backgroundTaskName = "Pancetta Background Updater";
 
-        private BaconManager m_baconMan;
-
-        /// <summary>
-        /// In charge of image updates
-        /// </summary>
-        public BackgroundImageUpdater ImageUpdaterMan { get; }
-
-        /// <summary>
-        /// In charge of image updates
-        /// </summary>
-        public BackgroundMessageUpdater MessageUpdaterMan { get; }
-
-        public BackgroundManager(BaconManager baconMan)
+        private BackgroundManager()
         {
-            m_baconMan = baconMan;
-            ImageUpdaterMan = new BackgroundImageUpdater(baconMan);
-            MessageUpdaterMan = new BackgroundMessageUpdater(baconMan);
         }
 
         /// <summary>
@@ -72,10 +68,10 @@ namespace Pancetta.Managers
             LastSystemBackgroundUpdateStatus = (int)status;
             if(status != BackgroundAccessStatus.AllowedSubjectToSystemPolicy && status != BackgroundAccessStatus.AlwaysAllowed)
             {
-                m_baconMan.MessageMan.DebugDia("System denied us access from running in the background");
+                MessageManager.Instance.DebugDia("System denied us access from running in the background");
             }
             
-            if (ImageUpdaterMan.IsLockScreenEnabled || ImageUpdaterMan.IsDeskopEnabled || MessageUpdaterMan.IsEnabled)
+            if (BackgroundImageUpdater.Instance.IsLockScreenEnabled || BackgroundImageUpdater.Instance.IsDeskopEnabled || BackgroundMessageUpdater.Instance.IsEnabled)
             {
                 if (foundTask == null)
                 {
@@ -92,7 +88,7 @@ namespace Pancetta.Managers
                     }
                     catch(Exception e)
                     {
-                        m_baconMan.MessageMan.DebugDia("failed to register background task", e);
+                        MessageManager.Instance.DebugDia("failed to register background task", e);
                     }
                 }
             }
@@ -112,7 +108,7 @@ namespace Pancetta.Managers
         public async Task RunUpdate(RefCountedDeferral refDefferal)
         {
             // If we are a background task report the time
-            if (m_baconMan.IsBackgroundTask)
+            if (BaconManager.Instance.IsBackgroundTask)
             {
                 LastUpdateTime = DateTime.Now;
             }
@@ -121,10 +117,10 @@ namespace Pancetta.Managers
             await EnsureBackgroundSetup();
 
             // Run the image update if needed
-            await ImageUpdaterMan.RunUpdate(refDefferal);
+            await BackgroundImageUpdater.Instance.RunUpdate(refDefferal);
 
             // Run the message update if needed.
-            MessageUpdaterMan.RunUpdate(refDefferal);            
+            BackgroundMessageUpdater.Instance.RunUpdate(refDefferal);            
         }
 
         #region Vars
@@ -138,9 +134,9 @@ namespace Pancetta.Managers
             {
                 if (m_lastAttemptedUpdate.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundManager.LastUpdateTime"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundManager.LastUpdateTime"))
                     {
-                        m_lastAttemptedUpdate = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("BackgroundManager.LastUpdateTime");
+                        m_lastAttemptedUpdate = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("BackgroundManager.LastUpdateTime");
                     }
                 }
                 return m_lastAttemptedUpdate;
@@ -148,7 +144,7 @@ namespace Pancetta.Managers
             private set
             {
                 m_lastAttemptedUpdate = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>("BackgroundManager.LastUpdateTime", m_lastAttemptedUpdate);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>("BackgroundManager.LastUpdateTime", m_lastAttemptedUpdate);
             }
         }
         private DateTime m_lastAttemptedUpdate = new DateTime(0);
@@ -163,9 +159,9 @@ namespace Pancetta.Managers
             {
                 if (!m_lastSystemBackgroundUpdateStatus.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundManager.LastSystemBackgroundUpdateStatus"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundManager.LastSystemBackgroundUpdateStatus"))
                     {
-                        m_lastSystemBackgroundUpdateStatus = m_baconMan.SettingsMan.ReadFromLocalSettings<int>("BackgroundManager.LastSystemBackgroundUpdateStatus");
+                        m_lastSystemBackgroundUpdateStatus = SettingsManager.Instance.ReadFromLocalSettings<int>("BackgroundManager.LastSystemBackgroundUpdateStatus");
                     }
                     else
                     {
@@ -177,7 +173,7 @@ namespace Pancetta.Managers
             private set
             {
                 m_lastSystemBackgroundUpdateStatus = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<int>("BackgroundManager.LastSystemBackgroundUpdateStatus", m_lastSystemBackgroundUpdateStatus.Value);
+                SettingsManager.Instance.WriteToLocalSettings<int>("BackgroundManager.LastSystemBackgroundUpdateStatus", m_lastSystemBackgroundUpdateStatus.Value);
             }
         }
         private int? m_lastSystemBackgroundUpdateStatus = null;
@@ -192,9 +188,9 @@ namespace Pancetta.Managers
             {
                 if (m_appVersionWithBackgroundAccess ==  null)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundManager.AppVersionWithBackgroundAccess"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundManager.AppVersionWithBackgroundAccess"))
                     {
-                        m_appVersionWithBackgroundAccess = m_baconMan.SettingsMan.ReadFromLocalSettings<string>("BackgroundManager.AppVersionWithBackgroundAccess");
+                        m_appVersionWithBackgroundAccess = SettingsManager.Instance.ReadFromLocalSettings<string>("BackgroundManager.AppVersionWithBackgroundAccess");
                     }
                     else
                     {
@@ -206,7 +202,7 @@ namespace Pancetta.Managers
             set
             {
                 m_appVersionWithBackgroundAccess = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<string>("BackgroundManager.AppVersionWithBackgroundAccess", m_appVersionWithBackgroundAccess);
+                SettingsManager.Instance.WriteToLocalSettings<string>("BackgroundManager.AppVersionWithBackgroundAccess", m_appVersionWithBackgroundAccess);
             }
         }
         private string m_appVersionWithBackgroundAccess = null;

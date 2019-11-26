@@ -21,6 +21,16 @@ namespace Pancetta.Managers.Background
 {
     public class BackgroundImageUpdater
     {
+        private static BackgroundImageUpdater _instance = null;
+        public static BackgroundImageUpdater Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new BackgroundImageUpdater();
+                return _instance;
+            }
+        }
         /// <summary>
         /// Indicates which update a type should do.
         /// </summary>
@@ -43,7 +53,6 @@ namespace Pancetta.Managers.Background
         ///
         /// Private
         ///
-        private BaconManager m_baconMan;
         private StorageFolder m_lockScreenImageCacheFolder = null;
         private StorageFolder m_desktopImageCacheFolder = null;
         private StorageFolder m_bandImageCacheFolder = null;
@@ -54,9 +63,8 @@ namespace Pancetta.Managers.Background
         private RefCountedDeferral m_bandRefDeferral = null;
 
 
-        public BackgroundImageUpdater(BaconManager baconMan)
+        private BackgroundImageUpdater()
         {
-            m_baconMan = baconMan;
         }
 
         /// <summary>
@@ -157,7 +165,7 @@ namespace Pancetta.Managers.Background
             }
             catch(Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Failed to set background image", e);
+                MessageManager.Instance.DebugDia("Failed to set background image", e);
             }
         }
 
@@ -200,7 +208,7 @@ namespace Pancetta.Managers.Background
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("Failed to set background image", e);
+                MessageManager.Instance.DebugDia("Failed to set background image", e);
             }
         }
 
@@ -285,7 +293,7 @@ namespace Pancetta.Managers.Background
             Subreddit subreddit = new Subreddit() { Id = DateTime.Now.Ticks.ToString(), DisplayName = name };
 
             // Get the collector for the subreddit
-            PostCollector collector = PostCollector.GetCollector(subreddit, m_baconMan);
+            PostCollector collector = PostCollector.GetCollector(subreddit, BaconManager.Instance);
 
             // Sub to the collector callback
             if(type == UpdateTypes.LockScreen)
@@ -485,7 +493,7 @@ namespace Pancetta.Managers.Background
                     Context = type
                 };
                 imageRequst.OnRequestComplete += OnRequestComplete;
-                m_baconMan.ImageMan.QueueImageRequest(imageRequst);
+                ImageManager.Instance.QueueImageRequest(imageRequst);
             }  
 
             // If we have nothing to request this is the end of the line for this type.
@@ -532,7 +540,7 @@ namespace Pancetta.Managers.Background
                 }
                 catch (Exception e)
                 {
-                    m_baconMan.MessageMan.DebugDia("Failed to write background image", e);
+                    MessageManager.Instance.DebugDia("Failed to write background image", e);
                 }
             }
 
@@ -808,9 +816,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_isLockScreenEnabled.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.IsLockScreenEnabled"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.IsLockScreenEnabled"))
                     {
-                        m_isLockScreenEnabled = m_baconMan.SettingsMan.ReadFromLocalSettings<bool>("BackgroundImageUpdater.IsLockScreenEnabled");
+                        m_isLockScreenEnabled = SettingsManager.Instance.ReadFromLocalSettings<bool>("BackgroundImageUpdater.IsLockScreenEnabled");
                     }
                     else
                     {
@@ -822,7 +830,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_isLockScreenEnabled = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<bool>("BackgroundImageUpdater.IsLockScreenEnabled", m_isLockScreenEnabled.Value);
+                SettingsManager.Instance.WriteToLocalSettings<bool>("BackgroundImageUpdater.IsLockScreenEnabled", m_isLockScreenEnabled.Value);
             }
         }
         private bool? m_isLockScreenEnabled = null;
@@ -836,9 +844,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_isDeskopEnabled.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.IsDeskopEnabled"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.IsDeskopEnabled"))
                     {
-                        m_isDeskopEnabled = m_baconMan.SettingsMan.ReadFromLocalSettings<bool>("BackgroundImageUpdater.IsDeskopEnabled");
+                        m_isDeskopEnabled = SettingsManager.Instance.ReadFromLocalSettings<bool>("BackgroundImageUpdater.IsDeskopEnabled");
                     }
                     else
                     {
@@ -850,7 +858,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_isDeskopEnabled = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<bool>("BackgroundImageUpdater.IsDeskopEnabled", m_isDeskopEnabled.Value);
+                SettingsManager.Instance.WriteToLocalSettings<bool>("BackgroundImageUpdater.IsDeskopEnabled", m_isDeskopEnabled.Value);
             }
         }
         private bool? m_isDeskopEnabled = null;
@@ -864,9 +872,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_isBandWallpaperEnabled.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.IsBandWallpaperEnabled"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.IsBandWallpaperEnabled"))
                     {
-                        m_isBandWallpaperEnabled = m_baconMan.SettingsMan.ReadFromLocalSettings<bool>("BackgroundImageUpdater.IsBandWallpaperEnabled");
+                        m_isBandWallpaperEnabled = SettingsManager.Instance.ReadFromLocalSettings<bool>("BackgroundImageUpdater.IsBandWallpaperEnabled");
                     }
                     else
                     {
@@ -878,7 +886,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_isBandWallpaperEnabled = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<bool>("BackgroundImageUpdater.IsBandWallpaperEnabled", m_isBandWallpaperEnabled.Value);
+                SettingsManager.Instance.WriteToLocalSettings<bool>("BackgroundImageUpdater.IsBandWallpaperEnabled", m_isBandWallpaperEnabled.Value);
             }
         }
         private bool? m_isBandWallpaperEnabled = null;
@@ -892,9 +900,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_currentLockScreenRotationIndex.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.CurrentLockScreenRotationIndex"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.CurrentLockScreenRotationIndex"))
                     {
-                        m_currentLockScreenRotationIndex = m_baconMan.SettingsMan.ReadFromLocalSettings<int>("BackgroundImageUpdater.CurrentLockScreenRotationIndex");
+                        m_currentLockScreenRotationIndex = SettingsManager.Instance.ReadFromLocalSettings<int>("BackgroundImageUpdater.CurrentLockScreenRotationIndex");
                     }
                     else
                     {
@@ -906,7 +914,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_currentLockScreenRotationIndex = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<int>("BackgroundImageUpdater.CurrentLockScreenRotationIndex", m_currentLockScreenRotationIndex.Value);
+                SettingsManager.Instance.WriteToLocalSettings<int>("BackgroundImageUpdater.CurrentLockScreenRotationIndex", m_currentLockScreenRotationIndex.Value);
             }
         }
         private int? m_currentLockScreenRotationIndex = null;
@@ -920,9 +928,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_currentBandRotationIndex.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.CurrentBandRotationIndex"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.CurrentBandRotationIndex"))
                     {
-                        m_currentBandRotationIndex = m_baconMan.SettingsMan.ReadFromLocalSettings<int>("BackgroundImageUpdater.CurrentBandRotationIndex");
+                        m_currentBandRotationIndex = SettingsManager.Instance.ReadFromLocalSettings<int>("BackgroundImageUpdater.CurrentBandRotationIndex");
                     }
                     else
                     {
@@ -934,7 +942,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_currentBandRotationIndex = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<int>("BackgroundImageUpdater.CurrentBandRotationIndex", m_currentBandRotationIndex.Value);
+                SettingsManager.Instance.WriteToLocalSettings<int>("BackgroundImageUpdater.CurrentBandRotationIndex", m_currentBandRotationIndex.Value);
             }
         }
         private int? m_currentBandRotationIndex = null;
@@ -948,9 +956,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_currentDesktopRotationIndex.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.CurrentDesktopRotationIndex"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.CurrentDesktopRotationIndex"))
                     {
-                        m_currentDesktopRotationIndex = m_baconMan.SettingsMan.ReadFromLocalSettings<int>("BackgroundImageUpdater.CurrentDesktopRotationIndex");
+                        m_currentDesktopRotationIndex = SettingsManager.Instance.ReadFromLocalSettings<int>("BackgroundImageUpdater.CurrentDesktopRotationIndex");
                     }
                     else
                     {
@@ -962,7 +970,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_currentDesktopRotationIndex = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<int>("BackgroundImageUpdater.CurrentDesktopRotationIndex", m_currentDesktopRotationIndex.Value);
+                SettingsManager.Instance.WriteToLocalSettings<int>("BackgroundImageUpdater.CurrentDesktopRotationIndex", m_currentDesktopRotationIndex.Value);
             }
         }
         private int? m_currentDesktopRotationIndex = null;
@@ -976,9 +984,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_updateFrquency.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.UpdateFrquency"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.UpdateFrquency"))
                     {
-                        m_updateFrquency = m_baconMan.SettingsMan.ReadFromLocalSettings<int>("BackgroundImageUpdater.UpdateFrquency");
+                        m_updateFrquency = SettingsManager.Instance.ReadFromLocalSettings<int>("BackgroundImageUpdater.UpdateFrquency");
                     }
                     else
                     {
@@ -990,7 +998,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_updateFrquency = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<int>("BackgroundImageUpdater.UpdateFrquency", m_updateFrquency.Value);
+                SettingsManager.Instance.WriteToLocalSettings<int>("BackgroundImageUpdater.UpdateFrquency", m_updateFrquency.Value);
             }
         }
         private int? m_updateFrquency = null;
@@ -1004,9 +1012,9 @@ namespace Pancetta.Managers.Background
             {
                 if (m_lastImageUpdate.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.LastImageUpdate"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.LastImageUpdate"))
                     {
-                        m_lastImageUpdate = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("BackgroundImageUpdater.LastImageUpdate");
+                        m_lastImageUpdate = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("BackgroundImageUpdater.LastImageUpdate");
                     }
                 }
                 return m_lastImageUpdate;
@@ -1014,7 +1022,7 @@ namespace Pancetta.Managers.Background
             private set
             {
                 m_lastImageUpdate = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>("BackgroundImageUpdater.LastImageUpdate", m_lastImageUpdate);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>("BackgroundImageUpdater.LastImageUpdate", m_lastImageUpdate);
             }
         }
         private DateTime m_lastImageUpdate = new DateTime(0);
@@ -1028,9 +1036,9 @@ namespace Pancetta.Managers.Background
             {
                 if (m_lastFullUpdate.Equals(new DateTime(0)))
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.LastFullUpdate"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.LastFullUpdate"))
                     {
-                        m_lastFullUpdate = m_baconMan.SettingsMan.ReadFromLocalSettings<DateTime>("BackgroundImageUpdater.LastFullUpdate");
+                        m_lastFullUpdate = SettingsManager.Instance.ReadFromLocalSettings<DateTime>("BackgroundImageUpdater.LastFullUpdate");
                     }
                 }
                 return m_lastFullUpdate;
@@ -1038,7 +1046,7 @@ namespace Pancetta.Managers.Background
             private set
             {
                 m_lastFullUpdate = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<DateTime>("BackgroundImageUpdater.LastFullUpdate", m_lastFullUpdate);
+                SettingsManager.Instance.WriteToLocalSettings<DateTime>("BackgroundImageUpdater.LastFullUpdate", m_lastFullUpdate);
             }
         }
         private DateTime m_lastFullUpdate = new DateTime(0);
@@ -1053,9 +1061,9 @@ namespace Pancetta.Managers.Background
             {
                 if (m_lockScreenSubredditUrl == null)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.LockScreenSubredditUrl"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.LockScreenSubredditUrl"))
                     {
-                        m_lockScreenSubredditUrl = m_baconMan.SettingsMan.ReadFromLocalSettings<string>("BackgroundImageUpdater.LockScreenSubredditUrl");
+                        m_lockScreenSubredditUrl = SettingsManager.Instance.ReadFromLocalSettings<string>("BackgroundImageUpdater.LockScreenSubredditUrl");
                     }
                     else
                     {
@@ -1068,7 +1076,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_lockScreenSubredditUrl = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<string>("BackgroundImageUpdater.LockScreenSubredditUrl", m_lockScreenSubredditUrl);
+                SettingsManager.Instance.WriteToLocalSettings<string>("BackgroundImageUpdater.LockScreenSubredditUrl", m_lockScreenSubredditUrl);
             }
         }
         private string m_lockScreenSubredditUrl = null;
@@ -1083,9 +1091,9 @@ namespace Pancetta.Managers.Background
             {
                 if (m_desktopSubredditUrl == null)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.DesktopSubredditUrl"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.DesktopSubredditUrl"))
                     {
-                        m_desktopSubredditUrl = m_baconMan.SettingsMan.ReadFromLocalSettings<string>("BackgroundImageUpdater.DesktopSubredditUrl");
+                        m_desktopSubredditUrl = SettingsManager.Instance.ReadFromLocalSettings<string>("BackgroundImageUpdater.DesktopSubredditUrl");
                     }
                     else
                     {
@@ -1098,7 +1106,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_desktopSubredditUrl = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<string>("BackgroundImageUpdater.DesktopSubredditUrl", m_desktopSubredditUrl);
+                SettingsManager.Instance.WriteToLocalSettings<string>("BackgroundImageUpdater.DesktopSubredditUrl", m_desktopSubredditUrl);
             }
         }
         private string m_desktopSubredditUrl = null;
@@ -1113,9 +1121,9 @@ namespace Pancetta.Managers.Background
             {
                 if (m_bandSubredditName == null)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.BandSubredditName"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.BandSubredditName"))
                     {
-                        m_bandSubredditName = m_baconMan.SettingsMan.ReadFromLocalSettings<string>("BackgroundImageUpdater.BandSubredditName");
+                        m_bandSubredditName = SettingsManager.Instance.ReadFromLocalSettings<string>("BackgroundImageUpdater.BandSubredditName");
                     }
                     else
                     {
@@ -1128,7 +1136,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_bandSubredditName = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<string>("BackgroundImageUpdater.BandSubredditName", m_bandSubredditName);
+                SettingsManager.Instance.WriteToLocalSettings<string>("BackgroundImageUpdater.BandSubredditName", m_bandSubredditName);
             }
         }
         private string m_bandSubredditName = null;
@@ -1144,9 +1152,9 @@ namespace Pancetta.Managers.Background
             {
                 if (!m_lastKnownScreenResoultion.HasValue)
                 {
-                    if (m_baconMan.SettingsMan.LocalSettings.ContainsKey("BackgroundImageUpdater.LastKnownScreenResoultion"))
+                    if (SettingsManager.Instance.LocalSettings.ContainsKey("BackgroundImageUpdater.LastKnownScreenResoultion"))
                     {
-                        m_lastKnownScreenResoultion = m_baconMan.SettingsMan.ReadFromLocalSettings<Size>("BackgroundImageUpdater.LastKnownScreenResoultion");
+                        m_lastKnownScreenResoultion = SettingsManager.Instance.ReadFromLocalSettings<Size>("BackgroundImageUpdater.LastKnownScreenResoultion");
                     }
                     else
                     {
@@ -1159,7 +1167,7 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_lastKnownScreenResoultion = value;
-                m_baconMan.SettingsMan.WriteToLocalSettings<Size>("BackgroundImageUpdater.LastKnownScreenResoultion", m_lastKnownScreenResoultion.Value);
+                SettingsManager.Instance.WriteToLocalSettings<Size>("BackgroundImageUpdater.LastKnownScreenResoultion", m_lastKnownScreenResoultion.Value);
             }
         }
         private Size? m_lastKnownScreenResoultion = null;

@@ -21,13 +21,21 @@ namespace Pancetta.Managers
 
     public class DraftManager
     {
+        private static DraftManager _instance = null;
+        public static DraftManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new DraftManager();
+                return _instance;
+            }
+        }
+
         const string c_postDraftFile = "PostSubmissionDraft.json";
 
-        BaconManager m_baconMan;
-
-        public DraftManager(BaconManager baconMan)
+        private DraftManager()
         {
-            m_baconMan = baconMan;
         }
 
         /// <summary>
@@ -64,7 +72,7 @@ namespace Pancetta.Managers
             }
             catch(Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("failed to write draft", e);
+                MessageManager.Instance.DebugDia("failed to write draft", e);
                 return false;
             }
             return true;
@@ -96,7 +104,7 @@ namespace Pancetta.Managers
             }
             catch (Exception e)
             {
-                m_baconMan.MessageMan.DebugDia("failed to read draft", e);
+                MessageManager.Instance.DebugDia("failed to read draft", e);
                 return null;
             }
         }

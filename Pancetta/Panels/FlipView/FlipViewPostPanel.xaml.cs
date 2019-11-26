@@ -1,6 +1,7 @@
 ﻿using Pancetta.Collectors;
 using Pancetta.DataObjects;
 using Pancetta.Helpers;
+using Pancetta.Managers;
 using Pancetta.Windows.ContentPanels;
 using Pancetta.Windows.HelperControls;
 using System;
@@ -382,7 +383,7 @@ namespace Pancetta.Windows.Panels.FlipView
             FlipViewPostContext context = GetContext();
             if (context != null)
             {
-                App.BaconMan.ImageMan.SaveImageLocally(context.Post.Url);
+                ImageManager.Instance.SaveImageLocally(context.Post.Url);
             }
         }
 
@@ -447,7 +448,7 @@ namespace Pancetta.Windows.Panels.FlipView
             if (context != null)
             {
                 // Confirm
-                bool? doIt = await App.BaconMan.MessageMan.ShowYesNoMessage("Delete Post", "Are you sure you want to?");
+                bool? doIt = await MessageManager.Instance.ShowYesNoMessage("Delete Post", "Are you sure you want to?");
 
                 if (doIt.HasValue && doIt.Value)
                 {
@@ -556,7 +557,7 @@ namespace Pancetta.Windows.Panels.FlipView
             ui_listView.ItemsSource = m_commentManager.Comments;
 
             // If the user wanted, kick off pre load of comments.
-            if (forcePreFetch || App.BaconMan.UiSettingsMan.FlipView_PreloadComments)
+            if (forcePreFetch || UiSettingManager.Instance.FlipView_PreloadComments)
             {
                 m_commentManager.PreFetchComments();
             }
@@ -660,7 +661,7 @@ namespace Pancetta.Windows.Panels.FlipView
             // If we are far enough to also hide the header consider hiding it.
             if (e.ListScrollTotalDistance > headerAniamtionDistance)
             {
-                if (App.BaconMan.UiSettingsMan.FlipView_MinimizeStoryHeader)
+                if (UiSettingManager.Instance.FlipView_MinimizeStoryHeader)
                 {
                     if (e.ScrollDirection == ScrollDirection.Down)
                     {
@@ -772,7 +773,7 @@ namespace Pancetta.Windows.Panels.FlipView
 
             if (comment.IsDeleted)
             {
-                App.BaconMan.MessageMan.ShowMessageSimple("LET IT GO!", "You can't edit a deleted comment!");
+                MessageManager.Instance.ShowMessageSimple("LET IT GO!", "You can't edit a deleted comment!");
                 return;
             }
 
@@ -799,7 +800,7 @@ namespace Pancetta.Windows.Panels.FlipView
             if (comment.IsCommentOwnedByUser)
             {
                 // Delete the comment
-                bool? response = await App.BaconMan.MessageMan.ShowYesNoMessage("Delete Comment", "Are you sure?");
+                bool? response = await MessageManager.Instance.ShowYesNoMessage("Delete Comment", "Are you sure?");
 
                 if (response.HasValue && response.Value)
                 {
@@ -945,7 +946,7 @@ namespace Pancetta.Windows.Panels.FlipView
         /// <param name="e"></param>
         private void MarkdownTextBlock_OnMarkdownLinkTapped(object sender, UniversalMarkdown.OnMarkdownLinkTappedArgs e)
         {
-            App.BaconMan.ShowGlobalContent(e.Link);
+            BaconManager.Instance.ShowGlobalContent(e.Link);
         }
 
         #endregion
@@ -1138,7 +1139,7 @@ namespace Pancetta.Windows.Panels.FlipView
             }
             catch(Exception e)
             {
-                App.BaconMan.MessageMan.DebugDia($"FullscreenToggleFailed IsVis:{IsVisible}, gofull:{goFullscreen}, trace string [{traceString}]", e);
+                MessageManager.Instance.DebugDia($"FullscreenToggleFailed IsVis:{IsVisible}, gofull:{goFullscreen}, trace string [{traceString}]", e);
             }
         }
 
@@ -1475,13 +1476,13 @@ namespace Pancetta.Windows.Panels.FlipView
         /// </summary>
         public void ShowCommentScrollTipIfNeeded()
         {
-            if (!App.BaconMan.UiSettingsMan.FlipView_ShowCommentScrollTip)
+            if (!UiSettingManager.Instance.FlipView_ShowCommentScrollTip)
             {
                 return;
             }
 
             // Never show it again.
-            App.BaconMan.UiSettingsMan.FlipView_ShowCommentScrollTip = false;
+            UiSettingManager.Instance.FlipView_ShowCommentScrollTip = false;
 
             // Create the tip UI, add it to the UI and show it.
             m_commentTipPopUp = new TipPopUp();
