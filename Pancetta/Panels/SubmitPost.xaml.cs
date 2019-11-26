@@ -1,8 +1,8 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using BaconBackend.Managers;
-using Baconit.HelperControls;
-using Baconit.Interfaces;
+﻿using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Managers;
+using Pancetta.Windows.HelperControls;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +25,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public sealed partial class SubmitPost : UserControl, IPanel
     {
@@ -423,7 +423,7 @@ namespace Baconit.Panels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BaconMan_OnBackButton(object sender, BaconBackend.OnBackButtonArgs e)
+        private void BaconMan_OnBackButton(object sender, OnBackButtonArgs e)
         {
             if(e.IsHandled)
             {

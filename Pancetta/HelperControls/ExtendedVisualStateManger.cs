@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     public class ExtendedVisualStateManager : VisualStateManager
     {

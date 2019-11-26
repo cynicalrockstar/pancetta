@@ -1,6 +1,6 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using Baconit.Interfaces;
+﻿using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels.SettingsPanels
+namespace Pancetta.Windows.Panels.SettingsPanels
 {
     public sealed partial class BackgroundUpdatingSettings : UserControl, IPanel
     {
@@ -135,9 +135,9 @@ namespace Baconit.Panels.SettingsPanels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void SubredditMan_OnSubredditsUpdated(object sender, BaconBackend.Managers.OnSubredditsUpdatedArgs e)
+        private async void SubredditMan_OnSubredditsUpdated(object sender, Managers.OnSubredditsUpdatedArgs e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 SetupSubredditLists();
             });

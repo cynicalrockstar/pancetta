@@ -1,5 +1,5 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
+﻿using Pancetta.DataObjects;
+using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     // Indicates what action happened.
     public enum UserCallbackAction

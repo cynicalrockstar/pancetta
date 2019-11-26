@@ -1,10 +1,10 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using BaconBackend.Managers;
-using Baconit.ContentPanels;
-using Baconit.HelperControls;
-using Baconit.Interfaces;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Managers;
+using Pancetta.Windows.ContentPanels;
+using Pancetta.Windows.HelperControls;
+using Pancetta.Windows.Interfaces;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-namespace Baconit.Panels.FlipView
+namespace Pancetta.Windows.Panels.FlipView
 {
     public sealed partial class FlipViewPanel : UserControl, IPanel
     {
@@ -151,7 +151,7 @@ namespace Baconit.Panels.FlipView
                     await Task.Delay(1000);
 
                     // Now try to go back.
-                    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                    await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                     {
                         m_host.GoBack();
                     });
@@ -227,7 +227,7 @@ namespace Baconit.Panels.FlipView
         public async void OnNavigatingFrom()
         {
             // Deffer the action so we don't mess up any animations.
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // Tell all of the posts they are not visible.
                 lock (m_postsLists)
@@ -259,7 +259,7 @@ namespace Baconit.Panels.FlipView
             });
 
             // Deffer the action so we don't mess up any animations.
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // Clear out all of the posts, and comments.
                 lock (m_postsLists)
@@ -308,7 +308,7 @@ namespace Baconit.Panels.FlipView
             m_targetPost = (string)arguments[PanelManager.NAV_ARGS_POST_ID];
 
             // Kick off to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Lock the post list
                 lock(m_postsLists)
@@ -357,7 +357,7 @@ namespace Baconit.Panels.FlipView
         /// <param name="newPosts"></param>
         private async void UpdatePosts(int startingPos, List<Post> newPosts)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 Visibility flipViewMenuVis = m_host.CurrentScreenMode() == ScreenMode.Single ? Visibility.Visible : Visibility.Collapsed;
 
@@ -503,7 +503,7 @@ namespace Baconit.Panels.FlipView
             await Task.Delay(1000);
 
             // Now kick off a UI thread on low to do the update.
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
             {
                 lock(m_postsLists)
                 {
@@ -556,7 +556,7 @@ namespace Baconit.Panels.FlipView
                 }
 
                 // And preload the content for the next post, but again defer this since it is a background task.
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                 {
                     UpdatePanelContent();
                 });
@@ -593,7 +593,7 @@ namespace Baconit.Panels.FlipView
             else
             {
                 // Kick off the panel content update to the UI thread with idle pri to give the UI time to setup.
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                 {
                     // Update the posts
                     UpdatePanelContent();
@@ -723,7 +723,7 @@ namespace Baconit.Panels.FlipView
         /// </summary>
         private async void ShowFullScreenLoading()
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 // Make sure we don't have one already, if so get out of here.
                 lock (this)

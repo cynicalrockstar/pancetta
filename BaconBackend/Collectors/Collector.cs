@@ -1,12 +1,10 @@
-﻿using BaconBackend.Helpers;
-using BaconBackend.Managers;
+﻿using Pancetta.Helpers;
+using Pancetta.Managers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BaconBackend.Collectors
+namespace Pancetta.Collectors
 {
     /// <summary>
     /// Defines the possible states of the collector

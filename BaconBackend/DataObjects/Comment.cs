@@ -1,16 +1,12 @@
-﻿using BaconBackend.Helpers;
+﻿using Pancetta.Helpers;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace BaconBackend.DataObjects
+namespace Pancetta.DataObjects
 {
     /// <summary>
     /// A comment on a post. May or may not be a comment on another comment.

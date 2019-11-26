@@ -7,7 +7,7 @@
     <ProjectGuid>{C79AC423-5427-4379-AB5B-11F531B5229C}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BaconBackground</RootNamespace>
+    <RootNamespace>Pancetta.Windows.Background</RootNamespace>
     <AssemblyName>BaconBackground</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
@@ -90,9 +90,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaconBackend\BaconBackend.csproj">
+    <ProjectReference Include="..\BaconBackend\PancettaCommon.csproj">
       <Project>{760d26fa-938b-4b0a-9c87-915adaed244d}</Project>
-      <Name>BaconBackend</Name>
+      <Name>PancettaCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

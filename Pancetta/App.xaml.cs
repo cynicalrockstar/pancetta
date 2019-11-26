@@ -1,6 +1,6 @@
-﻿using BaconBackend;
-using BaconBackend.Helpers;
-using Baconit.Interfaces;
+﻿using Pancetta;
+using Pancetta.Helpers;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +23,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace Baconit
+namespace Pancetta.Windows
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -56,7 +56,7 @@ namespace Baconit
         /// </summary>
         public App()
         {
-            bool result = Windows.UI.ViewManagement.ApplicationViewScaling.TrySetDisableLayoutScaling(true);
+            bool result = global::Windows.UI.ViewManagement.ApplicationViewScaling.TrySetDisableLayoutScaling(true);
 
             // Setup the exception handler first
             this.UnhandledException += OnUnhandledException;
@@ -184,7 +184,7 @@ namespace Baconit
             }
 
             // We have to get the screen res before we call activate or it will be wrong and include the system tray.
-            var bounds = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().VisibleBounds;
+            var bounds = global::Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().VisibleBounds;
             var scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
 
             //This blocks and seems unnecessary
@@ -243,7 +243,7 @@ namespace Baconit
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        private void OnUnhandledException(object sender, global::Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
             if (Debugger.IsAttached)
             {

@@ -1,8 +1,8 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using Baconit.HelperControls;
-using Baconit.Interfaces;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Windows.HelperControls;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +13,7 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public class FlipViewPostCommentManager
     {
@@ -214,7 +214,7 @@ namespace Baconit.Panels
             m_post.FlipViewShowLoadingMoreComments = true;
 
             // Dispatch to the UI thread so this will happen a bit later to give time for the animations to finish.
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // Update the count
                 m_post.CurrentCommentShowingCount = newCount;
@@ -267,7 +267,7 @@ namespace Baconit.Panels
             if (collector.LoadAllItems())
             {
                 // Dispatch to the UI thread
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     // Only show the loading if the current number of comments is 0
                     if(Comments.Count == 0)
@@ -298,7 +298,7 @@ namespace Baconit.Panels
             if(e.State == CollectorState.Idle || e.State == CollectorState.FullyExtended)
             {
                 // When we are idle hide the loading message.
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     // Check if we have any comments
                     if(e.NewPostCount == 0 && Comments.Count == 0)
@@ -317,7 +317,7 @@ namespace Baconit.Panels
             else if(e.State == CollectorState.Error)
             {
                 // Show an error message if we error
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     m_post.ShowCommentsErrorMessage = "Error Loading Comments";
                     m_post.FlipViewShowLoadingMoreComments = false;
@@ -328,7 +328,7 @@ namespace Baconit.Panels
         private async void CommentCollector_OnCollectionUpdated(object sender, OnCollectionUpdatedArgs<Comment> e)
         {
             // Dispatch to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Setup the insert
                 int insertIndex = e.StartingPosition;
@@ -565,7 +565,7 @@ namespace Baconit.Panels
         public async void Collpase_Tapped(Comment comment)
         {
             // Kick delay to the UI thread so the animations can continue
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 CollapseCommentsFromComment(comment);
             });
@@ -574,7 +574,7 @@ namespace Baconit.Panels
         public async void Expand_Tapped(Comment comment)
         {
             // Kick delay to the UI thread so the animations can continue
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 ExpandCommentsFromComment(comment);
             });
@@ -620,16 +620,16 @@ namespace Baconit.Panels
                 string commentLink = "https://reddit.com" + m_post.Permalink + m_shareComment.Id;
                 // #todo use a markdown-less body text
                 string shareBody = m_shareComment.Body.Length > 50 ? m_shareComment.Body.Substring(0, 50) + "..." : m_shareComment.Body;
-                args.Request.Data.Properties.ApplicationName = "Baconit";
+                args.Request.Data.Properties.ApplicationName = "Pancetta";
                 args.Request.Data.Properties.ContentSourceWebLink = new Uri(commentLink, UriKind.Absolute);
-                args.Request.Data.Properties.Title = "A Reddit Post Shared From Baconit";
+                args.Request.Data.Properties.Title = "A Reddit Post Shared From Pancetta";
                 args.Request.Data.Properties.Description = shareBody;
                 args.Request.Data.SetText($" \r\n\r\n{shareBody}\r\n\r\n{commentLink}");
                 m_shareComment = null;
             }
             else
             {
-                args.Request.FailWithDisplayText("Baconit doesn't have anything to share!");
+                args.Request.FailWithDisplayText("Pancetta doesn't have anything to share!");
             }
         }
 

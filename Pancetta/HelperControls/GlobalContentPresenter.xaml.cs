@@ -1,5 +1,5 @@
-﻿using BaconBackend.DataObjects;
-using Baconit.ContentPanels;
+﻿using Pancetta.DataObjects;
+using Pancetta.Windows.ContentPanels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     /// <summary>
     /// States of the global content presenter
@@ -164,7 +164,7 @@ namespace Baconit.HelperControls
         {
             try
             {
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(m_source.Url, UriKind.Absolute));
+                await global::Windows.System.Launcher.LaunchUriAsync(new Uri(m_source.Url, UriKind.Absolute));
             }
             catch(Exception)
             { }

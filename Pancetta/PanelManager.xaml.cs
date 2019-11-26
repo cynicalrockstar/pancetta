@@ -1,7 +1,7 @@
-﻿using BaconBackend.Helpers;
-using BaconBackend.Managers;
-using Baconit.Interfaces;
-using Baconit.Panels;
+﻿using Pancetta.Helpers;
+using Pancetta.Managers;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-namespace Baconit
+namespace Pancetta.Windows
 {
     /// <summary>
     /// Defines the screen mode we are currently in
@@ -930,7 +930,7 @@ namespace Baconit
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void MemoryMan_OnMemoryCleanUpRequest(object sender, BaconBackend.Managers.OnMemoryCleanupRequestArgs e)
+        private async void MemoryMan_OnMemoryCleanUpRequest(object sender, Managers.OnMemoryCleanupRequestArgs e)
         {
             // Memory pressure
             //  Low - Only clean up pages that are very old and user forgot about
@@ -1092,7 +1092,7 @@ namespace Baconit
                 App.BaconMan.UiSettingsMan.PagesMemoryCleanedUp += cleanupPanelList.Count;
 
                 // Jump to the UI thread to do this.
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     foreach (IPanel panel in cleanupPanelList)
                     {
@@ -1229,7 +1229,7 @@ namespace Baconit
             // This is broken into two functions to work around an OS bug. On some builds of windows
             // the StatusBar object cant be found at all, so if we try to make one on the stack before
             // we check if it exits.
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            if (global::Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 return SetStatusBar_Internal(color, opacity);
             }

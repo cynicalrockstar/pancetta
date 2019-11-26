@@ -1,9 +1,9 @@
-﻿<Page x:Class="Baconit.MainPage"
+﻿<Page x:Class="Pancetta.Windows.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:helperControls="using:Baconit.HelperControls"
-      xmlns:local="using:Baconit"
+      xmlns:helperControls="using:Pancetta.Windows.HelperControls"
+      xmlns:local="using:Pancetta.Windows"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       RequestedTheme="Dark"
       mc:Ignorable="d">
@@ -169,7 +169,7 @@
                             <TextBlock x:Name="ui_quickSearchLowPriText"
                                        Margin="10"
                                        Foreground="Black"
-                                       Text="baconit" />
+                                       Text="Pancetta" />
                         </Grid>
                         <Grid x:Name="ui_quickSearchMedPriGrid"
                               Background="Transparent"
@@ -177,7 +177,7 @@
                             <TextBlock x:Name="ui_quickSearchMedPriText"
                                        Margin="10"
                                        Foreground="Black"
-                                       Text="baconit" />
+                                       Text="Pancetta" />
                         </Grid>
                         <Grid x:Name="ui_quickSearchHiPriGrid"
                               Background="{ThemeResource SystemControlBackgroundAccentBrush}"
@@ -185,7 +185,7 @@
                             <TextBlock x:Name="ui_quickSearchHiPriText"
                                        Margin="10"
                                        Foreground="Black"
-                                       Text="baconit" />
+                                       Text="Pancetta" />
                         </Grid>
                     </StackPanel>
 

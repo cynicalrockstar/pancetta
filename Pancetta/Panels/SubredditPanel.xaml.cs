@@ -1,7 +1,7 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using BaconBackend.Interfaces;
-using Baconit.Interfaces;
+﻿using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Interfaces;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,17 +17,17 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using BaconBackend.Managers;
+using Pancetta.Managers;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
-using BaconBackend.Collectors;
+using Pancetta.Collectors;
 using System.Threading.Tasks;
-using Baconit.HelperControls;
+using Pancetta.Windows.HelperControls;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI;
-using Baconit.Panels.FlipView;
+using Pancetta.Windows.Panels.FlipView;
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public sealed partial class SubredditPanel : UserControl, IPanel
     {
@@ -100,7 +100,7 @@ namespace Baconit.Panels
                     await Task.Delay(500);
 
                     // Try to go back now.
-                    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                    await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                     {
                         m_host.GoBack();
                     });
@@ -222,7 +222,7 @@ namespace Baconit.Panels
             if (args.State == CollectorState.Idle || args.State == CollectorState.FullyExtended)
             {
                 bool postLoaded = m_collector.GetCurrentPosts().Count != 0;
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     ui_noPostText.Visibility = postLoaded ? Visibility.Collapsed : Visibility.Visible;
                 });
@@ -247,7 +247,7 @@ namespace Baconit.Panels
         public async void OnError(Exception e)
         {
             // Dispatch to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 App.BaconMan.MessageMan.ShowMessageSimple("Oops", "Pancetta can't load any posts right now, check your Internet connection.");
                 ToggleLoadingBar(false);
@@ -262,7 +262,7 @@ namespace Baconit.Panels
         private async void SetPosts(int startingPos, List<Post> newPosts, bool isFreshUpdate)
         {
             // Dispatch to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Setup the insert
                 int insertIndex = startingPos;
@@ -371,7 +371,7 @@ namespace Baconit.Panels
                 }
 
                 // Dispatch to the UI thread
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     // Create a bitmap and set the source
                     owningPost.Image = new BitmapImage();
@@ -761,7 +761,7 @@ namespace Baconit.Panels
         /// </summary>
         private async void ShowFullScreenLoading(bool showLoading = true)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 // Make sure we don't have one already, if so get out of here.
                 lock (this)
@@ -820,7 +820,7 @@ namespace Baconit.Panels
         private async void ToggleLoadingBar(bool show)
         {
             // Dispatch to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 ui_progressBar.IsIndeterminate = show ? true : false;
                 ui_progressBar.Visibility = show ? Visibility.Visible : Visibility.Collapsed;

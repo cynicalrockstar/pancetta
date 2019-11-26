@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaconBackend.Managers;
+using Pancetta.Managers;
 using Windows.UI.Xaml;
 using Windows.ApplicationModel;
-using BaconBackend.Interfaces;
-using BaconBackend.Helpers;
+using Pancetta.Interfaces;
+using Pancetta.Helpers;
 using Windows.UI.Core;
 using Windows.ApplicationModel.Background;
 using System.Threading;
 
-namespace BaconBackend
+namespace Pancetta
 {
     /// <summary>
     /// Provides data for BaconManager's OnBackButton event.

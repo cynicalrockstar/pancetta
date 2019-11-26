@@ -1,12 +1,12 @@
-﻿using BaconBackend.DataObjects;
-using Baconit.Panels.FlipView;
+﻿using Pancetta.DataObjects;
+using Pancetta.Windows.Panels.FlipView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baconit.ContentPanels
+namespace Pancetta.Windows.ContentPanels
 {
     /// <summary>
     /// Represents the content that the panel will show.

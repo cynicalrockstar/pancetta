@@ -1,6 +1,6 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using Baconit.Interfaces;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels.SettingsPanels
+namespace Pancetta.Windows.Panels.SettingsPanels
 {
     public sealed partial class SubredditViewSettings : UserControl, IPanel
     {
@@ -77,7 +77,7 @@ namespace Baconit.Panels.SettingsPanels
             // Ignore for now.
         }
 
-        private void SubredditMan_OnSubredditsUpdated(object sender, BaconBackend.Managers.OnSubredditsUpdatedArgs e)
+        private void SubredditMan_OnSubredditsUpdated(object sender, Managers.OnSubredditsUpdatedArgs e)
         {
             m_takeChangeAction = false;
             SetSubredditList();

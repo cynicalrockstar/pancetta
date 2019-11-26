@@ -1,17 +1,14 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using BaconBackend.Managers;
-using Newtonsoft.Json;
+﻿using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 
-namespace BaconBackend.Collectors
+namespace Pancetta.Collectors
 {
     /// <summary>
     /// The args for the OnCommentCollectionUpdatedArgs event.

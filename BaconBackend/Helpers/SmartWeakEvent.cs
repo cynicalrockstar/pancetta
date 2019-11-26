@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace BaconBackend.Helpers
+namespace Pancetta.Helpers
 {
     /// <summary>
     /// A class for managing a weak event.

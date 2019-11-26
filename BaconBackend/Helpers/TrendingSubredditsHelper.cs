@@ -1,12 +1,12 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaconBackend.Helpers
+namespace Pancetta.Helpers
 {
     /// <summary>
     /// Provides data for the event of having the list of trending subreddits ready.

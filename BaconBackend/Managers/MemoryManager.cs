@@ -1,4 +1,4 @@
-﻿using BaconBackend.Helpers;
+﻿using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.System;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     /// <summary>
     /// Indicates the current memory pressure state of the app.

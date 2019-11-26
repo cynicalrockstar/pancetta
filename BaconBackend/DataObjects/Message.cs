@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace BaconBackend.DataObjects
+namespace Pancetta.DataObjects
 {
     /// <summary>
     /// A message in a user's inbox. This may be a reply on a comment or post the user made.

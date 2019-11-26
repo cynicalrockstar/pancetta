@@ -1,7 +1,7 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using BaconBackend.Interfaces;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Interfaces;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ using Windows.Storage.Streams;
 using Windows.System.UserProfile;
 using Windows.UI.Core;
 
-namespace BaconBackend.Managers.Background
+namespace Pancetta.Managers.Background
 {
     public class BackgroundImageUpdater
     {

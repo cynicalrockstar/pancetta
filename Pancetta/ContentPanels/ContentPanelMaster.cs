@@ -1,8 +1,8 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Managers;
-using Baconit.ContentPanels;
-using Baconit.ContentPanels.Panels;
-using Baconit.Interfaces;
+﻿using Pancetta.DataObjects;
+using Pancetta.Managers;
+using Pancetta.Windows.ContentPanels;
+using Pancetta.Windows.ContentPanels.Panels;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 
-namespace Baconit.ContentPanels
+namespace Pancetta.Windows.ContentPanels
 {
 
     public sealed class ContentPanelMaster
@@ -969,7 +969,7 @@ namespace Baconit.ContentPanels
         /// <param name="panel"></param>
         private async void FireOnPanelAvailable(IContentPanelHost host, IContentPanelBase panelBase)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 try
                 {
@@ -993,7 +993,7 @@ namespace Baconit.ContentPanels
         /// <param name="panel"></param>
         private async Task FireOnRemovePanel(IContentPanelHost host, IContentPanelBase panelBase)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 try
                 {
@@ -1017,7 +1017,7 @@ namespace Baconit.ContentPanels
         /// <param name="panel"></param>
         private async Task FireOnDestroyContent(IContentPanelBase panelBase)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 try
                 {
@@ -1038,7 +1038,7 @@ namespace Baconit.ContentPanels
         private async void FireOnContentPreloading(IContentPanelHost host)
         {
             // Do this on a high pri so the loading indicator will show up ASAP.
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 try
                 {

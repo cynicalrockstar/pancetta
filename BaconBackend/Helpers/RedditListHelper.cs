@@ -1,4 +1,4 @@
-﻿using BaconBackend.Managers;
+﻿using Pancetta.Managers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.Web.Http;
 
-namespace BaconBackend.Helpers
+namespace Pancetta.Helpers
 {
     /// <summary>
     /// Helper classes used to help parse the Json.

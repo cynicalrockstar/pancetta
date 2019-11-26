@@ -1,6 +1,6 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
 using NotificationsExtensions.Badges;
 using NotificationsExtensions.Tiles;
 using NotificationsExtensions.Toasts;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
 
-namespace BaconBackend.Managers.Background
+namespace Pancetta.Managers.Background
 {
     public class BackgroundMessageUpdater
     {

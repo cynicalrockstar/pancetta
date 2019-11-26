@@ -1,4 +1,4 @@
-﻿using BaconBackend.Interfaces;
+﻿using Pancetta.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,10 +10,10 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Runtime.InteropServices.WindowsRuntime;
-using BaconBackend.Helpers;
+using Pancetta.Helpers;
 using Windows.Storage;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     public class ImageManager
     {

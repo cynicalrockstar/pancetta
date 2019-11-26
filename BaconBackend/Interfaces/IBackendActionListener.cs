@@ -1,11 +1,11 @@
-﻿using BaconBackend.Helpers;
+﻿using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaconBackend.Interfaces
+namespace Pancetta.Interfaces
 {
     /// <summary>
     /// Foreground object that can be directed by the backend.

@@ -1,6 +1,6 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     /// <summary>
     /// Event args for the comment box state changed event.
@@ -117,7 +117,7 @@ namespace Baconit.HelperControls
 
             // Set the interval and edit timeout. We will use the memory limit as a guess of what the
             // the device can handle.
-            ulong memoryLimit = Windows.System.MemoryManager.AppMemoryUsageLimit / 1024 / 1024;
+            ulong memoryLimit = global::Windows.System.MemoryManager.AppMemoryUsageLimit / 1024 / 1024;
             if (memoryLimit < 250)
             {
                 m_previewUpdateEditTimeout = 500;

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
-namespace BaconBackend.DataObjects
+namespace Pancetta.DataObjects
 {
     /// <summary>
     /// Types of list items in a search result list.

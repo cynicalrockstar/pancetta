@@ -7,7 +7,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     class UiControlHelpers<T>
     {

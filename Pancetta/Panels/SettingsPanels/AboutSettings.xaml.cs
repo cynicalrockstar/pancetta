@@ -1,4 +1,4 @@
-﻿using Baconit.Interfaces;
+﻿using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels.SettingsPanels
+namespace Pancetta.Windows.Panels.SettingsPanels
 {
     public sealed partial class AboutSettings : UserControl, IPanel
     {
@@ -78,7 +78,7 @@ namespace Baconit.Panels.SettingsPanels
 
         private async void RateAndReview_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
+            await global::Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
         }
 
         private void Website_Tapped(object sender, TappedRoutedEventArgs e)

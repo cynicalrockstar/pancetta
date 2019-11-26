@@ -1,14 +1,14 @@
 ﻿
-using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using BaconBackend.Interfaces;
-using BaconBackend.Managers;
-using BaconBackend.Managers.Background;
-using Baconit.HelperControls;
-using Baconit.Interfaces;
-using Baconit.Panels;
-using Baconit.Panels.FlipView;
+using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Interfaces;
+using Pancetta.Managers;
+using Pancetta.Managers.Background;
+using Pancetta.Windows.HelperControls;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels;
+using Pancetta.Windows.Panels.FlipView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,7 +33,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Baconit
+namespace Pancetta.Windows
 {
     /// <summary>
     /// The even used to show global content
@@ -268,7 +268,7 @@ namespace Baconit
         /// <param name="newSubreddits"></param>
         private async void SubredditMan_OnSubredditUpdate(object sender, OnSubredditsUpdatedArgs args)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 UpdateSubredditList(args.NewSubreddits);
             });
@@ -279,7 +279,7 @@ namespace Baconit
         /// </summary>
         private async void UserMan_OnUserUpdated(object sender, OnUserUpdatedArgs args)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 UpdateAccount();
             });
@@ -645,7 +645,7 @@ namespace Baconit
         /// <param name="e"></param>
         private void QuickSearchBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            if(e.Key == Windows.System.VirtualKey.Enter)
+            if(e.Key == global::Windows.System.VirtualKey.Enter)
             {
                 if(ui_quickSearchHiPriText.DataContext == null)
                 {
@@ -848,7 +848,7 @@ namespace Baconit
 
         private async void TrendingSubsHelper_OnTrendingSubReady(object sender, TrendingSubsReadyEvent e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Loop through the results and add them to the UI.
                 for(int i = 0; i < e.TrendingSubredditsDisplayNames.Count; i++)
@@ -920,7 +920,7 @@ namespace Baconit
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BaconMan_OnBackButton(object sender, BaconBackend.OnBackButtonArgs e)
+        private void BaconMan_OnBackButton(object sender, OnBackButtonArgs e)
         {
             if(e.IsHandled)
             {
@@ -1003,7 +1003,7 @@ namespace Baconit
         /// <param name="markdownContent"></param>
         public async void ShowMessageOfTheDay(string title, string markdownContent)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Make the popup.
                 MotdPopUp motdPopUp = new MotdPopUp(title, markdownContent);
@@ -1061,7 +1061,7 @@ namespace Baconit
         private async void MemoryMan_OnMemoryReport(object sender, OnMemoryReportArgs e)
         {
             // Jump to the UI thread.
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Show the UI if we haven't
                 ui_memoryContainer.Visibility = Visibility.Visible;

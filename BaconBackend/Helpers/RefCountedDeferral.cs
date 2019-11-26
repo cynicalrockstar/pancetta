@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Background;
 
-namespace BaconBackend.Helpers
+namespace Pancetta.Helpers
 {
     public class RefCountedDeferral
     {

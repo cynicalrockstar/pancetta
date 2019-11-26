@@ -1,5 +1,5 @@
-﻿using BaconBackend.Managers;
-using Baconit.Interfaces;
+﻿using Pancetta.Managers;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public sealed partial class LoginPanel : UserControl, IPanel
     {

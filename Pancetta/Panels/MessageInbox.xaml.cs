@@ -1,8 +1,8 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using Baconit.HelperControls;
-using Baconit.Interfaces;
-using Baconit.Panels.FlipView;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Windows.HelperControls;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels.FlipView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +24,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public sealed partial class MessageInbox : UserControl, IPanel
     {
@@ -99,7 +99,7 @@ namespace Baconit.Panels
 
         private async void Collector_OnCollectorStateChange(object sender, OnCollectorStateChangeArgs e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Show or hide the progress bar
                 ToggleProgressBar(e.State == CollectorState.Updating || e.State == CollectorState.Extending);
@@ -113,7 +113,7 @@ namespace Baconit.Panels
 
         private async void Collector_OnCollectionUpdated(object sender, OnCollectionUpdatedArgs<Message> e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Setup the insert
                 int insertIndex = e.StartingPosition;

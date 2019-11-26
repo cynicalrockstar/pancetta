@@ -1,4 +1,4 @@
-﻿using BaconBackend.DataObjects;
+﻿using Pancetta.DataObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace BaconBackend.Helpers
+namespace Pancetta.Helpers
 {
     /// <summary>
     /// The type of content that a link points toward.

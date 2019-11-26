@@ -1,19 +1,12 @@
-﻿using BaconBackend.Collectors;
+﻿using Pancetta.Collectors;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace BaconBackend.DataObjects
+namespace Pancetta.DataObjects
 {
     /// <summary>
     /// A reddit post, either of a link or of text.

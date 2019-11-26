@@ -1,5 +1,5 @@
-﻿using BaconBackend.Helpers;
-using Baconit.Interfaces;
+﻿using Pancetta.Helpers;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.ContentPanels.Panels
+namespace Pancetta.Windows.ContentPanels.Panels
 {
     public sealed partial class RedditContentPanel : UserControl, IContentPanel
     {

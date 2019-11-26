@@ -1,4 +1,4 @@
-﻿using BaconBackend.Collectors;
+﻿using Pancetta.Collectors;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace BaconBackend.DataObjects
+namespace Pancetta.DataObjects
 {
     [JsonObject(MemberSerialization.OptOut)]
     public class Subreddit

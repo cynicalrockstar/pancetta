@@ -1,12 +1,9 @@
-﻿using BaconBackend.Helpers;
+﻿using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Core;
 
-namespace BaconBackend.Collectors
+namespace Pancetta.Collectors
 {
     /// <summary>
     /// Indicates the state of this collector

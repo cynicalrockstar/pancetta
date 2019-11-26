@@ -1,7 +1,7 @@
-﻿using BaconBackend.Collectors;
-using Baconit.Interfaces;
-using Baconit.Panels;
-using Baconit.Panels.FlipView;
+﻿using Pancetta.Collectors;
+using Pancetta.Interfaces;
+using Pancetta.Windows.Panels;
+using Pancetta.Windows.Panels.FlipView;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,8 +22,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
+using Pancetta.Windows.Interfaces;
 
-namespace Baconit.ContentPanels.Panels
+namespace Pancetta.Windows.ContentPanels.Panels
 {
     public sealed partial class GifImageContentPanel : UserControl, IContentPanel
     {
@@ -105,7 +106,7 @@ namespace Baconit.ContentPanels.Panels
                 }
 
                 // Since some of this can be costly, delay the work load until we aren't animating.
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                 {
                     // If we didn't get anything something went wrong.
                     if (String.IsNullOrWhiteSpace(gifUrl))
@@ -479,7 +480,7 @@ namespace Baconit.ContentPanels.Panels
             }
             if (!String.IsNullOrWhiteSpace(url))
             {
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
+                await global::Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
             }
         }
 
@@ -512,15 +513,15 @@ namespace Baconit.ContentPanels.Panels
         {
             if (m_context.Post != null)
             {
-                args.Request.Data.Properties.ApplicationName = "Baconit";
+                args.Request.Data.Properties.ApplicationName = "Pancetta";
                 args.Request.Data.Properties.ContentSourceWebLink = new Uri(m_context.Post.Url, UriKind.Absolute);
-                args.Request.Data.Properties.Title = "A Reddit Post Shared From Baconit";
+                args.Request.Data.Properties.Title = "A Reddit Post Shared From Pancetta";
                 args.Request.Data.Properties.Description = m_context.Post.Title;
                 args.Request.Data.SetText($"\r\n\r\n{m_context.Post.Title}\r\n\r\n{m_context.Post.Url}");
             }
             else
             {
-                args.Request.FailWithDisplayText("Baconit doesn't have anything to share!");
+                args.Request.FailWithDisplayText("Pancetta doesn't have anything to share!");
             }
         }
     }

@@ -1,14 +1,14 @@
-﻿using BaconBackend.DataObjects;
+﻿using Pancetta.DataObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using BaconBackend.Helpers;
+using Pancetta.Helpers;
 using System.Net;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     /// <summary>
     /// Event args for the OnSubredditsUpdated event.
@@ -345,7 +345,7 @@ namespace BaconBackend.Managers
                 // If the user isn't signed in add baconit, windowsphone, and windows for free!
                 subreddit = new Subreddit()
                 {
-                    DisplayName = "baconit",
+                    DisplayName = "Pancetta",
                     Title = "The best reddit app ever!",
                     Id = "2rfk9"
                 };

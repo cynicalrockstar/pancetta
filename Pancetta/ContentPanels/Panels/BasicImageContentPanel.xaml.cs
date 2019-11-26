@@ -1,8 +1,8 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.Managers;
-using Baconit.Interfaces;
-using Baconit.Panels;
-using Baconit.Panels.FlipView;
+﻿using Pancetta.Collectors;
+using Pancetta.Managers;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels;
+using Pancetta.Windows.Panels.FlipView;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace Baconit.ContentPanels.Panels
+namespace Pancetta.Windows.ContentPanels.Panels
 {
     public sealed partial class BasicImageContentPanel : UserControl, IContentPanel
     {
@@ -264,7 +264,7 @@ namespace Baconit.ContentPanels.Panels
             request.OnRequestComplete -= OnRequestComplete;
 
             // Jump back to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 if (!response.Success)
                 {
@@ -596,7 +596,7 @@ namespace Baconit.ContentPanels.Panels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BaconMan_OnBackButton(object sender, BaconBackend.OnBackButtonArgs e)
+        private void BaconMan_OnBackButton(object sender, OnBackButtonArgs e)
         {
             if (e.IsHandled)
             {
@@ -796,7 +796,7 @@ namespace Baconit.ContentPanels.Panels
             }
             if (!String.IsNullOrWhiteSpace(url))
             {
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
+                await global::Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
             }
         }
 
@@ -829,15 +829,15 @@ namespace Baconit.ContentPanels.Panels
         {
             if (m_context.Post != null)
             {
-                args.Request.Data.Properties.ApplicationName = "Baconit";
+                args.Request.Data.Properties.ApplicationName = "Pancetta";
                 args.Request.Data.Properties.ContentSourceWebLink = new Uri(m_context.Post.Url, UriKind.Absolute);
-                args.Request.Data.Properties.Title = "A Reddit Post Shared From Baconit";
+                args.Request.Data.Properties.Title = "A Reddit Post Shared From Pancetta";
                 args.Request.Data.Properties.Description = m_context.Post.Title;
                 args.Request.Data.SetText($"\r\n\r\n{m_context.Post.Title}\r\n\r\n{m_context.Post.Url}");
             }
             else
             {
-                args.Request.FailWithDisplayText("Baconit doesn't have anything to share!");
+                args.Request.FailWithDisplayText("Pancetta doesn't have anything to share!");
             }
         }
 

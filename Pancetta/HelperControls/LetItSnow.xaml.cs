@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     public enum SnowyStates
     {

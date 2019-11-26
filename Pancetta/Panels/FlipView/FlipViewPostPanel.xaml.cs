@@ -1,8 +1,8 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using Baconit.ContentPanels;
-using Baconit.HelperControls;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Windows.ContentPanels;
+using Pancetta.Windows.HelperControls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +24,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels.FlipView
+namespace Pancetta.Windows.Panels.FlipView
 {
     /// <summary>
     /// Arguments used to request the comment box opens.
@@ -315,7 +315,7 @@ namespace Baconit.Panels.FlipView
                 }
                 if (!String.IsNullOrWhiteSpace(url))
                 {
-                    await Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
+                    await global::Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
                 }
             }
         }

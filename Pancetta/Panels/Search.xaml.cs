@@ -1,8 +1,8 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using Baconit.Interfaces;
-using Baconit.Panels.FlipView;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels.FlipView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public sealed partial class Search : UserControl, IPanel
     {
@@ -147,7 +147,7 @@ namespace Baconit.Panels
         private void SearchBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
             // If they tapped enter, fire search
-            if (e.Key == Windows.System.VirtualKey.Enter)
+            if (e.Key == global::Windows.System.VirtualKey.Enter)
             {
                 Search_Tapped(null, null);
             }
@@ -282,7 +282,7 @@ namespace Baconit.Panels
         /// <param name="e"></param>
         private async void CurrentSubCollector_OnCollectorStateChange(object sender, OnCollectorStateChangeArgs e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 if (e.State == CollectorState.Idle || e.State == CollectorState.Error || e.State == CollectorState.FullyExtended)
                 {
@@ -302,7 +302,7 @@ namespace Baconit.Panels
         /// <param name="e"></param>
         private async void CurrentSubCollector_OnCollectionUpdated(object sender, OnCollectionUpdatedArgs<Subreddit> e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Subreddits are always at the top of the list
                 int insertIndex = 1;
@@ -417,7 +417,7 @@ namespace Baconit.Panels
         /// <param name="e"></param>
         private async void CurrentPostCollector_OnCollectorStateChange(object sender, OnCollectorStateChangeArgs e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 if (e.State == CollectorState.Idle || e.State == CollectorState.Error || e.State == CollectorState.FullyExtended)
                 {
@@ -437,7 +437,7 @@ namespace Baconit.Panels
         /// <param name="e"></param>
         private async void CurrentPostCollector_OnCollectionUpdated(object sender, OnCollectionUpdatedArgs<Post> e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Posts insert at the bottom of the list.
                 bool showAll = m_currentSearchType.HasValue && m_currentSearchType.Value == SearchResultTypes.Post;

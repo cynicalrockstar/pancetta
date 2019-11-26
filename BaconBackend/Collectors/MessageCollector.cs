@@ -1,13 +1,10 @@
-﻿using BaconBackend.DataObjects;
+﻿using Pancetta.DataObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using BaconBackend.Helpers;
-using System.Net;
+using Pancetta.Helpers;
 
-namespace BaconBackend.Collectors
+namespace Pancetta.Collectors
 {
     public class MessageCollector : Collector<Message>
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.System.Profile;
 
-namespace BaconBackend.Helpers
+namespace Pancetta.Helpers
 {
     public enum DeviceTypes
     {

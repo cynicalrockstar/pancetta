@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     /// <summary>
     /// Used to contain data for post draft

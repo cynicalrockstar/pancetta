@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.Web.Http;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     public class ServiceDownException : Exception { }
 

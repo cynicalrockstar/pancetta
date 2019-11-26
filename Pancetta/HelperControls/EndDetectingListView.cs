@@ -1,4 +1,4 @@
-﻿using BaconBackend.Helpers;
+﻿using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     /// <summary>
     /// Indicates which way the list is scrolling.
@@ -78,7 +78,7 @@ namespace Baconit.HelperControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void EndDetectingListView_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void EndDetectingListView_Loaded(object sender, global::Windows.UI.Xaml.RoutedEventArgs e)
         {
             // Stop listening to the event. We only want to do this once.
             Loaded -= EndDetectingListView_Loaded;

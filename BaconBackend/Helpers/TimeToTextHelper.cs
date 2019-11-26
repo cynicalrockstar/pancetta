@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaconBackend.Helpers
+namespace Pancetta.Helpers
 {
     /// <summary>
     /// Helper class to convert an absolute time to text that represents 

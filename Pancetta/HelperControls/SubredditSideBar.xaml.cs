@@ -1,7 +1,7 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using Baconit.Interfaces;
-using Baconit.Panels;
+﻿using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     public sealed partial class SubredditSideBar : UserControl
     {

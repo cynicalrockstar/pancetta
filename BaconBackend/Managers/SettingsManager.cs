@@ -12,7 +12,7 @@ using System.Threading;
 using System.IO;
 using Windows.Storage.FileProperties;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     public class SettingsManager
     {

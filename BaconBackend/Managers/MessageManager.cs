@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
 #pragma warning disable CS4014
     public class MessageManager

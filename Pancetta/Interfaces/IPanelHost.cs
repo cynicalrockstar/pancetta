@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
 
-namespace Baconit.Interfaces
+namespace Pancetta.Windows.Interfaces
 {
     public interface IPanelHost
     {

@@ -1,5 +1,5 @@
-﻿using BaconBackend.Helpers;
-using BaconBackend.Managers.Background;
+﻿using Pancetta.Helpers;
+using Pancetta.Managers.Background;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Background;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
     public class BackgroundManager
     {
@@ -82,7 +82,7 @@ namespace BaconBackend.Managers
                     // We need to make a new task
                     BackgroundTaskBuilder builder = new BackgroundTaskBuilder();
                     builder.Name = c_backgroundTaskName;
-                    builder.TaskEntryPoint = "BaconBackground.BackgroundEntry";
+                    builder.TaskEntryPoint = "Pancetta.Windows.Background.BackgroundEntry";
                     builder.SetTrigger(new TimeTrigger(c_backgroundUpdateTime, false));
                     builder.SetTrigger(new MaintenanceTrigger(c_backgroundUpdateTime, false));
 

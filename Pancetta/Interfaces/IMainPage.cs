@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baconit.Interfaces
+namespace Pancetta.Windows.Interfaces
 {
     public interface IMainPage
     {

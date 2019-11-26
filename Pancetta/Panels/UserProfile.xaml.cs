@@ -1,8 +1,8 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using Baconit.Interfaces;
-using Baconit.Panels.FlipView;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels.FlipView;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +24,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public sealed partial class UserProfile : UserControl, IPanel
     {
@@ -111,7 +111,7 @@ namespace Baconit.Panels
                 m_user = await MiscellaneousHelper.GetRedditUser(App.BaconMan, userName);
 
                 // Jump back to the UI thread, we will use low priority so we don't make any animations choppy.
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                 {
                     // Check we got it.
                     if (m_user == null)
@@ -264,7 +264,7 @@ namespace Baconit.Panels
         private async void PostCollector_OnCollectorStateChange(object sender, OnCollectorStateChangeArgs e)
         {
             // Jump to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // Kill anything we have
                 ui_postLoadingBar.IsIndeterminate = false;
@@ -309,7 +309,7 @@ namespace Baconit.Panels
         private async void PostCollector_OnCollectionUpdated(object sender, OnCollectionUpdatedArgs<Post> e)
         {
             // Jump to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // If this is fresh clear
                 if(e.IsFreshUpdate)
@@ -532,7 +532,7 @@ namespace Baconit.Panels
         private async void CommentCollector_OnCollectorStateChange(object sender, OnCollectorStateChangeArgs e)
         {
             // Jump to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // Kill anything we have
                 ui_commentLoadingBar.IsIndeterminate = false;
@@ -577,7 +577,7 @@ namespace Baconit.Panels
         private async void CommentCollector_OnCollectionUpdated(object sender, OnCollectionUpdatedArgs<Comment> e)
         {
             // Jump to the UI thread
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // If this is fresh clear
                 if (e.IsFreshUpdate)

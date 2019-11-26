@@ -1,6 +1,6 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using Baconit.Interfaces;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Baconit.Panels.FlipView
+namespace Pancetta.Windows.Panels.FlipView
 {
     /// <summary>
     /// Used by flip view to pass context to post items.

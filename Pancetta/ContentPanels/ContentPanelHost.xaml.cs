@@ -1,6 +1,6 @@
-﻿using BaconBackend.Helpers;
-using BaconBackend.Managers;
-using Baconit.Interfaces;
+﻿using Pancetta.Helpers;
+using Pancetta.Managers;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.ContentPanels
+namespace Pancetta.Windows.ContentPanels
 {
     /// <summary>
     /// Args for toggle full screen
@@ -730,7 +730,7 @@ namespace Baconit.ContentPanels
                         url = ContentPanelMaster.Current.GetSource(SourceId).Url;
                     }
 
-                    await Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
+                    await global::Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
                 }
                 catch (Exception)
                 { }

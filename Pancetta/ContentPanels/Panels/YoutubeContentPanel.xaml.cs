@@ -1,4 +1,4 @@
-﻿using Baconit.Interfaces;
+﻿using Pancetta.Windows.Interfaces;
 using MyToolkit.Multimedia;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.ContentPanels.Panels
+namespace Pancetta.Windows.ContentPanels.Panels
 {
     public sealed partial class YoutubeContentPanel : UserControl, IContentPanel
     {
@@ -88,7 +88,7 @@ namespace Baconit.ContentPanels.Panels
                 YouTubeUri youTubeUri = await GetYouTubeVideoUrl(m_base.Source);
 
                 // Back to the UI thread with pri
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                 {
                     if (youTubeUri == null)
                     {

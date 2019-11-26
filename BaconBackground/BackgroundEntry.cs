@@ -1,5 +1,5 @@
-﻿using BaconBackend;
-using BaconBackend.Helpers;
+﻿using Pancetta;
+using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 
-namespace BaconBackground
+namespace Pancetta.Windows.Background
 {
     public sealed class BackgroundEntry : IBackgroundTask
     {

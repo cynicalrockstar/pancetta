@@ -7,7 +7,7 @@
     <ProjectGuid>{760D26FA-938B-4B0A-9C87-915ADAED244D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BaconBackend</RootNamespace>
+    <RootNamespace>Pancetta</RootNamespace>
     <AssemblyName>BaconBackend</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>

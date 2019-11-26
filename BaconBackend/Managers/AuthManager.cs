@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
 
-namespace BaconBackend.Managers
+namespace Pancetta.Managers
 {
 #pragma warning disable CS0649
 

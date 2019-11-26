@@ -1,7 +1,7 @@
-﻿using BaconBackend.Collectors;
-using Baconit.Interfaces;
-using Baconit.Panels;
-using Baconit.Panels.FlipView;
+﻿using Pancetta.Collectors;
+using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels;
+using Pancetta.Windows.Panels.FlipView;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace Baconit.ContentPanels.Panels
+namespace Pancetta.Windows.ContentPanels.Panels
 {
     public sealed partial class MarkdownContentPanel : UserControl, IContentPanel
     {
@@ -81,7 +81,7 @@ namespace Baconit.ContentPanels.Panels
                 m_markdownBlock.OnMarkdownLinkTapped += MarkdownBlock_OnMarkdownLinkTapped;
                 m_markdownBlock.OnMarkdownReady += MarkdownBox_OnMarkdownReady;
                 m_markdownBlock.Markdown = m_base.Source.SelfText;
-                m_markdownBlock.Foreground = new SolidColorBrush(Windows.UI.Colors.Black);
+                m_markdownBlock.Foreground = new SolidColorBrush(global::Windows.UI.Colors.Black);
                 m_markdownBlock.FontSize = 12;
                 ui_contentRoot.Children.Add(m_markdownBlock);
 
@@ -184,7 +184,7 @@ namespace Baconit.ContentPanels.Panels
             }
             if (!String.IsNullOrWhiteSpace(url))
             {
-                await Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
+                await global::Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
             }
         }
 
@@ -217,15 +217,15 @@ namespace Baconit.ContentPanels.Panels
         {
             if (m_context.Post != null)
             {
-                args.Request.Data.Properties.ApplicationName = "Baconit";
+                args.Request.Data.Properties.ApplicationName = "Pancetta";
                 args.Request.Data.Properties.ContentSourceWebLink = new Uri(m_context.Post.Url, UriKind.Absolute);
-                args.Request.Data.Properties.Title = "A Reddit Post Shared From Baconit";
+                args.Request.Data.Properties.Title = "A Reddit Post Shared From Pancetta";
                 args.Request.Data.Properties.Description = m_context.Post.Title;
                 args.Request.Data.SetText($"\r\n\r\n{m_context.Post.Title}\r\n\r\n{m_context.Post.Url}");
             }
             else
             {
-                args.Request.FailWithDisplayText("Baconit doesn't have anything to share!");
+                args.Request.FailWithDisplayText("Pancetta doesn't have anything to share!");
             }
         }
     }

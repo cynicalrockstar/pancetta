@@ -1,18 +1,13 @@
-﻿using BaconBackend.DataObjects;
-using BaconBackend.Helpers;
-using BaconBackend.Managers;
-using Newtonsoft.Json;
+﻿using Pancetta.DataObjects;
+using Pancetta.Helpers;
+using Pancetta.Managers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI;
-using Windows.UI.Xaml.Media;
 
-namespace BaconBackend.Collectors
+namespace Pancetta.Collectors
 {
     public class PostCollector : Collector<Post>
     {

@@ -1,13 +1,13 @@
-﻿using BaconBackend.Collectors;
-using BaconBackend.DataObjects;
-using Baconit.Interfaces;
+﻿using Pancetta.Collectors;
+using Pancetta.DataObjects;
+using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baconit.Panels.FlipView
+namespace Pancetta.Windows.Panels.FlipView
 {
     /// <summary>
     /// This class is what is bound to the flip view for each item.

@@ -1,5 +1,5 @@
-﻿using Baconit.Interfaces;
-using Baconit.Panels.SettingsPanels;
+﻿using Pancetta.Windows.Interfaces;
+using Pancetta.Windows.Panels.SettingsPanels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace Baconit.Panels
+namespace Pancetta.Windows.Panels
 {
     public sealed partial class Settings : UserControl, IPanel
     {

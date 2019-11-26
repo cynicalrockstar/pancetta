@@ -8,11 +8,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pancetta", "Pancetta\Pancet
 		{760D26FA-938B-4B0A-9C87-915ADAED244D} = {760D26FA-938B-4B0A-9C87-915ADAED244D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaconBackend", "BaconBackend\BaconBackend.csproj", "{760D26FA-938B-4B0A-9C87-915ADAED244D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PancettaCommon", "BaconBackend\PancettaCommon.csproj", "{760D26FA-938B-4B0A-9C87-915ADAED244D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalMarkdown", "UniversalMarkdown\UniversalMarkdown.csproj", "{9FFC3B68-696A-4342-A2B8-2EADDDEF7FF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaconBackground", "BaconBackground\BaconBackground.csproj", "{C79AC423-5427-4379-AB5B-11F531B5229C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pancetta.Windows.Background", "BaconBackground\Pancetta.Windows.Background.csproj", "{C79AC423-5427-4379-AB5B-11F531B5229C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

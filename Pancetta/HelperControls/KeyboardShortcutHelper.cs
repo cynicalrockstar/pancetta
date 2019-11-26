@@ -1,4 +1,4 @@
-﻿using BaconBackend.Helpers;
+﻿using Pancetta.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
-namespace Baconit.HelperControls
+namespace Pancetta.Windows.HelperControls
 {
     class KeyboardShortcutHelper
     {
@@ -47,9 +47,9 @@ namespace Baconit.HelperControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs e)
+        private void CoreWindow_KeyDown(global::Windows.UI.Core.CoreWindow sender, global::Windows.UI.Core.KeyEventArgs e)
         {
-            if (e.VirtualKey == Windows.System.VirtualKey.Control)
+            if (e.VirtualKey == global::Windows.System.VirtualKey.Control)
             {
                 m_isControlKeyDown = true;
             }
@@ -57,7 +57,7 @@ namespace Baconit.HelperControls
             {
                 // I had this on the key down event but it didn't seem to fire 100%
                 // reliably. So this place seems to work better.
-                if (e.VirtualKey == Windows.System.VirtualKey.S)
+                if (e.VirtualKey == global::Windows.System.VirtualKey.S)
                 {
                     // Disable for mobile, for some reason this can trip with the mobile keyboard.
                     if (DeviceHelper.CurrentDevice() != DeviceTypes.Mobile)
@@ -75,13 +75,13 @@ namespace Baconit.HelperControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CoreWindow_KeyUp(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs e)
+        private void CoreWindow_KeyUp(global::Windows.UI.Core.CoreWindow sender, global::Windows.UI.Core.KeyEventArgs e)
         {
-            if (e.VirtualKey == Windows.System.VirtualKey.Control)
+            if (e.VirtualKey == global::Windows.System.VirtualKey.Control)
             {
                 m_isControlKeyDown = false;
             }
-            else if(e.VirtualKey == Windows.System.VirtualKey.Escape)
+            else if(e.VirtualKey == global::Windows.System.VirtualKey.Escape)
             {
                 // If we have an escape key hit fire go back.
                 m_onGoBackActivation.Raise(this, new EventArgs());

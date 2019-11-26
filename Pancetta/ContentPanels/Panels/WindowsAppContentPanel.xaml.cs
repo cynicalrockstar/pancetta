@@ -1,4 +1,4 @@
-﻿using Baconit.Interfaces;
+﻿using Pancetta.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Baconit.ContentPanels.Panels
+namespace Pancetta.Windows.ContentPanels.Panels
 {
     public sealed partial class WindowsAppContentPanel : UserControl, IContentPanel
     {
@@ -147,7 +147,7 @@ namespace Baconit.ContentPanels.Panels
                         // Do a quick sanity check
                         if (appId.Length > 4)
                         {
-                            successfullyParsedAppId = await Windows.System.Launcher.LaunchUriAsync(new Uri($"ms-windows-store://pdp/?ProductId={appId}"));
+                            successfullyParsedAppId = await global::Windows.System.Launcher.LaunchUriAsync(new Uri($"ms-windows-store://pdp/?ProductId={appId}"));
                         }
                     }
                 }
