@@ -201,7 +201,7 @@ namespace BaconBackend.Helpers
                 string jsonResponse = await baconMan.NetworkMan.MakeRedditGetRequestAsString($"user/{userName}/about/.json");
 
                 // Parse the new user
-                foundUser = MiscellaneousHelper.ParseOutRedditDataElement<User>(baconMan, jsonResponse);
+                foundUser = await MiscellaneousHelper.ParseOutRedditDataElement<User>(baconMan, jsonResponse);
             }
             catch (Exception e)
             {
@@ -416,7 +416,7 @@ namespace BaconBackend.Helpers
         /// </summary>
         /// <param name="originalJson"></param>
         /// <returns></returns>
-        public static T ParseOutRedditDataElement<T>(BaconManager baconMan, string originalJson)
+        public static async Task<T> ParseOutRedditDataElement<T>(BaconManager baconMan, string originalJson)
         {
             // TODO make this async. If I try to Task.Run(()=> the parse the task returns but the
             // await never resumes... idk why.

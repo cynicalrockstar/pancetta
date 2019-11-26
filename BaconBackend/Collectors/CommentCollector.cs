@@ -424,7 +424,7 @@ namespace BaconBackend.Collectors
                 try
                 {
                     // Parse the new comment
-                    Comment newComment = MiscellaneousHelper.ParseOutRedditDataElement<Comment>(m_baconMan, serverResponse);
+                    Comment newComment = MiscellaneousHelper.ParseOutRedditDataElement<Comment>(m_baconMan, serverResponse).Result;
 
                     if (isEdit)
                     {
