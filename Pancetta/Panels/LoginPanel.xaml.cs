@@ -37,7 +37,7 @@ namespace Baconit.Panels
 
             // Setup the image.
             List<Uri> uriList = new List<Uri>();
-            uriList.Add(new Uri("ms-appx:///Assets/Welcome/QuinnImageMedium.jpg", UriKind.Absolute));
+            uriList.Add(new Uri("ms-appx:///Assets/Welcome/amsterdam.jpg", UriKind.Absolute));
             ui_imageScrolBackground.SetImages(uriList);
         }
 

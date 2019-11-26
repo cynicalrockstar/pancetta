@@ -309,8 +309,8 @@
     <Content Include="Assets\MainPage\NotFavoriteIcon.png" />
     <Content Include="Assets\MainPage\pancetta_50.png" />
     <Content Include="Assets\Settings\pancetta_100.png" />
-    <Content Include="Assets\Welcome\MarilynImageMedium.jpg" />
-    <Content Include="Assets\Welcome\QuinnImageMedium.jpg" />
+    <Content Include="Assets\Welcome\amsterdam.jpg" />
+    <Content Include="Assets\Welcome\path.jpg" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>

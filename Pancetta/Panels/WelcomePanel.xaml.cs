@@ -28,7 +28,7 @@ namespace Baconit.Panels
 
             // Setup the image
             List<Uri> uriList = new List<Uri>();
-            uriList.Add(new Uri("ms-appx:///Assets/Welcome/MarilynImageMedium.jpg", UriKind.Absolute));
+            uriList.Add(new Uri("ms-appx:///Assets/Welcome/path.jpg", UriKind.Absolute));
             ui_slidingImageControl.SetImages(uriList);
         }
 
