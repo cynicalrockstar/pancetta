@@ -342,7 +342,6 @@ namespace Baconit
             }
             catch(Exception e)
             {
-                App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "UpdateSubredditListFailed", e);
                 App.BaconMan.MessageMan.DebugDia("UpdateSubredditListFailed", e);
             }
         }
@@ -390,8 +389,6 @@ namespace Baconit
 
             // Reverse the status
             App.BaconMan.SubredditMan.SetFavorite(sub.Id, !sub.IsFavorite);
-
-            App.BaconMan.TelemetryMan.ReportEvent(this, "SubredditListFavoriteTapped");
         }
 
         /// <summary>
@@ -568,7 +565,6 @@ namespace Baconit
                 Dictionary<string, object> args = new Dictionary<string, object>();
                 args.Add(PanelManager.NAV_ARGS_USER_NAME, App.BaconMan.UserMan.CurrentUser.Name);
                 m_panelManager.Navigate(typeof(UserProfile), App.BaconMan.UserMan.CurrentUser.Name, args);
-                App.BaconMan.TelemetryMan.ReportEvent(this, "GoToProfileViaGlobalMenu");
             }
             ToggleMenu(false);
         }
@@ -584,7 +580,6 @@ namespace Baconit
         /// <param name="e"></param>
         private void KeyboardShortcutHepler_OnQuickSearchActivation(object sender, EventArgs e)
         {
-            App.BaconMan.TelemetryMan.ReportEvent(this, "QuickSearchKeyboardShortcut");
             ToggleMenu(true);
             SearchHeader_Tapped(null, null);
         }
@@ -599,7 +594,6 @@ namespace Baconit
             // If the search box is empty close or open the box
             if (String.IsNullOrWhiteSpace(ui_quickSearchBox.Text))
             {
-                App.BaconMan.TelemetryMan.ReportEvent(this, "QuickSearchOpened");
                 ToggleQuickSearch();
             }
             else
@@ -945,7 +939,7 @@ namespace Baconit
         /// Fired when someone wants to show the global content presenter
         /// </summary>
         /// <param name="link">What to show</param>
-        public async void ShowGlobalContent(string link)
+        public void ShowGlobalContent(string link)
         {
             // Validate that the link can't be opened by the subreddit viewer
             RedditContentContainer container = MiscellaneousHelper.TryToFindRedditContentInLink(link);

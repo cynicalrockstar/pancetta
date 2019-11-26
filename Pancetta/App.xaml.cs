@@ -56,20 +56,13 @@ namespace Baconit
         /// </summary>
         public App()
         {
-
-            //bool result = Windows.UI.ViewManagement.ApplicationViewScaling.TrySetDisableLayoutScaling(true);
+            bool result = Windows.UI.ViewManagement.ApplicationViewScaling.TrySetDisableLayoutScaling(true);
 
             // Setup the exception handler first
             this.UnhandledException += OnUnhandledException;
 
             // Now setup the baconman
             BaconMan = new BaconManager(false);
-
-            // Now telemetry
-            Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
-                Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
-                Microsoft.ApplicationInsights.WindowsCollectors.UnhandledException |
-                Microsoft.ApplicationInsights.WindowsCollectors.Session);
 
             // Init the app
             this.InitializeComponent();
@@ -134,12 +127,6 @@ namespace Baconit
                 {
                     BaconMan.UiSettingsMan.Developer_StopFatalCrashesAndReport = true;
                 }
-            }
-
-            // If we are on Xbox disable the blank border around the app. Ideally we would give the user the option to re-enable this.
-            if(DeviceHelper.CurrentDevice() == DeviceTypes.Xbox)
-            {
-                Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().SetDesiredBoundsMode(Windows.UI.ViewManagement.ApplicationViewBoundsMode.UseCoreWindow);
             }
 
             // Grab the accent color and make our custom accent color brushes.
@@ -254,7 +241,7 @@ namespace Baconit
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private void OnUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
             if (Debugger.IsAttached)
             {

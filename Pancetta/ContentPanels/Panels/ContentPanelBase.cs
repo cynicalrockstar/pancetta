@@ -328,7 +328,6 @@ namespace Baconit.ContentPanels.Panels
                 {
                     // If we fail here we will fall back to the web browser.
                     App.BaconMan.MessageMan.DebugDia("Failed to query can handle post", e);
-                    App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToQueryCanHandlePost", e);
                 }
             }
 
@@ -351,7 +350,6 @@ namespace Baconit.ContentPanels.Panels
                         loadedPanel = false;
                         HasError = true;
                         App.BaconMan.MessageMan.DebugDia("failed to create content control", e);
-                        App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToCreateContentPanel", e);
                     }
                 });
             }

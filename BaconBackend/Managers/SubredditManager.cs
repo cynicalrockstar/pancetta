@@ -185,11 +185,10 @@ namespace BaconBackend.Managers
                 string jsonResponse = await m_baconMan.NetworkMan.MakeRedditGetRequestAsString($"/r/{displayName}/about/.json");
 
                 // Parse the new subreddit
-                foundSubreddit = await MiscellaneousHelper.ParseOutRedditDataElement<Subreddit>(m_baconMan, jsonResponse);
+                foundSubreddit = MiscellaneousHelper.ParseOutRedditDataElement<Subreddit>(m_baconMan, jsonResponse);
             }
             catch (Exception e)
             {
-                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "failed to get subreddit", e);
                 m_baconMan.MessageMan.DebugDia("failed to get subreddit", e);
             }
 
@@ -252,13 +251,11 @@ namespace BaconBackend.Managers
                 }
 
                 // Report the error
-                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToSubscribeToSubredditWebRequestFailed");
                 m_baconMan.MessageMan.DebugDia("failed to subscribe / unsub subreddit, reddit returned an expected value");
                 return false;
             }
             catch (Exception e)
             {
-                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToSubscribeToSubreddit", e);
                 m_baconMan.MessageMan.DebugDia("failed to subscribe / unsub subreddit", e);
             }
             return false;
