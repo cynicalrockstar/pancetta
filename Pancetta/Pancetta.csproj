@@ -79,7 +79,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -488,19 +488,12 @@
       <Project>{760d26fa-938b-4b0a-9c87-915adaed244d}</Project>
       <Name>BaconBackend</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BaconBackground\BaconBackground.csproj">
-      <Project>{c79ac423-5427-4379-ab5b-11f531b5229c}</Project>
-      <Name>BaconBackground</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UniversalMarkdown\UniversalMarkdown.csproj">
       <Project>{9ffc3b68-696a-4342-a2b8-2eadddef7ff9}</Project>
       <Name>UniversalMarkdown</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights">
-      <Version>1.2.3</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.ApplicationInsights.PersistenceChannel">
       <Version>1.2.3</Version>
     </PackageReference>

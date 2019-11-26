@@ -155,7 +155,6 @@ namespace Baconit.ContentPanels.Panels
             }
             catch (Exception e)
             {
-                App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToMakeUriInWebControl", e);
                 m_base.FireOnError(true, "This web page failed to load");
             }
 
@@ -227,18 +226,9 @@ namespace Baconit.ContentPanels.Panels
 
         private async void ReadingMode_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            try
-            {
-                var reader = new ReadSharp.Reader();
-                var article = await reader.Read(new Uri(m_base.Source.Url));
-                m_webView.NavigateToString(article.Content);
-            }
-            catch (Exception ex)
-            {
-                App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToNavReadingMode", ex);
-            }
-
-            App.BaconMan.TelemetryMan.ReportEvent(this, "ReadingModeEnabled");
+            var reader = new ReadSharp.Reader();
+            var article = await reader.Read(new Uri(m_base.Source.Url));
+            m_webView.NavigateToString(article.Content);
         }
 
         private void HideReadingModeLoading()
@@ -409,7 +399,6 @@ namespace Baconit.ContentPanels.Panels
             if (!String.IsNullOrWhiteSpace(url))
             {
                 await Windows.System.Launcher.LaunchUriAsync(new Uri(url, UriKind.Absolute));
-                App.BaconMan.TelemetryMan.ReportEvent(this, "OpenInBrowser");
             }
         }
 
@@ -421,7 +410,6 @@ namespace Baconit.ContentPanels.Panels
                 DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
                 dataTransferManager.DataRequested += DataTransferManager_DataRequested;
                 DataTransferManager.ShowShareUI();
-                App.BaconMan.TelemetryMan.ReportEvent(this, "SharePostTapped");
             }
         }
 
@@ -430,7 +418,6 @@ namespace Baconit.ContentPanels.Panels
             Dictionary<string, object> args = new Dictionary<string, object>();
             args.Add(PanelManager.NAV_ARGS_USER_NAME, m_context.Post.Author);
             m_context.Host.Navigate(typeof(UserProfile), m_context.Post.Author, args);
-            App.BaconMan.TelemetryMan.ReportEvent(this, "GoToUserFlipView");
         }
 
         private void SubredditButton_Click(object sender, RoutedEventArgs e)
@@ -438,7 +425,6 @@ namespace Baconit.ContentPanels.Panels
             Dictionary<string, object> args = new Dictionary<string, object>();
             args.Add(PanelManager.NAV_ARGS_SUBREDDIT_NAME, m_context.Post.Subreddit);
             m_context.Host.Navigate(typeof(SubredditPanel), m_context.Post.Subreddit + SortTypes.Hot + SortTimeTypes.Week, args);
-            App.BaconMan.TelemetryMan.ReportEvent(this, "GoToSubredditFlipView");
         }
 
         private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
@@ -450,12 +436,10 @@ namespace Baconit.ContentPanels.Panels
                 args.Request.Data.Properties.Title = "A Reddit Post Shared From Baconit";
                 args.Request.Data.Properties.Description = m_context.Post.Title;
                 args.Request.Data.SetText($"\r\n\r\n{m_context.Post.Title}\r\n\r\n{m_context.Post.Url}");
-                App.BaconMan.TelemetryMan.ReportEvent(this, "PostShared");
             }
             else
             {
                 args.Request.FailWithDisplayText("Baconit doesn't have anything to share!");
-                App.BaconMan.TelemetryMan.ReportUnexpectedEvent(this, "FailedToShareFilpViewPostNoSharePost");
             }
         }
     }

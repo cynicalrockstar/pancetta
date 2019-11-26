@@ -99,15 +99,12 @@
     <Compile Include="Collectors\SearchPostCollector.cs" />
     <Compile Include="Collectors\SearchSubredditCollector.cs" />
     <Compile Include="Collectors\PostCollector.cs" />
-    <Compile Include="DataObjects\AppVersion.cs" />
     <Compile Include="DataObjects\BindableBase.cs" />
     <Compile Include="DataObjects\Comment.cs" />
     <Compile Include="DataObjects\Message.cs" />
-    <Compile Include="DataObjects\MessageOfTheDay.cs" />
     <Compile Include="DataObjects\Post.cs" />
     <Compile Include="DataObjects\SearchResult.cs" />
     <Compile Include="DataObjects\Subreddit.cs" />
-    <Compile Include="DataObjects\DataContainer.cs" />
     <Compile Include="DataObjects\User.cs" />
     <Compile Include="Helpers\DeviceHelper.cs" />
     <Compile Include="Helpers\HashList.cs" />
@@ -122,16 +119,13 @@
     <Compile Include="Managers\BackgroundManager.cs" />
     <Compile Include="Managers\Background\BackgroundImageUpdater.cs" />
     <Compile Include="Managers\Background\BackgroundMessageUpdater.cs" />
-    <Compile Include="Managers\CacheManager.cs" />
     <Compile Include="Managers\ImageManager.cs" />
     <Compile Include="Managers\MemoryManager.cs" />
     <Compile Include="Managers\MessageManager.cs" />
-    <Compile Include="Managers\Background\MessageOfTheDayManager.cs" />
     <Compile Include="Managers\NetworkManager.cs" />
     <Compile Include="Managers\SettingsManager.cs" />
     <Compile Include="Managers\DraftManager.cs" />
     <Compile Include="Managers\SubredditManager.cs" />
-    <Compile Include="Managers\TelemetryManager.cs" />
     <Compile Include="Managers\TileManager.cs" />
     <Compile Include="Managers\UiSettingManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
@@ -139,9 +133,6 @@
     <Content Include="Properties\BaconBackend.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights">
-      <Version>1.2.3</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.ApplicationInsights.PersistenceChannel">
       <Version>1.2.3</Version>
     </PackageReference>

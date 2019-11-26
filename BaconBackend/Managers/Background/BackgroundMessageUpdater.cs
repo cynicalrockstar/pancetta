@@ -60,7 +60,7 @@ namespace BaconBackend.Managers.Background
         /// Updates all of the notifications based on the message list.
         /// </summary>
         /// <param name="newMessages"></param>
-        public async void UpdateNotifications(List<Message> newMessages)
+        public void UpdateNotifications(List<Message> newMessages)
         {
             bool updateSliently = !m_baconMan.IsBackgroundTask;
 
@@ -226,7 +226,6 @@ namespace BaconBackend.Managers.Background
             }
             catch (Exception ex)
             {
-                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "messageUpdaterFailed", ex);
                 m_baconMan.MessageMan.DebugDia("failed to update message notifications", ex);
             }
 

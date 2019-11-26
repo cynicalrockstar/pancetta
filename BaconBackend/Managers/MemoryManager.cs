@@ -145,122 +145,122 @@ namespace BaconBackend.Managers
         public void StartMemoryWatch()
         {
             // If we should run.
-            lock(this)
-            {
-                if(m_isRunning)
-                {
-                    return;
-                }
-                m_isRunning = true;
-            }
+            //lock(this)
+            //{
+            //    if(m_isRunning)
+            //    {
+            //        return;
+            //    }
+            //    m_isRunning = true;
+            //}
 
-            // Kick off a thread.
-            Task.Run(async () =>
-            {
-                // Loop forever.
-                while (true)
-                {
-                    // Sleep for some time, sleep longer if the memory pressure is lower.
-                    int sleepTime = 100;
-                    switch(MemoryPressure)
-                    {
-                        case MemoryPressureStates.None:
-                            sleepTime = 500;
-                            break;
-                        case MemoryPressureStates.Low:
-                            sleepTime = 300;
-                            break;
-                        case MemoryPressureStates.Medium:
-                        case MemoryPressureStates.HighNoAllocations:
-                            sleepTime = 100;
-                            break;
-                    }
-                    await Task.Delay(sleepTime);
+            //// Kick off a thread.
+            //Task.Run(async () =>
+            //{
+            //    // Loop forever.
+            //    while (true)
+            //    {
+            //        // Sleep for some time, sleep longer if the memory pressure is lower.
+            //        int sleepTime = 100;
+            //        switch(MemoryPressure)
+            //        {
+            //            case MemoryPressureStates.None:
+            //                sleepTime = 500;
+            //                break;
+            //            case MemoryPressureStates.Low:
+            //                sleepTime = 300;
+            //                break;
+            //            case MemoryPressureStates.Medium:
+            //            case MemoryPressureStates.HighNoAllocations:
+            //                sleepTime = 100;
+            //                break;
+            //        }
+            //        await Task.Delay(sleepTime);
 
-                    // Make sure we aren't stopped.
-                    if (!m_isRunning)
-                    {
-                        return;
-                    }
+            //        // Make sure we aren't stopped.
+            //        if (!m_isRunning)
+            //        {
+            //            return;
+            //        }
 
-                    // Calculate the current memory pressure.
-                    ulong usedMemory = Windows.System.MemoryManager.AppMemoryUsage;
-                    ulong memoryLimit = Windows.System.MemoryManager.AppMemoryUsageLimit;
-                    CurrentMemoryUsagePercentage = (double)usedMemory / (double)memoryLimit;
+            //        // Calculate the current memory pressure.
+            //        ulong usedMemory = Windows.System.MemoryManager.AppMemoryUsage;
+            //        ulong memoryLimit = Windows.System.MemoryManager.AppMemoryUsageLimit;
+            //        CurrentMemoryUsagePercentage = (double)usedMemory / (double)memoryLimit;
 
-                    // Set the pressure state.
-                    MemoryPressureStates oldPressure = MemoryPressure;
-                    if(CurrentMemoryUsagePercentage < c_noneMemoryPressueLimit)
-                    {
-                        MemoryPressure = MemoryPressureStates.None;
-                    }
-                    else if (CurrentMemoryUsagePercentage < c_veryLowMemoryPressueLimit)
-                    {
-                        MemoryPressure = MemoryPressureStates.VeryLow;
-                    }
-                    else if(CurrentMemoryUsagePercentage < c_lowMemoryPressueLimit)
-                    {
-                        MemoryPressure = MemoryPressureStates.Low;
-                    }
-                    else if (CurrentMemoryUsagePercentage < c_mediumMemoryPressueLimit)
-                    {
-                        MemoryPressure = MemoryPressureStates.Medium;
-                    }
-                    else
-                    {
-                        MemoryPressure = MemoryPressureStates.HighNoAllocations;
-                    }
+            //        // Set the pressure state.
+            //        MemoryPressureStates oldPressure = MemoryPressure;
+            //        if(CurrentMemoryUsagePercentage < c_noneMemoryPressueLimit)
+            //        {
+            //            MemoryPressure = MemoryPressureStates.None;
+            //        }
+            //        else if (CurrentMemoryUsagePercentage < c_veryLowMemoryPressueLimit)
+            //        {
+            //            MemoryPressure = MemoryPressureStates.VeryLow;
+            //        }
+            //        else if(CurrentMemoryUsagePercentage < c_lowMemoryPressueLimit)
+            //        {
+            //            MemoryPressure = MemoryPressureStates.Low;
+            //        }
+            //        else if (CurrentMemoryUsagePercentage < c_mediumMemoryPressueLimit)
+            //        {
+            //            MemoryPressure = MemoryPressureStates.Medium;
+            //        }
+            //        else
+            //        {
+            //            MemoryPressure = MemoryPressureStates.HighNoAllocations;
+            //        }
 
-                    // If our new state is higher than our old state
-                    if (MemoryPressure > oldPressure)
-                    {
-                        // We went up a state, Fire the cleanup request since we are at least low.
-                        FireMemoryCleanup(MemoryPressure, oldPressure);
+            //        // If our new state is higher than our old state
+            //        if (MemoryPressure > oldPressure)
+            //        {
+            //            // We went up a state, Fire the cleanup request since we are at least low.
+            //            FireMemoryCleanup(MemoryPressure, oldPressure);
 
-                        // Set the count
-                        m_cleanupTick = 0;
-                    }
-                    // If our new state is lower than our old state.
-                    else if(MemoryPressure < oldPressure)
-                    {
-                        // We did well, but we can still be at medium or low, reset the counter.
-                        m_cleanupTick = 0;
-                    }
-                    else
-                    {
-                        // Things are the same, if we are low or above take action.
-                        if(MemoryPressure >= MemoryPressureStates.Low)
-                        {
-                            // Count
-                            m_cleanupTick++;
+            //            // Set the count
+            //            m_cleanupTick = 0;
+            //        }
+            //        // If our new state is lower than our old state.
+            //        else if(MemoryPressure < oldPressure)
+            //        {
+            //            // We did well, but we can still be at medium or low, reset the counter.
+            //            m_cleanupTick = 0;
+            //        }
+            //        else
+            //        {
+            //            // Things are the same, if we are low or above take action.
+            //            if(MemoryPressure >= MemoryPressureStates.Low)
+            //            {
+            //                // Count
+            //                m_cleanupTick++;
 
-                            // Get the rollover count.
-                            int tickRollover = MemoryPressure == MemoryPressureStates.Low ? c_lowTickRollover : c_mediumAndHighTickRollover;
+            //                // Get the rollover count.
+            //                int tickRollover = MemoryPressure == MemoryPressureStates.Low ? c_lowTickRollover : c_mediumAndHighTickRollover;
 
-                            // Check for roll over
-                            if(m_cleanupTick > tickRollover)
-                            {
-                                FireMemoryCleanup(MemoryPressure, oldPressure);
-                                m_cleanupTick = 0;
-                            }
-                        }
-                    }
+            //                // Check for roll over
+            //                if(m_cleanupTick > tickRollover)
+            //                {
+            //                    FireMemoryCleanup(MemoryPressure, oldPressure);
+            //                    m_cleanupTick = 0;
+            //                }
+            //            }
+            //        }
 
-                    // For now since this is only used by developer settings, don't bother
-                    // if it isn't enabled.
-                    if (m_baconMan.UiSettingsMan.Developer_ShowMemoryOverlay)
-                    {
-                        // Check if we need to send a report, we only want to send a report every
-                        // 10 ticks so we don't spam too many. Also report if the state changed.
-                        m_reportTick++;
-                        if (m_reportTick > 5 || oldPressure != MemoryPressure)
-                        {
-                            FireMemoryReport(usedMemory, memoryLimit, CurrentMemoryUsagePercentage);
-                            m_reportTick = 0;
-                        }
-                    }
-                }
-            });
+            //        // For now since this is only used by developer settings, don't bother
+            //        // if it isn't enabled.
+            //        if (m_baconMan.UiSettingsMan.Developer_ShowMemoryOverlay)
+            //        {
+            //            // Check if we need to send a report, we only want to send a report every
+            //            // 10 ticks so we don't spam too many. Also report if the state changed.
+            //            m_reportTick++;
+            //            if (m_reportTick > 5 || oldPressure != MemoryPressure)
+            //            {
+            //                FireMemoryReport(usedMemory, memoryLimit, CurrentMemoryUsagePercentage);
+            //                m_reportTick = 0;
+            //            }
+            //        }
+            //    }
+            //});
         }
 
         /// <summary>
@@ -285,7 +285,6 @@ namespace BaconBackend.Managers
             catch(Exception e)
             {
                 m_baconMan.MessageMan.DebugDia("Memory report fire failed", e);
-                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "MemeoryReportFiredFailed", e);
             }
         }
 
@@ -309,7 +308,6 @@ namespace BaconBackend.Managers
             catch (Exception e)
             {
                 m_baconMan.MessageMan.DebugDia("Memory cleanup fire failed", e);
-                m_baconMan.TelemetryMan.ReportUnexpectedEvent(this, "MemeoryCleanupFiredFailed", e);
             }
         }
     }
