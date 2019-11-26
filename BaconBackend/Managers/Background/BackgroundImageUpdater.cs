@@ -704,7 +704,7 @@ namespace BaconBackend.Managers.Background
         /// <param name="type"></param>
         private void ReleaseDeferral(UpdateTypes type)
         {
-            lock(this)
+            lock (this)
             {
                 if (type == UpdateTypes.LockScreen)
                 {
@@ -730,7 +730,7 @@ namespace BaconBackend.Managers.Background
                     }
                     m_desktopRefDeferral = null;
                 }
-            }  
+            }
         }
 
         /// <summary>

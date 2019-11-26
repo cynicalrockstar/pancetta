@@ -139,11 +139,13 @@ namespace BaconBackend.Managers
                     // NOTE!! We are really careful not to use a string here so we don't have to allocate a huge string.
                     IInputStream inputStream = await file.OpenReadAsync();
                     using (StreamReader reader = new StreamReader(inputStream.AsStreamForRead()))
-                    using (JsonReader jsonReader = new JsonTextReader(reader))
                     {
-                        // Parse the settings file into the dictionary.
-                        JsonSerializer serializer = new JsonSerializer();
-                        m_localSettings = await Task.Run(() => serializer.Deserialize<Dictionary<string, object>>(jsonReader));
+                        using (JsonReader jsonReader = new JsonTextReader(reader))
+                        {
+                            //Naive threading - this awaited forever and the waitevent was never set, which caused a hang later in the startup process
+                            //This doesn't need to be a task anyway
+                            m_localSettings = new JsonSerializer().Deserialize<Dictionary<string, object>>(jsonReader);
+                        }
                     }
                 }
                 else

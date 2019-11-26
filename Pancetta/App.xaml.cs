@@ -186,6 +186,8 @@ namespace Baconit
             // We have to get the screen res before we call activate or it will be wrong and include the system tray.
             var bounds = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().VisibleBounds;
             var scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+
+            //This blocks and seems unnecessary
             BaconMan.BackgroundMan.ImageUpdaterMan.LastKnownScreenResoultion = new Size(bounds.Width * scaleFactor, bounds.Height * scaleFactor);
 
             // Ensure the current window is active
