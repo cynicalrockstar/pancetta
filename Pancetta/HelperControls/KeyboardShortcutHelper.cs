@@ -53,21 +53,6 @@ namespace Pancetta.Windows.HelperControls
             {
                 m_isControlKeyDown = true;
             }
-            else if (m_isControlKeyDown)
-            {
-                // I had this on the key down event but it didn't seem to fire 100%
-                // reliably. So this place seems to work better.
-                if (e.VirtualKey == global::Windows.System.VirtualKey.S)
-                {
-                    // Disable for mobile, for some reason this can trip with the mobile keyboard.
-                    if (DeviceHelper.CurrentDevice() != DeviceTypes.Mobile)
-                    {
-                        // Fire the event
-                        m_onQuickSearchActivation.Raise(this, new EventArgs());
-                        e.Handled = true;
-                    }
-                }
-            }
         }
 
         /// <summary>

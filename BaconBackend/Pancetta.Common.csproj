@@ -108,7 +108,6 @@
     <Compile Include="DataObjects\User.cs" />
     <Compile Include="Extensions\CappedDictionary.cs" />
     <Compile Include="Extensions\CappedList.cs" />
-    <Compile Include="Helpers\DeviceHelper.cs" />
     <Compile Include="Helpers\MiscellaneousHelper.cs" />
     <Compile Include="Helpers\RedditListHelper.cs" />
     <Compile Include="Helpers\RefCountedDeferral.cs" />
