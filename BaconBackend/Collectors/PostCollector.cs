@@ -1,4 +1,5 @@
-﻿using Pancetta.DataObjects;
+﻿using Pancetta.Common.Extensions;
+using Pancetta.DataObjects;
 using Pancetta.Helpers;
 using Pancetta.Managers;
 using System;
@@ -626,7 +627,7 @@ namespace Pancetta.Collectors
         /// If a story exists in here it has been read, and the int indicates the amount of comments
         /// it has when last read. If the comment count is -1 it has been read but the comments weren't noted.
         /// </summary>
-        private HashList<string, int> ReadPostsList
+        private CappedDictionary<string,int> ReadPostsList
         {
             get
             {
@@ -634,11 +635,11 @@ namespace Pancetta.Collectors
                 {
                     if (SettingsManager.Instance.RoamingSettings.ContainsKey("SubredditPostCollector.ReadPostsList"))
                     {
-                        m_readPostsList = SettingsManager.Instance.ReadFromRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList");
+                        m_readPostsList = SettingsManager.Instance.ReadFromRoamingSettings<CappedDictionary<string, int>>("SubredditPostCollector.ReadPostsList");
                     }
                     else
                     {
-                        m_readPostsList = new HashList<string, int>(150);
+                        m_readPostsList = new CappedDictionary<string, int>() { MaxSize = 150 };
                     }
                 }
                 return m_readPostsList;
@@ -646,9 +647,9 @@ namespace Pancetta.Collectors
             set
             {
                 m_readPostsList = value;
-                SettingsManager.Instance.WriteToRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList", m_readPostsList);
+                SettingsManager.Instance.WriteToRoamingSettings<CappedDictionary<string, int>>("SubredditPostCollector.ReadPostsList", m_readPostsList);
             }
         }
-        private HashList<string, int> m_readPostsList = null;
+        private CappedDictionary<string, int> m_readPostsList = null;
     }
 }
