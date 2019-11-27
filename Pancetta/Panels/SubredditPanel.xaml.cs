@@ -175,7 +175,7 @@ namespace Pancetta.Windows.Panels
             SetCurrentTimeSort(sortTimeType);
 
             // Get the collector and register for updates.
-            m_collector = PostCollector.GetCollector(m_subreddit, BaconManager.Instance, m_currentSortType, m_currentSortTimeType);
+            m_collector = PostCollector.GetCollector(m_subreddit, m_currentSortType, m_currentSortTimeType);
             m_collector.OnCollectorStateChange += Collector_OnCollectorStateChange;
             m_collector.OnCollectionUpdated += Collector_OnCollectionUpdated;
 

@@ -30,12 +30,12 @@ namespace Pancetta.Collectors
         /// </summary>
         /// <param name="subreddit"></param>
         /// <returns></returns>
-        public static PostCollector GetCollector(Subreddit subreddit, BaconManager baconMan, SortTypes sort = SortTypes.Hot, SortTimeTypes sortTime = SortTimeTypes.Week, string forcePostId = null)
+        public static PostCollector GetCollector(Subreddit subreddit, SortTypes sort = SortTypes.Hot, SortTimeTypes sortTime = SortTimeTypes.Week, string forcePostId = null)
         {
             PostCollectorContext container = new PostCollectorContext() { subreddit = subreddit, sortType = sort, forcePostId = forcePostId, sortTimeType = sortTime };
             // Make the uniqueId. If we have a force post add that also so we don't get an existing collector with the real subreddit.
             container.UniqueId = subreddit.Id + sort + sortTime + (String.IsNullOrWhiteSpace(forcePostId) ? String.Empty : forcePostId);
-            return (PostCollector)Collector<Post>.GetCollector(typeof(PostCollector), container.UniqueId, container, baconMan);
+            return (PostCollector)Collector<Post>.GetCollector(typeof(PostCollector), container.UniqueId, container);
         }
 
         /// <summary>
@@ -43,11 +43,11 @@ namespace Pancetta.Collectors
         /// </summary>
         /// <param name="subreddit"></param>
         /// <returns></returns>
-        public static PostCollector GetCollector(User user, BaconManager baconMan, SortTypes sort = SortTypes.Hot, SortTimeTypes sortTime = SortTimeTypes.Week)
+        public static PostCollector GetCollector(User user, SortTypes sort = SortTypes.Hot, SortTimeTypes sortTime = SortTimeTypes.Week)
         {
             PostCollectorContext container = new PostCollectorContext() { User = user, sortType = sort, sortTimeType = sortTime };
             container.UniqueId = "t2_"+user.Id + sort + sortTime;
-            return (PostCollector)Collector<Post>.GetCollector(typeof(PostCollector), container.UniqueId, container, baconMan);
+            return (PostCollector)Collector<Post>.GetCollector(typeof(PostCollector), container.UniqueId, container);
         }
 
         //
@@ -57,17 +57,15 @@ namespace Pancetta.Collectors
         Subreddit m_subreddit = null;
         SortTypes m_sortType = SortTypes.Hot;
         SortTimeTypes m_sortTimeType = SortTimeTypes.Week;
-        BaconManager m_baconMan;
 
-        public PostCollector(PostCollectorContext collectorContext, BaconManager baconMan)
-            : base(baconMan, collectorContext.UniqueId)
+        public PostCollector(PostCollectorContext collectorContext)
+            : base(collectorContext.UniqueId)
         {
             // Set the vars
             m_user = collectorContext.User;
             m_subreddit = collectorContext.subreddit;
             m_sortType = collectorContext.sortType;
             m_sortTimeType = collectorContext.sortTimeType;
-            m_baconMan = baconMan;
 
             // If we are doing a top sort setup the sort time
             string optionalArgs = String.Empty;
@@ -367,7 +365,7 @@ namespace Pancetta.Collectors
             }
 
             // Make the call to save or hide the post
-            bool success = await Task.Run(() => MiscellaneousHelper.SaveOrHideRedditItem(m_baconMan, "t3_" + collectionPost.Id, save, hide));
+            bool success = await Task.Run(() => MiscellaneousHelper.SaveOrHideRedditItem(BaconManager.Instance, "t3_" + collectionPost.Id, save, hide));
 
             if (!success)
             {
@@ -475,7 +473,7 @@ namespace Pancetta.Collectors
         public async void DeletePost(Post post)
         {
             // Try to delete it.
-            bool success = await Task.Run(()=> MiscellaneousHelper.DeletePost(m_baconMan, post.Id));
+            bool success = await Task.Run(()=> MiscellaneousHelper.DeletePost(BaconManager.Instance, post.Id));
 
             if(success)
             {
@@ -627,7 +625,7 @@ namespace Pancetta.Collectors
         /// If a story exists in here it has been read, and the int indicates the amount of comments
         /// it has when last read. If the comment count is -1 it has been read but the comments weren't noted.
         /// </summary>
-        private CappedDictionary<string,int> ReadPostsList
+        private HashList<string, int> ReadPostsList
         {
             get
             {
@@ -635,11 +633,11 @@ namespace Pancetta.Collectors
                 {
                     if (SettingsManager.Instance.RoamingSettings.ContainsKey("SubredditPostCollector.ReadPostsList"))
                     {
-                        m_readPostsList = SettingsManager.Instance.ReadFromRoamingSettings<CappedDictionary<string, int>>("SubredditPostCollector.ReadPostsList");
+                        m_readPostsList = SettingsManager.Instance.ReadFromRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList");
                     }
                     else
                     {
-                        m_readPostsList = new CappedDictionary<string, int>() { MaxSize = 150 };
+                        m_readPostsList = new HashList<string, int>(150);
                     }
                 }
                 return m_readPostsList;
@@ -647,9 +645,9 @@ namespace Pancetta.Collectors
             set
             {
                 m_readPostsList = value;
-                SettingsManager.Instance.WriteToRoamingSettings<CappedDictionary<string, int>>("SubredditPostCollector.ReadPostsList", m_readPostsList);
+                SettingsManager.Instance.WriteToRoamingSettings<HashList<string, int>>("SubredditPostCollector.ReadPostsList", m_readPostsList);
             }
         }
-        private CappedDictionary<string, int> m_readPostsList = null;
+        private HashList<string, int> m_readPostsList = null;
     }
 }

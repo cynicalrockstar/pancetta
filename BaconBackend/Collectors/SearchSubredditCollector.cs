@@ -7,13 +7,9 @@ namespace Pancetta.Collectors
 {
     public class SearchSubredditCollector : Collector<Subreddit>
     {
-        private BaconManager m_baconMan;
-
-        public SearchSubredditCollector(BaconManager baconMan, string searchTerm) :
-            base(baconMan, "SearchSubredditCollector")
+        public SearchSubredditCollector(string searchTerm) :
+            base("SearchSubredditCollector")
         {
-            m_baconMan = baconMan;
-
             // Encode the query
             searchTerm = WebUtility.UrlEncode(searchTerm);
 

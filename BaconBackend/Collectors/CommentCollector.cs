@@ -35,11 +35,11 @@ namespace Pancetta.Collectors
         /// </summary>
         /// <param name="subreddit"></param>
         /// <returns></returns>
-        public static CommentCollector GetCollector(Post post, BaconManager baconMan, string forceComment = null)
+        public static CommentCollector GetCollector(Post post, string forceComment = null)
         {
             CommentCollectorContext context = new CommentCollectorContext() { forceComment = forceComment, post = post };
             context.UniqueId = post.Id + (String.IsNullOrWhiteSpace(forceComment) ? String.Empty : forceComment) + post.CommentSortType;
-            return (CommentCollector)Collector<Comment>.GetCollector(typeof(CommentCollector), context.UniqueId, context, baconMan);
+            return (CommentCollector)Collector<Comment>.GetCollector(typeof(CommentCollector), context.UniqueId, context);
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace Pancetta.Collectors
         /// </summary>
         /// <param name="subreddit"></param>
         /// <returns></returns>
-        public static CommentCollector GetCollector(User user, BaconManager baconMan, SortTypes sort = SortTypes.New)
+        public static CommentCollector GetCollector(User user, SortTypes sort = SortTypes.New)
         {
             CommentCollectorContext context = new CommentCollectorContext() { user = user, userSort = sort };
             context.UniqueId = "t2_"+user.Id + sort;
-            return (CommentCollector)Collector<Comment>.GetCollector(typeof(CommentCollector), context.UniqueId, context, baconMan);
+            return (CommentCollector)Collector<Comment>.GetCollector(typeof(CommentCollector), context.UniqueId, context);
         }
 
         //
@@ -59,13 +59,11 @@ namespace Pancetta.Collectors
         //
         Post m_post = null;
         User m_user = null;
-        BaconManager m_baconMan;
 
-        public CommentCollector(CommentCollectorContext context, BaconManager baconMan)
-            : base(baconMan, context.UniqueId)
+        public CommentCollector(CommentCollectorContext context)
+            : base(context.UniqueId)
         {
             // Set the vars
-            m_baconMan = baconMan;
             m_post = context.post;
             m_user = context.user;
 
@@ -421,7 +419,7 @@ namespace Pancetta.Collectors
                 try
                 {
                     // Parse the new comment
-                    Comment newComment = MiscellaneousHelper.ParseOutRedditDataElement<Comment>(m_baconMan, serverResponse);
+                    Comment newComment = MiscellaneousHelper.ParseOutRedditDataElement<Comment>(BaconManager.Instance, serverResponse);
 
                     if (isEdit)
                     {

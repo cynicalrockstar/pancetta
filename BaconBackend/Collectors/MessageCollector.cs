@@ -10,13 +10,9 @@ namespace Pancetta.Collectors
 {
     public class MessageCollector : Collector<Message>
     {
-        private BaconManager m_baconMan;
-
-        public MessageCollector(BaconManager baconMan) :
-            base(baconMan, "messageInbox")
+        public MessageCollector() :
+            base("messageInbox")
         {
-            m_baconMan = baconMan;
-
             // Set up the list helper
             InitListHelper("/message/inbox/.json");
 

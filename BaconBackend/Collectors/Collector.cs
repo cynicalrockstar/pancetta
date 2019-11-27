@@ -138,7 +138,7 @@ namespace Pancetta.Collectors
         /// </summary>
         /// <param name="subreddit"></param>
         /// <returns></returns>
-        protected static Collector<T> GetCollector(Type objectType, string collectorId, object initObject, BaconManager baconMan)
+        protected static Collector<T> GetCollector(Type objectType, string collectorId, object initObject)
         {
             lock (s_collectors)
             {
@@ -152,7 +152,7 @@ namespace Pancetta.Collectors
                 }
                 else
                 {
-                    object[] args = { initObject, baconMan };
+                    object[] args = { initObject };
                     collector = (Collector<T>)Activator.CreateInstance(objectType, args);
                     s_collectors[collectorId] = new WeakReference<Collector<T>>(collector);
                     return collector;
@@ -214,12 +214,10 @@ namespace Pancetta.Collectors
         CollectorState m_state = CollectorState.Idle;
         CollectorErrorState m_errorState = CollectorErrorState.Unknown;
         RedditListHelper<T> m_listHelper;
-        BaconManager m_baconMan;
         string m_uniqueId;
 
-        protected Collector(BaconManager manager, string uniqueId)
+        protected Collector(string uniqueId)
         {
-            m_baconMan = manager;
             m_uniqueId = uniqueId;
         }
 

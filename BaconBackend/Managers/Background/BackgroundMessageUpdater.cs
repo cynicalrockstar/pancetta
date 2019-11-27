@@ -54,7 +54,7 @@ namespace Pancetta.Managers.Background
                     m_refDeferral.AddRef();
 
                     // Make the collector
-                    m_collector = new MessageCollector(BaconManager.Instance);
+                    m_collector = new MessageCollector();
 
                     // We don't need to sub to the collection update because we will get
                     // called automatically when it updates
@@ -412,7 +412,7 @@ namespace Pancetta.Managers.Background
         /// This is an auto length caped list that has fast look up because it is also a map.
         /// If a message has been shown this it will be in this list.
         /// </summary>
-        private CappedDictionary<string, bool> ShownMessageNotifications
+        private HashList<string, bool> ShownMessageNotifications
         {
             get
             {
@@ -420,11 +420,11 @@ namespace Pancetta.Managers.Background
                 {
                     if (SettingsManager.Instance.RoamingSettings.ContainsKey("BackgroundMessageUpdater.ShownMessageNotifications"))
                     {
-                        m_ShownMessageNotifications = SettingsManager.Instance.ReadFromRoamingSettings<CappedDictionary<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications");
+                        m_ShownMessageNotifications = SettingsManager.Instance.ReadFromRoamingSettings<HashList<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications");
                     }
                     else
                     {
-                        m_ShownMessageNotifications = new CappedDictionary<string, bool>() { MaxSize = 150 };
+                        m_ShownMessageNotifications = new HashList<string, bool>(150);
                     }
                 }
                 return m_ShownMessageNotifications;
@@ -432,10 +432,10 @@ namespace Pancetta.Managers.Background
             set
             {
                 m_ShownMessageNotifications = value;
-                SettingsManager.Instance.WriteToRoamingSettings<CappedDictionary<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications", m_ShownMessageNotifications);
+                SettingsManager.Instance.WriteToRoamingSettings<HashList<string, bool>>("BackgroundMessageUpdater.ShownMessageNotifications", m_ShownMessageNotifications);
             }
         }
-        private CappedDictionary<string, bool> m_ShownMessageNotifications = null;
+        private HashList<string, bool> m_ShownMessageNotifications = null;
 
 
         private void SaveSettings()

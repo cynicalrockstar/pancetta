@@ -293,7 +293,7 @@ namespace Pancetta.Managers.Background
             Subreddit subreddit = new Subreddit() { Id = DateTime.Now.Ticks.ToString(), DisplayName = name };
 
             // Get the collector for the subreddit
-            PostCollector collector = PostCollector.GetCollector(subreddit, BaconManager.Instance);
+            PostCollector collector = PostCollector.GetCollector(subreddit);
 
             // Sub to the collector callback
             if(type == UpdateTypes.LockScreen)

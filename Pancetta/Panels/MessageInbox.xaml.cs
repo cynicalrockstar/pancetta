@@ -50,7 +50,7 @@ namespace Pancetta.Windows.Panels
             m_panelHost = host;
 
             // Make a new collector
-            m_collector = new MessageCollector(BaconManager.Instance);
+            m_collector = new MessageCollector();
 
             // Sub to the collector callbacks
             m_collector.OnCollectionUpdated += Collector_OnCollectionUpdated;

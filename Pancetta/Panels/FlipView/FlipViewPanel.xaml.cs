@@ -194,7 +194,7 @@ namespace Pancetta.Windows.Panels.FlipView
                 }
 
                 // Get the collector and register for updates.
-                m_collector = PostCollector.GetCollector(m_subreddit, BaconManager.Instance, m_currentSort, m_currentSortTime, forcePostId);
+                m_collector = PostCollector.GetCollector(m_subreddit, m_currentSort, m_currentSortTime, forcePostId);
                 m_collector.OnCollectionUpdated += Collector_OnCollectionUpdated;
 
                 // Kick off an update of the subreddits if needed.

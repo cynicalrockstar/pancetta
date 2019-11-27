@@ -268,7 +268,7 @@ namespace Pancetta.Windows.Panels
         {
             lock (this)
             {
-                m_currentSubCollector = new SearchSubredditCollector(BaconManager.Instance, searchTerm);
+                m_currentSubCollector = new SearchSubredditCollector(searchTerm);
                 m_currentSubCollector.OnCollectionUpdated += CurrentSubCollector_OnCollectionUpdated;
                 m_currentSubCollector.OnCollectorStateChange += CurrentSubCollector_OnCollectorStateChange;
                 m_currentSubCollector.Update(true);
@@ -403,7 +403,7 @@ namespace Pancetta.Windows.Panels
 
             lock (this)
             {
-                m_currentPostCollector = new SearchPostCollector(BaconManager.Instance, searchTerm, sort, times, subredditFilter, authorFilter, websiteFilter, selftextFilter, isSelfPost, isNsfw);
+                m_currentPostCollector = new SearchPostCollector(searchTerm, sort, times, subredditFilter, authorFilter, websiteFilter, selftextFilter, isSelfPost, isNsfw);
                 m_currentPostCollector.OnCollectionUpdated += CurrentPostCollector_OnCollectionUpdated;
                 m_currentPostCollector.OnCollectorStateChange += CurrentPostCollector_OnCollectorStateChange;
                 m_currentPostCollector.Update(true);

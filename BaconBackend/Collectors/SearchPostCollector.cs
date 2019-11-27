@@ -26,14 +26,10 @@ namespace Pancetta.Collectors
 
     public class SearchPostCollector : Collector<Post>
     {
-        private BaconManager m_baconMan;
-
-        public SearchPostCollector(BaconManager baconMan, string searchTerm, PostSearchSorts sort = PostSearchSorts.Relevance, PostSearchTimes time = PostSearchTimes.AllTime, string subreddit = null,
+        public SearchPostCollector(string searchTerm, PostSearchSorts sort = PostSearchSorts.Relevance, PostSearchTimes time = PostSearchTimes.AllTime, string subreddit = null,
             string authorFilter = null, string websiteFilter = null, string selftextFilter = null, string isSelfPost = null, string isNsfw = null) :
-            base(baconMan, "SearchSubredditCollector")
+            base("SearchSubredditCollector")
         {
-            m_baconMan = baconMan;
-
             // Add the subreddit if needed            
             if (!String.IsNullOrWhiteSpace(subreddit))
             {

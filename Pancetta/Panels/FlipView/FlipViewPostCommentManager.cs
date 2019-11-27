@@ -176,7 +176,7 @@ namespace Pancetta.Windows.Panels
                 if (m_commentCollector == null)
                 {
                     // Get the comment collector, if we don't want to show a subset don't give it the target comment
-                    m_commentCollector = new DeferredCollector<Comment>(CommentCollector.GetCollector(m_post, BaconManager.Instance, m_showThreadSubset ? m_targetComment : null));
+                    m_commentCollector = new DeferredCollector<Comment>(CommentCollector.GetCollector(m_post, m_showThreadSubset ? m_targetComment : null));
 
                     // Sub to collection callbacks for the comments.
                     m_commentCollector.OnCollectionUpdated += CommentCollector_OnCollectionUpdated;

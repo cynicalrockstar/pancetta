@@ -234,7 +234,7 @@ namespace Pancetta.Windows.Panels
 
                 if (m_postCollector == null)
                 {
-                    m_postCollector = PostCollector.GetCollector(m_user, BaconManager.Instance, m_postSort);
+                    m_postCollector = PostCollector.GetCollector(m_user, m_postSort);
                     m_postCollector.OnCollectionUpdated += PostCollector_OnCollectionUpdated;
                     m_postCollector.OnCollectorStateChange += PostCollector_OnCollectorStateChange;
                 }
@@ -502,7 +502,7 @@ namespace Pancetta.Windows.Panels
 
                 if (m_commentCollector == null)
                 {
-                    m_commentCollector = CommentCollector.GetCollector(m_user, BaconManager.Instance, m_commentSort);
+                    m_commentCollector = CommentCollector.GetCollector(m_user, m_commentSort);
                     m_commentCollector.OnCollectionUpdated += CommentCollector_OnCollectionUpdated;
                     m_commentCollector.OnCollectorStateChange += CommentCollector_OnCollectorStateChange;
                 }
