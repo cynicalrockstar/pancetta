@@ -95,7 +95,6 @@ namespace Pancetta.Managers
         //
         // Private Vars
         //
-        BaconManager m_baconMan;
         List<ImageManagerRequestInternal> m_requestList = new List<ImageManagerRequestInternal>();
 
         private ImageManager()

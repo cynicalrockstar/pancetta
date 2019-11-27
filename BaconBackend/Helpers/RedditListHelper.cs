@@ -82,7 +82,6 @@ namespace Pancetta.Helpers
         //
         string m_baseUrl;
         string m_optionalGetArgs;
-        NetworkManager m_networkMan;
         int m_lastTopGet = 0;
         ElementList<T> m_currentElementList = new ElementList<T>();
 
@@ -110,7 +109,6 @@ namespace Pancetta.Helpers
             m_baseUrl = baseUrl;
             m_optionalGetArgs = optionalGetArgs;
             m_currentElementList.Children = new List<Element<T>>();
-            m_networkMan = netMan;
             m_isArrayRoot = isArrayRoot;
             m_takeFirstArrayRoot = takeFirstArrayRoot;
         }
@@ -249,7 +247,7 @@ namespace Pancetta.Helpers
         {
             string optionalEnding = String.IsNullOrWhiteSpace(m_optionalGetArgs) ? String.Empty : "&"+ m_optionalGetArgs;
             string url = m_baseUrl + $"?limit={limit}&raw_json=1" + (String.IsNullOrWhiteSpace(after) ? String.Empty : $"&after={after}") + optionalEnding;
-            return await m_networkMan.MakeRedditGetRequest(url);
+            return await NetworkManager.Instance.MakeRedditGetRequest(url);
         }
     }
 }

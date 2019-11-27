@@ -30,7 +30,6 @@ namespace Pancetta.Managers
 
         private const string LOCAL_SETTINGS_FILE = "LocalSettings.data";
         object objectLock = new object();
-        BaconManager m_baconMan;
         ManualResetEvent m_localSettingsReady = new ManualResetEvent(false);
 
         private SettingsManager()

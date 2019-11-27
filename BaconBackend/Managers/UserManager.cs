@@ -60,9 +60,6 @@ namespace Pancetta.Managers
             public string Message = "";
         }
 
-        //private BaconManager m_baconMan;
-        private AuthManager m_authMan;
-
         private UserManager()
         {
         }
@@ -72,13 +69,13 @@ namespace Pancetta.Managers
         /// </summary>
         public async Task<string> GetAccessToken()
         {
-            return await m_authMan.GetAccessToken();
+            return await AuthManager.Instance.GetAccessToken();
         }
 
         public async Task<SignInResult> SignInNewUser()
         {
             // Start the process by trying to auth a new user
-            SignInResult result = await m_authMan.AuthNewUser();
+            SignInResult result = await AuthManager.Instance.AuthNewUser();
 
             // Check the result
             if(!result.WasSuccess)
@@ -110,7 +107,7 @@ namespace Pancetta.Managers
         public void SignOut()
         {
             // Remove the auth
-            m_authMan.DeleteCurrentAuth();
+            AuthManager.Instance.DeleteCurrentAuth();
 
             // Rest the current user object
             CurrentUser = null;
@@ -188,7 +185,7 @@ namespace Pancetta.Managers
         {
             get
             {
-                return m_authMan.IsUserSignedIn;
+                return AuthManager.Instance.IsUserSignedIn;
             }
         }
 
