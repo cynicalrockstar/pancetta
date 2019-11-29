@@ -1041,7 +1041,9 @@ namespace Pancetta.Windows.Panels.FlipView
             }
             m_isFullscreen = goFullscreen;
 
-            string traceString = "";
+            return;
+
+            //Some old Baconit code that's no longer necessary
             try
             {
                 if (IsVisible)
@@ -1055,15 +1057,11 @@ namespace Pancetta.Windows.Panels.FlipView
                     DoubleAnimation animFullscreenButton = (DoubleAnimation)m_stickyHeader.FindName("ui_animHeaderFullscreenButtonRotate");
                     Grid stickyGrid = (Grid)m_stickyHeader.FindName("ui_storyHeaderBlock");
 
-                    traceString += " gotstickelement ";
-
                     // Stop any past animations.
                     if (storyboard.GetCurrentState() != ClockState.Stopped)
                     {
                         storyboard.Stop();
                     }
-
-                    traceString += $" settingStickAnim height [{stickyGrid.ActualHeight}[ ";
 
                     // Setup the animations.
                     double animTo = goFullscreen ? -stickyGrid.ActualHeight : 0;
@@ -1079,15 +1077,11 @@ namespace Pancetta.Windows.Panels.FlipView
                     animFullscreenButton.To = goFullscreen ? 0 : 180;
                     animFullscreenButton.From = goFullscreen ? 180 : 0;
 
-                    traceString += " gettingnormalHeader ";
-
                     // For the normal header
                     Storyboard storyNormal = (Storyboard)m_storyHeader.FindName("ui_storyCollapseHeaderHeight");
                     Grid headerGrid = (Grid)m_storyHeader.FindName("ui_storyHeaderBlock");
                     DoubleAnimation animNormal = (DoubleAnimation)m_storyHeader.FindName("ui_animHeaderHeightCollapse");
                     DoubleAnimation animNormalFullscreenButton = (DoubleAnimation)m_storyHeader.FindName("ui_animHeaderHeightButtonRotate");
-
-                    traceString += " stoppingclock ";
 
                     // Stop any past animations.
                     if (storyNormal.GetCurrentState() != ClockState.Stopped)
@@ -1095,16 +1089,11 @@ namespace Pancetta.Windows.Panels.FlipView
                         storyNormal.Stop();
                     }
 
-                    traceString += " settingnormalheaders ";
-
                     // Set the normal animations.
                     animNormal.To = goFullscreen ? 0 : headerGrid.ActualHeight;
                     animNormal.From = goFullscreen ? headerGrid.ActualHeight : 0;
                     animNormalFullscreenButton.To = goFullscreen ? 0 : 180;
                     animNormalFullscreenButton.From = goFullscreen ? 180 : 0;
-
-                    traceString += " play ";
-
 
                     // Play the animations.
                     storyboard.Begin();
@@ -1114,15 +1103,11 @@ namespace Pancetta.Windows.Panels.FlipView
                 {
                     // If not visible, just reset the UI.
 
-                    traceString += " gettingElements ";
-
                     // For the normal header set the size and the button
                     Grid headerGrid = (Grid)m_storyHeader.FindName("ui_storyHeaderBlock");
                     RotateTransform headerFullscreenButtonRotate = (RotateTransform)m_storyHeader.FindName("ui_headerFullscreenButtonRotate");
                     headerFullscreenButtonRotate.Angle = goFullscreen ? 0 : 180;
                     headerGrid.MaxHeight = goFullscreen ? double.NaN : headerGrid.ActualHeight;
-
-                    traceString += $" SettingElements height[{headerGrid.ActualHeight}] ";
 
                     // For the sticky header reset the transforms.
                     TranslateTransform titleTrans = (TranslateTransform)m_storyHeader.FindName("ui_headerTitleTransform");
@@ -1139,7 +1124,7 @@ namespace Pancetta.Windows.Panels.FlipView
             }
             catch(Exception e)
             {
-                MessageManager.Instance.DebugDia($"FullscreenToggleFailed IsVis:{IsVisible}, gofull:{goFullscreen}, trace string [{traceString}]", e);
+                MessageManager.Instance.DebugDia($"FullscreenToggleFailed IsVis:{IsVisible}, gofull:{goFullscreen}, trace string []", e);
             }
         }
 
