@@ -142,9 +142,6 @@
     <Compile Include="ContentPanels\Panels\WindowsAppContentPanel.xaml.cs">
       <DependentUpon>WindowsAppContentPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ContentPanels\Panels\YoutubeContentPanel.xaml.cs">
-      <DependentUpon>YoutubeContentPanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ContentPanels\ContentPanelMaster.cs" />
     <Compile Include="HelperControls\CircleIconButton.xaml.cs">
       <DependentUpon>CircleIconButton.xaml</DependentUpon>
@@ -348,10 +345,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ContentPanels\Panels\WindowsAppContentPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ContentPanels\Panels\YoutubeContentPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

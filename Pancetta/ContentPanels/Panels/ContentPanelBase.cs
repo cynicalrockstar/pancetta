@@ -1,4 +1,5 @@
-﻿using Pancetta.Interfaces;
+﻿using Pancetta.Common.Helpers;
+using Pancetta.Interfaces;
 using Pancetta.Managers;
 using Pancetta.Windows.Interfaces;
 using System;
@@ -280,39 +281,32 @@ namespace Pancetta.Windows.ContentPanels.Panels
                     {
                         controlType = typeof(BasicImageContentPanel);
                     }
+                    else if (MarkdownContentPanel.CanHandlePost(source))
+                    {
+                        controlType = typeof(MarkdownContentPanel);
+                    }
+                    else if (RedditContentPanel.CanHandlePost(source))
+                    {
+                        controlType = typeof(RedditContentPanel);
+                    }
+                    else if (WindowsAppContentPanel.CanHandlePost(source))
+                    {
+                        controlType = typeof(WindowsAppContentPanel);
+                    }
 
                     if (controlType == typeof(MarkdownContentPanel))
                     {
                         if (!source.Url.ToLower().Contains("reddit.com"))
                             controlType = typeof(WebPageContentPanel);
+                        if (source.Url.ToLower().Contains("youtube.com") || source.Url.ToLower().Contains("youtu.be"))
+                        {
+                            source.Url = UrlHelper.GetYoutubeEmbedLink(source.Url);
+                        }
                     }
-                    //if (GifImageContentPanel.CanHandlePost(source))
-                    //{
-                    //    controlType = typeof(GifImageContentPanel);
-                    //}
-                    //else if (YoutubeContentPanel.CanHandlePost(source))
-                    //{
-                    //    controlType = typeof(YoutubeContentPanel);
-                    //}
-                    //else if (BasicImageContentPanel.CanHandlePost(source))
-                    //{
-                    //    controlType = typeof(BasicImageContentPanel);
-                    //}
-                    //else if (MarkdownContentPanel.CanHandlePost(source))
-                    //{
-                    //    controlType = typeof(MarkdownContentPanel);
-                    //}
-                    //else if (RedditContentPanel.CanHandlePost(source))
-                    //{
-                    //    controlType = typeof(RedditContentPanel);
-                    //}
+
                     //else if (CommentSpoilerContentPanel.CanHandlePost(source))
                     //{
                     //    controlType = typeof(CommentSpoilerContentPanel);
-                    //}
-                    //else if (WindowsAppContentPanel.CanHandlePost(source))
-                    //{
-                    //    controlType = typeof(WindowsAppContentPanel);
                     //}
                     //else
                     //{
