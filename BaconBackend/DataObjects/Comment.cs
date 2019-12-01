@@ -27,6 +27,17 @@ namespace Pancetta.DataObjects
         [JsonProperty(PropertyName = "author")]
         public string Author { get; set; }
 
+        public string OpText
+        {
+            get
+            {
+                if (IsCommentFromOp)
+                    return "[OP]  ";
+                else
+                    return "";
+            }
+        }
+
         /// <summary>
         /// The comment's body text, in Markdown.
         /// </summary>
@@ -150,7 +161,6 @@ namespace Pancetta.DataObjects
         private static Color s_colorGray = Color.FromArgb(255, 153, 153, 153);
         private static SolidColorBrush s_transparentBrush = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
         private static SolidColorBrush s_veryLightAccentBrush = null;
-        private static SolidColorBrush s_opAuthorBackground = null;
         private static SolidColorBrush s_accentBrush = null;
         private static SolidColorBrush s_brightAccentColor = null;
 
@@ -162,49 +172,6 @@ namespace Pancetta.DataObjects
                 s_accentBrush = (SolidColorBrush)Application.Current.Resources["SystemControlBackgroundAccentBrush"];
             }
             return s_accentBrush;
-        }
-
-        private static SolidColorBrush GetBrightAccentColor()
-        {            
-            // Not thread safe, but that's ok
-            if (s_brightAccentColor == null)
-            {
-                Color accent = GetAccentBrush().Color;
-                int colorAdd = 70;
-                accent.B = (byte)Math.Min(255, accent.B + colorAdd);
-                accent.R = (byte)Math.Min(255, accent.R + colorAdd);
-                accent.G = (byte)Math.Min(255, accent.G + colorAdd);
-                s_brightAccentColor = new SolidColorBrush(accent);
-            }
-            return s_brightAccentColor;
-        }
-
-        private static SolidColorBrush GetLightenedAccentBrush()
-        {
-            // Not thread safe, but that's ok
-            if (s_veryLightAccentBrush == null)
-            {
-                SolidColorBrush accentBrush = GetAccentBrush();
-                Color accentColor = accentBrush.Color;
-                accentColor.A = 30;
-                s_veryLightAccentBrush = new SolidColorBrush(accentColor);
-            }
-            return s_veryLightAccentBrush;
-        }
-
-        private static SolidColorBrush GetOpAuthorBackground()
-        {
-            // Not thread safe, but that's ok
-            if (s_opAuthorBackground == null)
-            {
-                Color accent = GetAccentBrush().Color;
-                int colorAdd = 25;
-                accent.B = (byte)Math.Max(0, accent.B - colorAdd);
-                accent.R = (byte)Math.Max(0, accent.R - colorAdd);
-                accent.G = (byte)Math.Max(0, accent.G - colorAdd);
-                s_opAuthorBackground = new SolidColorBrush(accent);
-            }
-            return s_opAuthorBackground;
         }
 
         /// <summary>
@@ -278,9 +245,7 @@ namespace Pancetta.DataObjects
 
                 if (CommentDepth == 0)
                 {
-                    // For the first comment, make it darker, this will
-                    // differentiate it more
-                    borderBrush = GetBrightAccentColor();
+                    return FlairBrush;
                 }
                 else
                 {
@@ -347,7 +312,14 @@ namespace Pancetta.DataObjects
             {
                 if (IsHighlighted)
                 {
-                    return GetLightenedAccentBrush();
+                    if (s_veryLightAccentBrush == null)
+                    {
+                        SolidColorBrush accentBrush = GetAccentBrush();
+                        Color accentColor = accentBrush.Color;
+                        accentColor.A = 30;
+                        s_veryLightAccentBrush = new SolidColorBrush(accentColor);
+                    }
+                    return s_veryLightAccentBrush;
                 }
                 else
                 {
@@ -364,7 +336,16 @@ namespace Pancetta.DataObjects
         {
             get
             {
-                return GetBrightAccentColor();
+                if (s_brightAccentColor == null)
+                {
+                    Color accent = GetAccentBrush().Color;
+                    int colorAdd = 70;
+                    accent.B = (byte)Math.Min(255, accent.B + colorAdd);
+                    accent.R = (byte)Math.Min(255, accent.R + colorAdd);
+                    accent.G = (byte)Math.Min(255, accent.G + colorAdd);
+                    s_brightAccentColor = new SolidColorBrush(accent);
+                }
+                return s_brightAccentColor;
             }
         }
 
@@ -377,14 +358,25 @@ namespace Pancetta.DataObjects
         {
             get
             {
-                if (IsCommentFromOp)
-                {
-                    return GetOpAuthorBackground();
-                }
-                else
-                {
-                    return s_transparentBrush;
-                }
+                return s_transparentBrush;
+            }
+        }
+
+        [JsonIgnore]
+        public SolidColorBrush AuthorTextForeground
+        {
+            get
+            {
+                return GetAccentBrush();
+            }
+        }
+
+        [JsonIgnore]
+        public SolidColorBrush OpTextForeground
+        {
+            get
+            {
+                return GetAccentBrush();
             }
         }
 
