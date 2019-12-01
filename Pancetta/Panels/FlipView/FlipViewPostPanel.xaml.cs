@@ -1043,6 +1043,7 @@ namespace Pancetta.Windows.Panels.FlipView
 
             return;
 
+            //TODO: Remove
             //Some old Baconit code that's no longer necessary
             try
             {

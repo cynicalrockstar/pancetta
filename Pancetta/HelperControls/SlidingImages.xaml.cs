@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
+using Pancetta.Windows;
+using Windows.UI.Popups;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -66,8 +59,9 @@ namespace Pancetta.Windows.HelperControls
         /// </summary>
         public void BeginAnimation()
         {
+            
             // Make sure we have an image
-            if(m_imageUris == null)
+            if (m_imageUris == null)
             {
                 throw new Exception("No image was set!");
             }
@@ -113,7 +107,7 @@ namespace Pancetta.Windows.HelperControls
         private void UpdateImageSize()
         {
             // If the image isn't loaded do nothing.
-            if(!m_isImageLoaded)
+            if (!m_isImageLoaded)
             {
                 return;
             }
@@ -157,25 +151,29 @@ namespace Pancetta.Windows.HelperControls
             // If we are already animating just jump out.
             lock (this)
             {
-                if(m_isAnimating)
+                if (m_isAnimating)
                 {
                     return;
                 }
                 m_isAnimating = true;
             }
 
-            // Setup the image transform
-            ui_mainImageCompositeTrans.TranslateX = -c_animationAmmount;
-            anim_mainImageTranslateAnim.To = 0;
-            anim_mainImageTranslateAnim.From = -c_animationAmmount;
+            //Only start the animation if we are NOT on battery
+            if (!BatteryStatus.OnBattery)
+            {
+                // Setup the image transform
+                ui_mainImageCompositeTrans.TranslateX = -c_animationAmmount;
+                anim_mainImageTranslateAnim.To = 0;
+                anim_mainImageTranslateAnim.From = -c_animationAmmount;
 
-            // Setup the clip transform
-            anim_mainImageClipTranslateAnim.From = c_animationAmmount;
-            anim_mainImageClipTranslateAnim.To = 0;
-            Storyboard.SetTarget(anim_mainImageClipTranslateAnim, ui_mainImage.Clip.Transform);
+                // Setup the clip transform
+                anim_mainImageClipTranslateAnim.From = c_animationAmmount;
+                anim_mainImageClipTranslateAnim.To = 0;
+                Storyboard.SetTarget(anim_mainImageClipTranslateAnim, ui_mainImage.Clip.Transform);
 
-            // Play the animation!
-            story_mainImageStory.Begin();
+                // Play the animation!
+                story_mainImageStory.Begin();
+            }
         }
 
         private void MainImageStory_Completed(object sender, object e)
@@ -188,6 +186,10 @@ namespace Pancetta.Windows.HelperControls
                     return;
                 }
             }
+
+            //If on battery, don't do this
+            if (BatteryStatus.OnBattery)
+                return;
 
             // Flip the direction and start again!
             double temp = anim_mainImageTranslateAnim.From.Value;            

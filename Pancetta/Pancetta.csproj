@@ -488,6 +488,10 @@
       <Project>{760d26fa-938b-4b0a-9c87-915adaed244d}</Project>
       <Name>Pancetta.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Pancetta.Windows\Pancetta.Windows.csproj">
+      <Project>{f7eda1e1-4549-417a-82ec-e8a96ab20f63}</Project>
+      <Name>Pancetta.Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UniversalMarkdown\UniversalMarkdown.csproj">
       <Project>{9ffc3b68-696a-4342-a2b8-2eadddef7ff9}</Project>
       <Name>UniversalMarkdown</Name>
