@@ -119,8 +119,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
         /// </summary>
         public void OnHostAdded()
         {
-            // Setup the full screen UI.
-            SetupFullscreenButton();
+
         }
 
         #endregion
@@ -289,27 +288,6 @@ namespace Pancetta.Windows.ContentPanels.Panels
         #region Full Screen Logic
 
         /// <summary>
-        /// Shows or hides the full screen button.
-        /// </summary>
-        public async void SetupFullscreenButton()
-        {
-            await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-            {
-                ui_fullScreenHolder.Visibility = (m_base.CanGoFullscreen) ? Visibility.Visible : Visibility.Collapsed;
-            });
-        }
-
-        /// <summary>
-        /// Fired when the user taps the full screen button.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FullScreenHolder_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            ToggleFullScreen(!m_base.IsFullscreen);
-        }
-
-        /// <summary>
         /// Fire when the user presses back.
         /// </summary>
         /// <param name="sender"></param>
@@ -320,9 +298,6 @@ namespace Pancetta.Windows.ContentPanels.Panels
             {
                 return;
             }
-
-            // Kill it if we are.
-            e.IsHandled = ToggleFullScreen(false);
         }
 
         /// <summary>
@@ -339,42 +314,14 @@ namespace Pancetta.Windows.ContentPanels.Panels
 
             if (m_webView.ContainsFullScreenElement)
             {
-                // Go full screen
-                ToggleFullScreen(true);
-
                 // Hide the overlays, let the webcontrol take care of it (we don't want to overlap videos)
                 ui_webviewOverlays.Visibility = Visibility.Collapsed;
             }
             else
             {
-                // Jump out of full screen
-                ToggleFullScreen(false);
-
                 // Restore the overlays
                 ui_webviewOverlays.Visibility = Visibility.Visible;
             }
-        }
-
-        /// <summary>
-        /// Asks the host to toggle full screen.
-        /// </summary>
-        /// <param name="goFullScreen"></param>
-        /// <returns></returns>
-
-        private bool ToggleFullScreen(bool goFullScreen)
-        {
-            bool didAction = false;
-
-            // Set the state
-            didAction = m_base.FireOnFullscreenChanged(goFullScreen);
-
-            // Update the icon
-            ui_fullScreenIcon.Symbol = m_base.IsFullscreen ? Symbol.BackToWindow : Symbol.FullScreen;
-
-            // Set our manipulation mode to capture all input
-            ManipulationMode = m_base.IsFullscreen ? ManipulationModes.All : ManipulationModes.System;
-
-            return didAction;
         }
 
         #endregion

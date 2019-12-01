@@ -613,7 +613,7 @@ namespace UniversalMarkdown
         /// Gets the dependency property for <see cref="QuoteBackground"/>.
         /// </summary>
         public static readonly DependencyProperty QuoteBackgroundProperty = DependencyProperty.Register(nameof(QuoteBackground), typeof(Brush),
-                typeof(MarkdownTextBlock), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 30, 30, 30)), new PropertyChangedCallback(OnPropertyChangedStatic)));
+                typeof(MarkdownTextBlock), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 211,211,211)), new PropertyChangedCallback(OnPropertyChangedStatic)));
 
         /// <summary>
         /// Gets or sets the brush used to render a quote border.  If this is <c>null</c>, then
@@ -660,7 +660,7 @@ namespace UniversalMarkdown
         /// Gets the dependency property for <see cref="QuoteForeground"/>.
         /// </summary>
         public static readonly DependencyProperty QuoteForegroundProperty = DependencyProperty.Register(nameof(QuoteForeground), typeof(Brush),
-                typeof(MarkdownTextBlock), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 180, 180, 180)), new PropertyChangedCallback(OnPropertyChangedStatic)));
+                typeof(MarkdownTextBlock), new PropertyMetadata(new SolidColorBrush(Colors.Black), new PropertyChangedCallback(OnPropertyChangedStatic)));
 
         /// <summary>
         /// Gets or sets the space outside of quote borders.
