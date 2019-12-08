@@ -66,7 +66,27 @@ namespace Pancetta.DataObjects
         /// Indicates this is not a real subreddit, we made it up.
         /// </summary>
         [JsonProperty(PropertyName = "isArtifical")]
-        public bool IsArtifical { get; set; } = false;        
+        public bool IsArtifical { get; set; } = false;
+
+        private String _thumbnail = "";
+        [JsonProperty(PropertyName = "icon_img")]
+        public String Thumbnail
+        {
+            get
+            {
+                if (IsFavorite)
+                    return FavIconUri;
+
+                if (_thumbnail == "")
+                    return "ms-appx:///Assets/MainPage/snoo_50.png";
+
+                return _thumbnail;
+            }
+            set
+            {
+                _thumbnail = value;
+            }
+        }
 
         /// <summary>
         /// Uri to the favorite icon

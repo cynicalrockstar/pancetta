@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Pancetta.Helpers;
 using System.Net;
+using System.IO;
 
 namespace Pancetta.Managers
 {
@@ -88,19 +89,20 @@ namespace Pancetta.Managers
                     // will return all it can find.
                     string baseUrl = UserManager.Instance.IsUserSignedIn ? "/subreddits/mine.json" : "/subreddits/default.json";
                     int maxLimit = UserManager.Instance.IsUserSignedIn ? 99999 : 100;
-                    RedditListHelper <Subreddit> listHelper = new RedditListHelper<Subreddit>(baseUrl, NetworkManager.Instance);
+
+                    RedditListHelper<Subreddit> listHelper = new RedditListHelper<Subreddit>(baseUrl, NetworkManager.Instance);
 
                     // Get the list
                     List<Element<Subreddit>> elements = await listHelper.FetchElements(0, maxLimit);
 
                     // Create a json list from the wrappers.
                     List<Subreddit> subredditList = new List<Subreddit>();
-                    foreach(Element<Subreddit> element in elements)
+                    foreach (Element<Subreddit> element in elements)
                     {
                         subredditList.Add(element.Data);
                     }
 
-                    // Update the subreddit list
+                    //Update the subreddit list
                     HandleSubredditsFromWeb(subredditList);
                     LastUpdate = DateTime.Now;
                 }

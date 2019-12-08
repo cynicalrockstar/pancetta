@@ -305,6 +305,8 @@
     <Content Include="Assets\MainPage\FavoriteIcon.png" />
     <Content Include="Assets\MainPage\NotFavoriteIcon.png" />
     <Content Include="Assets\MainPage\pancetta_50.png" />
+    <Content Include="Assets\MainPage\reddit_50.png" />
+    <Content Include="Assets\MainPage\snoo_50.png" />
     <Content Include="Assets\Settings\pancetta_100.png" />
     <Content Include="Assets\Welcome\amsterdam.jpg" />
     <Content Include="Assets\Welcome\path.jpg" />

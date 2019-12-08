@@ -300,7 +300,7 @@ namespace Pancetta.Windows
 
                     // Set some UI properties.
                     newSubreddit.FavIconUri = newSubreddit.IsFavorite ? "ms-appx:///Assets/MainPage/FavoriteIcon.png" : "ms-appx:///Assets/MainPage/NotFavoriteIcon.png";
-                    newSubreddit.DisplayName = newSubreddit.DisplayName.ToLower();
+                    //newSubreddit.DisplayName = newSubreddit.DisplayName.ToLower();
 
                     // If the two are the same, just update them.
                     if (m_subreddits.Count > insertCount && m_subreddits[insertCount].Id.Equals(newSubreddit.Id))

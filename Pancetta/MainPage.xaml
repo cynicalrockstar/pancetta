@@ -90,7 +90,7 @@
                     <Image Width="20"
                            Height="20"
                            Margin="12,12,9,12"
-                           Source="ms-appx:///Assets/MainPage/pancetta_50.png" />
+                           Source="ms-appx:///Assets/MainPage/reddit_50.png" />
                     <TextBlock Grid.Column="1"
                                Margin="0,0,0,0"
                                VerticalAlignment="Center"
@@ -122,18 +122,22 @@
                                             Background="White"
                                             Margin="0,5,0,5"
                                             Padding="5,5,5,5">
-                                    <TextBlock Margin="0,0,0,0"
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{Binding Thumbnail}" Width="20" Height="20" Margin="0,0,7,0" />
+                                        <TextBlock Margin="0,0,0,0"
                                                Foreground="Black"
                                                Text="{Binding DisplayName}" 
-                                               FontSize="{Binding BodyTextFontSize}"
+                                               FontSize="11"
+                                               FontWeight="Bold"
                                                Tapped="Subreddit_Tapped"
-                                               MinWidth="300"/>
-                                    <TextBlock Margin="0,0,0,0"
-                                               Foreground="{Binding SubTextBrush}"
-                                               Visibility="{Binding SubTextVisible}"
+                                               MinWidth="300" />
+                                    </StackPanel>
+                                    <TextBlock Margin="27,0,0,0"
+                                               Foreground="DarkGray"
                                                Text="{Binding Title}"
                                                TextTrimming="WordEllipsis"
-                                               TextWrapping="NoWrap" 
+                                               TextWrapping="WrapWholeWords"
+                                               FontSize="11"
                                                Tapped="Subreddit_Tapped" />
                                 </StackPanel>
                             </DataTemplate>
