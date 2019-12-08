@@ -129,7 +129,7 @@ namespace UniversalMarkdown
         /// Gets the dependency property for <see cref="CodeBackground"/>.
         /// </summary>
         public static readonly DependencyProperty CodeBackgroundProperty = DependencyProperty.Register(nameof(CodeBackground), typeof(Brush),
-                typeof(MarkdownTextBlock), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 30, 30, 30)), new PropertyChangedCallback(OnPropertyChangedStatic)));
+                typeof(MarkdownTextBlock), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 211, 211, 211)), new PropertyChangedCallback(OnPropertyChangedStatic)));
 
         /// <summary>
         /// Gets or sets the brush used to render the border fill of a code block.

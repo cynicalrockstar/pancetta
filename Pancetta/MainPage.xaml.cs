@@ -401,7 +401,12 @@ namespace Pancetta.Windows
             // Close the menu
             ToggleMenu(false);
 
-            Subreddit subreddit = (sender as Grid).DataContext as Subreddit;
+            Subreddit subreddit = null;
+            if (sender is TextBlock)
+                subreddit = (sender as TextBlock).DataContext as Subreddit;
+            else if (sender is StackPanel)
+                subreddit = (sender as StackPanel).DataContext as Subreddit;
+
             NavigateToSubreddit(subreddit);
         }
 

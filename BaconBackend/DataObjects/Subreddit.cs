@@ -99,6 +99,62 @@ namespace Pancetta.DataObjects
             }
         }
 
+        [JsonIgnore]
+        public int SubTextHeight
+        {
+            get
+            {
+                if (this.IsFavorite)
+                    return 20;
+                else return 0;
+            }
+        }
+
+        [JsonIgnore]
+        public int BodyTextFontSize
+        {
+            get
+            {
+                if (this.IsFavorite)
+                    return 16;
+                else
+                    return 12;
+            }
+        }
+
+        [JsonIgnore]
+        public Visibility SubTextVisible
+        {
+            get
+            {
+                if (this.IsFavorite)
+                    return Visibility.Visible;
+                else
+                    return Visibility.Collapsed;
+            }
+        }
+
+        [JsonIgnore]
+        public Thickness BodyMargin
+        {
+            get
+            {
+                if (this.IsFavorite)
+                    return new Thickness(8, 8, 8, 0);
+                else
+                    return new Thickness(0);
+            }
+        }
+
+        [JsonIgnore]
+        public int ItemMinHeight
+        {
+            get
+            {
+                return 25;
+            }
+        }
+
         /// <summary>
         /// Generate an identifier for this subreddit with a particular sorting.
         /// </summary>

@@ -333,7 +333,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
 
                 // Use the original url to get the gif name.
                 string gifName = postUrl.Substring(gifNameStart, gifNameEnd - gifNameStart);
-                return $"http://gfycat.com/cajax/get/{gifName}";
+                return $"https://api.gfycat.com/v1/gfycats/{gifName}";
             }
             return String.Empty;
         }

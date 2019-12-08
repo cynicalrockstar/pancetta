@@ -21,7 +21,7 @@
     <PackageCertificateThumbprint>C1A74F90FCED45C673178E27F09DA81E102DEA92</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
     <AppxPackageDir>\\nas.swanhouse.local\Aaron\Apps\</AppxPackageDir>
     <ApplicationInsightsResourceId>/subscriptions/8cb09ec7-eef0-4505-923e-a8965130da21/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/Baconit</ApplicationInsightsResourceId>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>

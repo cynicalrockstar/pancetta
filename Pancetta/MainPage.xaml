@@ -111,47 +111,38 @@
                               Grid.Row="6"
                               Grid.ColumnSpan="2"
                               VerticalAlignment="Top"
-                              Background="White"
-                              ItemContainerStyle="{StaticResource ListViewItemNoHighlight}"
-                              SelectionChanged="SubredditList_SelectionChanged"
-                              Style="{StaticResource ListViewStyle}">
+                              Background="LightGray"
+                              SelectionChanged="SubredditList_SelectionChanged">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0" HorizontalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid Grid.RowSpan="2"
-                                          Grid.Column="0"
-                                          Background="White"
-                                          Padding="12,0,0,0"
-                                          Tapped="Favorite_Tapped">
-                                        <Image Width="20"
-                                               Height="20"
-                                               Source="{Binding FavIconUri}" />
-                                    </Grid>
-                                    <Grid Grid.Column="1" Tapped="Subreddit_Tapped">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0"
-                                                   Margin="8,8,8,0"
-                                                   Foreground="Black"
-                                                   Style="{ThemeResource BodyTextBlockStyle}"
-                                                   Text="{Binding DisplayName}" />
-                                        <TextBlock Grid.Row="1"
-                                                   Margin="8,0,8,8"
-                                                   Foreground="{Binding SubTextBrush}"
-                                                   Style="{ThemeResource BodyTextBlockStyle}"
-                                                   Text="{Binding Title}"
-                                                   TextTrimming="WordEllipsis"
-                                                   TextWrapping="NoWrap" />
-                                    </Grid>
-                                </Grid>
+                                <StackPanel Tapped="Subreddit_Tapped"
+                                            BorderThickness="1"
+                                            BorderBrush="DarkGray"
+                                            CornerRadius="3"
+                                            Background="White"
+                                            Margin="0,5,0,5"
+                                            Padding="5,5,5,5">
+                                    <TextBlock Margin="0,0,0,0"
+                                               Foreground="Black"
+                                               Text="{Binding DisplayName}" 
+                                               FontSize="{Binding BodyTextFontSize}"
+                                               Tapped="Subreddit_Tapped"
+                                               MinWidth="300"/>
+                                    <TextBlock Margin="0,0,0,0"
+                                               Foreground="{Binding SubTextBrush}"
+                                               Visibility="{Binding SubTextVisible}"
+                                               Text="{Binding Title}"
+                                               TextTrimming="WordEllipsis"
+                                               TextWrapping="NoWrap" 
+                                               Tapped="Subreddit_Tapped" />
+                                </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="MinHeight" Value="25"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemContainerTransitions>
                             <TransitionCollection />
                         </ListView.ItemContainerTransitions>

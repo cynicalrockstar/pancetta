@@ -64,11 +64,11 @@ namespace Pancetta.Managers
         /// <param name="force">Forces the update</param>
         public bool Update(bool force = false)
         {
-            TimeSpan timeSinceLastUpdate = DateTime.Now - LastUpdate;
-            if (!force && timeSinceLastUpdate.TotalMinutes < 300 && SubredditList.Count > 0)
-            {
-               return false;
-            }
+            //TimeSpan timeSinceLastUpdate = DateTime.Now - LastUpdate;
+            //if (!force && timeSinceLastUpdate.TotalMinutes < 300 && SubredditList.Count > 0)
+            //{
+            //   return false;
+            //}
 
             lock(objectLock)
             {
@@ -329,6 +329,10 @@ namespace Pancetta.Managers
         /// </summary>
         private void HandleSubredditsFromWeb(List<Subreddit> subreddits)
         {
+            var anySaved = subreddits.Where(s => s.Id == "saved");
+            foreach (var s in anySaved)
+                subreddits.Remove(s);
+
             // Add the defaults
             // #todo figure out what to add here
             Subreddit subreddit = new Subreddit()
@@ -336,7 +340,8 @@ namespace Pancetta.Managers
                 DisplayName = "all",
                 Title = "The top of reddit",
                 Id = "all",
-                IsArtifical = true
+                IsArtifical = true,
+                IsFavorite = true
             };
             subreddits.Add(subreddit);
             subreddit = new Subreddit()
@@ -344,47 +349,19 @@ namespace Pancetta.Managers
                 DisplayName = "frontpage",
                 Title = "Your front page",
                 Id = "frontpage",
-                IsArtifical = true
+                IsArtifical = true,
+                IsFavorite = true
             };
             subreddits.Add(subreddit);
-
-            if(!UserManager.Instance.IsUserSignedIn)
+            subreddit = new Subreddit()
             {
-                // If the user isn't signed in add baconit, windowsphone, and windows for free!
-                subreddit = new Subreddit()
-                {
-                    DisplayName = "Pancetta",
-                    Title = "The best reddit app ever!",
-                    Id = "2rfk9"
-                };
-                subreddits.Add(subreddit);
-                subreddit = new Subreddit()
-                {
-                    DisplayName = "windowsphone",
-                    Title = "Everything Windows Phone!",
-                    Id = "2r71o"
-                };
-                subreddits.Add(subreddit);
-                subreddit = new Subreddit()
-                {
-                    DisplayName = "windows",
-                    Title = "Windows",
-                    Id = "2qh3k"
-                };
-                subreddits.Add(subreddit);
-            }
-            else
-            {
-                // If the user is signed in, add the saved subreddit.
-                subreddit = new Subreddit()
-                {
-                    DisplayName = "saved",
-                    Title = "Your saved posts",
-                    Id = "saved",
-                    IsArtifical = true
-                };
-                subreddits.Add(subreddit);
-            }
+                DisplayName = "saved",
+                Title = "Your saved posts",
+                Id = "saved",
+                IsArtifical = true,
+                IsFavorite = true
+            };
+            subreddits.Add(subreddit);
 
             // Send them on
             SetSubreddits(subreddits);
@@ -396,61 +373,12 @@ namespace Pancetta.Managers
         /// <param name="subreddits"></param>
         private void SetSubreddits(List<Subreddit> subreddits)
         {
-            List<Subreddit> newSubredditList = new List<Subreddit>();
-            foreach(Subreddit subreddit in subreddits)
-            {
-                // Mark if it is a favorite
-                subreddit.IsFavorite = FavoriteSubreddits.ContainsKey(subreddit.Id);
-
-                // Do a simple inert sort, account for favorites
-                bool wasAdded = false;
-                for (int i = 0; i < newSubredditList.Count; i++)
-                {
-                    bool addHere = false;
-                    // Is this list item a favorite
-                    if (newSubredditList[i].IsFavorite)
-                    {
-                        // If the new item isn't then continue.
-                        if (!subreddit.IsFavorite)
-                        {
-                            continue;
-                        }
-
-                        // If they are both favorites compare them.
-                        if(newSubredditList[i].DisplayName.CompareTo(subreddit.DisplayName) > 0)
-                        {
-                            addHere = true;
-                        }
-                    }
-                    // Or if the new one is a favorite only
-                    else if (subreddit.IsFavorite)
-                    {
-                        addHere = true;
-                    }
-                    // If neither of them are favorites.
-                    else
-                    {
-                        if (newSubredditList[i].DisplayName.CompareTo(subreddit.DisplayName) > 0)
-                        {
-                            addHere = true;
-                        }
-                    }
-
-                    if(addHere)
-                    {
-                        newSubredditList.Insert(i, subreddit);
-                        wasAdded = true;
-                        break;
-
-                    }
-                }
-
-                // If we didn't add it add it to the end.
-                if (!wasAdded)
-                {
-                    newSubredditList.Add(subreddit);
-                }
-            }
+            //Order and arrange
+            var newSubredditList = new List<Subreddit>();
+            var faves = subreddits.Where(s => s.IsFavorite == true).OrderBy(s => s.DisplayName).ToList();
+            newSubredditList.AddRange(faves);
+            var nonFaves = subreddits.Where(s => s.IsFavorite == false).OrderBy(s => s.DisplayName).ToList();
+            newSubredditList.AddRange(nonFaves);
 
             // Set the list
             SubredditList = newSubredditList;
@@ -563,8 +491,7 @@ namespace Pancetta.Managers
                         // Add the presets
                         m_favoriteSubreddits.Add("frontpage", true);
                         m_favoriteSubreddits.Add("all", true);
-                        m_favoriteSubreddits.Add("2rfk9", true); // Baconit
-                        m_favoriteSubreddits.Add("2r71o", true); // Windows phone
+                        m_favoriteSubreddits.Add("saved", true);
                     }
                 }
                 return m_favoriteSubreddits;
