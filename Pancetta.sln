@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pancetta", "Pancetta\Pancetta.csproj", "{904F56DA-B11C-43DC-9EB9-417501E79437}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -13,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalMarkdown", "UniversalMarkdown\UniversalMarkdown.csproj", "{9FFC3B68-696A-4342-A2B8-2EADDDEF7FF9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pancetta.Windows.Background", "BaconBackground\Pancetta.Windows.Background.csproj", "{C79AC423-5427-4379-AB5B-11F531B5229C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthTokenRetrieverLib", "AuthTokenRetrieverLib\AuthTokenRetrieverLib.csproj", "{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +92,22 @@ Global
 		{C79AC423-5427-4379-AB5B-11F531B5229C}.Release|x64.Build.0 = Release|x64
 		{C79AC423-5427-4379-AB5B-11F531B5229C}.Release|x86.ActiveCfg = Release|x86
 		{C79AC423-5427-4379-AB5B-11F531B5229C}.Release|x86.Build.0 = Release|x86
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|ARM.Build.0 = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x64.Build.0 = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x86.Build.0 = Debug|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|ARM.ActiveCfg = Release|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|ARM.Build.0 = Release|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x64.ActiveCfg = Release|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x64.Build.0 = Release|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x86.ActiveCfg = Release|Any CPU
+		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

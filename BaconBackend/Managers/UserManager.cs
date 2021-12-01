@@ -1,9 +1,13 @@
 ﻿using Pancetta.DataObjects;
 using Pancetta.Helpers;
+using Reddit.AuthTokenRetriever;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 
@@ -26,7 +30,40 @@ namespace Pancetta.Managers
     }
 
     public class UserManager
-    {        
+    {
+        private OAuthToken AccessTokenData
+        {
+            get
+            {
+                if (m_accessTokenData == null)
+                {
+                    if (m_baconMan.SettingsMan.RoamingSettings.ContainsKey("AuthManager.AccessToken"))
+                    {
+                        m_accessTokenData = m_baconMan.SettingsMan.ReadFromRoamingSettings<OAuthToken>("AuthManager.AccessToken");
+                    }
+                    else
+                    {
+                        m_accessTokenData = null;
+                    }
+                }
+                return m_accessTokenData;
+            }
+            set
+            {
+                m_accessTokenData = value;
+
+                // #todo remove
+                if (m_accessTokenData != null && String.IsNullOrWhiteSpace(m_accessTokenData.RefreshToken))
+                {
+                    Debugger.Break();
+                }
+
+                m_baconMan.SettingsMan.WriteToRoamingSettings<OAuthToken>("AuthManager.AccessToken", m_accessTokenData);
+            }
+        }
+
+        private OAuthToken m_accessTokenData = null;
+
         /// <summary>
         /// Fired when the user is updated, added, or removed
         /// </summary>
@@ -49,12 +86,24 @@ namespace Pancetta.Managers
         }
 
         private BaconManager m_baconMan;
-        private AuthManager m_authMan;
+        private AuthTokenRetrieverLib m_authLib;
+
+        private String appId = "VS8MYKTvFrbzoI8Zc7fPaw";
+        private String appSecret = "u1tSBXHqHi_iDo2-gyNatqhNNQ5X2w";
+
+        private ManualResetEvent m_tokenRefreshEvent = new ManualResetEvent(false);
 
         public UserManager(BaconManager baconMan)
         {
             m_baconMan = baconMan;
-            m_authMan = new AuthManager(m_baconMan);
+            m_authLib = new AuthTokenRetrieverLib(appId, 8080, appSecret: appSecret);
+            m_authLib.AuthSuccess += authSuccess;
+        }
+
+        private void authSuccess(object sender, Reddit.AuthTokenRetriever.EventArgs.AuthSuccessEventArgs e)
+        {
+            m_accessTokenData = e.AccessToken;
+            m_tokenRefreshEvent.Set();
         }
 
         /// <summary>
@@ -62,22 +111,68 @@ namespace Pancetta.Managers
         /// </summary>
         public async Task<string> GetAccessToken()
         {
-            return await m_authMan.GetAccessToken();
+            var shouldRefresh = false;
+
+            if (AccessTokenData != null)
+            {
+                TimeSpan timeRemaining = AccessTokenData.ExpiresAt - DateTime.Now;
+
+                // If it is already expired or will do so soon wait on the refresh before using it.
+                if (timeRemaining.TotalSeconds < 30)
+                {
+                    shouldRefresh = true;
+                }
+            }
+            else
+            {
+                shouldRefresh = true;
+            }
+
+            if (shouldRefresh)
+            {
+                m_authLib.AwaitCallback(true);
+                await OpenBrowser(m_authLib.AuthURL());
+
+                m_tokenRefreshEvent.WaitOne();
+                m_tokenRefreshEvent.Reset();
+                m_authLib.StopListening();
+            }
+
+            return AccessTokenData.AccessToken;
+        }
+
+        public static async Task OpenBrowser(string authUrl = "about:blank")
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                await Windows.System.Launcher.LaunchUriAsync(new Uri(authUrl));
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                // For OSX run a separate command to open the web browser as found in https://brockallen.com/2016/09/24/process-start-for-urls-on-net-core/
+                Process.Start("open", authUrl);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                // Similar to OSX, Linux can (and usually does) use xdg for this task.
+                Process.Start("xdg-open", authUrl);
+            }
         }
 
         public async Task<SignInResult> SignInNewUser()
         {
             // Start the process by trying to auth a new user
-            SignInResult result = await m_authMan.AuthNewUser();
+            //SignInResult result = await m_authMan.AuthNewUser();
+            await GetAccessToken();
 
             // Check the result
-            if(!result.WasSuccess)
-            {
-                return result;
-            }
+            //if(!result.WasSuccess)
+            //{
+            //    return result;
+            //}
 
             // Try to get the new user
-            result = await InternalUpdateUser();
+            var result = await InternalUpdateUser();
 
             // Return the result
             return result;
@@ -99,9 +194,6 @@ namespace Pancetta.Managers
 
         public void SignOut()
         {
-            // Remove the auth
-            m_authMan.DeleteCurrentAuth();
-
             // Rest the current user object
             CurrentUser = null;
             LastUpdate = new DateTime(0);
@@ -178,7 +270,7 @@ namespace Pancetta.Managers
         {
             get
             {
-                return m_authMan.IsUserSignedIn;
+                return AccessTokenData != null;
             }
         }
 

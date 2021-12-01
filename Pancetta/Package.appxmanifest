@@ -45,6 +45,8 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <uap:Capability Name="picturesLibrary" />
+    <Capability Name="privateNetworkClientServer"/>
+    <Capability Name="internetClientServer"/>
     <DeviceCapability Name="proximity" />
     <DeviceCapability Name="bluetooth.rfcomm">
       <Device Id="any">
