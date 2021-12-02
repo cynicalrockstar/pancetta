@@ -277,7 +277,7 @@ namespace Pancetta.Windows
         /// <summary>
         /// Fired when the user is updated
         /// </summary>
-        private async void UserMan_OnUserUpdated(object sender, OnUserUpdatedArgs args)
+        private async void UserMan_OnUserUpdated(object sender, UserUpdatedArgs args)
         {
             await global::Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {

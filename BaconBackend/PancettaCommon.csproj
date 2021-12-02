@@ -106,6 +106,7 @@
     <Compile Include="DataObjects\SearchResult.cs" />
     <Compile Include="DataObjects\Subreddit.cs" />
     <Compile Include="DataObjects\User.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Helpers\DeviceHelper.cs" />
     <Compile Include="Helpers\HashList.cs" />
     <Compile Include="Helpers\MiscellaneousHelper.cs" />
@@ -151,12 +152,6 @@
     <PackageReference Include="WriteableBitmapEx">
       <Version>1.6.3</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AuthTokenRetrieverLib\AuthTokenRetrieverLib.csproj">
-      <Project>{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}</Project>
-      <Name>AuthTokenRetrieverLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

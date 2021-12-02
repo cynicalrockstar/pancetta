@@ -31,6 +31,8 @@ namespace Pancetta.Windows.Panels
         /// </summary>
         bool m_isVisible = false;
 
+        private string _nonce;
+
         public LoginPanel()
         {
             this.InitializeComponent();
@@ -55,6 +57,8 @@ namespace Pancetta.Windows.Panels
 
             ui_imageScrolBackground.BeginAnimation();
             m_isVisible = true;
+            ui_loginUI.Visibility = Visibility.Visible;
+            AuthWebViewUi.Visibility = Visibility.Collapsed;
         }
 
         public void OnNavigatingFrom()
@@ -84,36 +88,11 @@ namespace Pancetta.Windows.Panels
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            DateTime loginBegin = DateTime.Now;
+            var loginBegin = DateTime.Now;
 
-            // Change the UI
-            CrossfadeUi(true);
-
-            // Make the call
-            UserManager.SignInResult result = await App.BaconMan.UserMan.SignInNewUser();
-
-            if(result.WasSuccess)
-            {
-                ShowWelcomeAndLeave();
-            }
-            else
-            {
-                // We failed
-                CrossfadeUi(false);
-
-                if (result.WasErrorNetwork)
-                {
-                    App.BaconMan.MessageMan.ShowMessageSimple("Check Your Connection", "We can't talk to reddit right now, check your internet connection.");
-                }
-                if(result.WasUserCanceled)
-                {
-                    // Don't do anything, they know what they did.
-                }
-                else
-                {
-                    App.BaconMan.MessageMan.ShowMessageSimple("Something Went Wrong", "We can't log you in right now, try again later.");
-                }
-            }
+            _nonce = Guid.NewGuid().ToString("N");
+            AuthWebView.Source = new Uri(App.BaconMan.UserMan.AuthManager.GetAuthRequestString(_nonce));
+            AuthWebViewUi.Visibility = Visibility.Visible;
         }
 
         private void CrossfadeUi(bool fadeInProgressUi)
@@ -190,6 +169,80 @@ namespace Pancetta.Windows.Panels
         private void CreateAccount_Click(object sender, RoutedEventArgs e)
         {
             App.BaconMan.ShowGlobalContent("https://www.reddit.com/register");
+        }
+
+        private bool _startingAuth = false;
+        private async void AuthWebViewNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        {
+            var url = args.Uri.ToString();
+            var redirectPath = new Uri(AuthManager.BaconitRedirectUrl);
+
+            if (args.Uri.AbsolutePath.Equals(redirectPath.AbsolutePath) && !_startingAuth)
+            {
+                _startingAuth = true;
+                CrossfadeUi(true);
+                AuthWebViewUi.Visibility = Visibility.Collapsed;
+
+                var result = ParseState(url);
+
+                if (!result.WasSuccess) return;
+
+                // Try to get the access token
+                var accessToken = await App.BaconMan.UserMan.AuthManager.RefreshAccessToken(result.Message, false);
+                if (accessToken == null)
+                {
+                    CrossfadeUi(false);
+                    return;
+                }
+
+                // Try to get the new user
+                result = await App.BaconMan.UserMan.InternalUpdateUser();
+
+                if (!result.WasSuccess) return;
+                ShowWelcomeAndLeave();
+                _startingAuth = false;
+            }
+        }
+
+        private UserManager.SignInResult ParseState(string url)
+        {
+            var parameters = new Uri(url).QueryDictionary();
+
+            var state = parameters.FirstOrDefault(p => p.Key.Equals("state", StringComparison.OrdinalIgnoreCase)).Value;
+            var code = parameters.FirstOrDefault(p => p.Key.Equals("code", StringComparison.OrdinalIgnoreCase)).Value;
+
+            if (string.IsNullOrWhiteSpace(state))
+            {
+                return new UserManager.SignInResult
+                {
+                    Message = "Reddit returned an error!"
+                };
+            }
+
+            // Check the state
+            if (_nonce != state)
+            {
+                return new UserManager.SignInResult
+                {
+                    Message = "The state is not the same!"
+                };
+            }
+
+            // Check the code
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return new UserManager.SignInResult
+                {
+                    Message = "The code is empty!"
+                };
+            }
+
+            // Return the code!
+            return new UserManager.SignInResult
+            {
+                WasSuccess = true,
+                Message = code
+            };
         }
     }
 }

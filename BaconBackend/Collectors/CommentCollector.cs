@@ -132,7 +132,7 @@ namespace Pancetta.Collectors
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void OnUserUpdated(object sender, OnUserUpdatedArgs args)
+        private void OnUserUpdated(object sender, UserUpdatedArgs args)
         {
             // If a user is added or removed update the subreddit to reflect the new user.
             if (args.Action != UserCallbackAction.Updated)

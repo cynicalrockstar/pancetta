@@ -23,6 +23,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
 using Pancetta.Windows.Interfaces;
+using Pancetta.Managers;
 
 namespace Pancetta.Windows.ContentPanels.Panels
 {
@@ -370,7 +371,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
             try
             {
                 // Make the call
-                IHttpContent webResult = await App.BaconMan.NetworkMan.MakeGetRequest(apiUrl);
+                IHttpContent webResult = await NetworkManager.MakeGetRequest(apiUrl);
 
                 // Get the input stream and json reader.
                 // NOTE!! We are really careful not to use a string here so we don't have to allocate a huge string.
@@ -428,7 +429,7 @@ namespace Pancetta.Windows.ContentPanels.Panels
             try
             {
                 // Make the call
-                IHttpContent webResult = await App.BaconMan.NetworkMan.MakeGetRequest("https://upload.gfycat.com/transcode?fetchUrl="+gifUrl);
+                IHttpContent webResult = await NetworkManager.MakeGetRequest("https://upload.gfycat.com/transcode?fetchUrl="+gifUrl);
 
                 // Get the input stream and json reader.
                 // NOTE!! We are really careful not to use a string here so we don't have to allocate a huge string.

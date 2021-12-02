@@ -144,7 +144,7 @@ namespace Pancetta.Collectors
             UpdateMessageCounts(GetCurrentPostsInternal());            
         }
 
-        private void OnUserUpdated(object sender, Managers.OnUserUpdatedArgs e)
+        private void OnUserUpdated(object sender, Managers.UserUpdatedArgs e)
         {
             // If the user is now signed in update.
             if (e.Action == Managers.UserCallbackAction.Added)

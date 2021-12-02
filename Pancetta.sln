@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversalMarkdown", "Univer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pancetta.Windows.Background", "BaconBackground\Pancetta.Windows.Background.csproj", "{C79AC423-5427-4379-AB5B-11F531B5229C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthTokenRetrieverLib", "AuthTokenRetrieverLib\AuthTokenRetrieverLib.csproj", "{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,22 +90,6 @@ Global
 		{C79AC423-5427-4379-AB5B-11F531B5229C}.Release|x64.Build.0 = Release|x64
 		{C79AC423-5427-4379-AB5B-11F531B5229C}.Release|x86.ActiveCfg = Release|x86
 		{C79AC423-5427-4379-AB5B-11F531B5229C}.Release|x86.Build.0 = Release|x86
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|ARM.Build.0 = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x64.Build.0 = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Debug|x86.Build.0 = Debug|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|ARM.ActiveCfg = Release|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|ARM.Build.0 = Release|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x64.ActiveCfg = Release|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x64.Build.0 = Release|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x86.ActiveCfg = Release|Any CPU
-		{05A9F4DB-24B1-4AA3-9DF6-D4CE78B90B73}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

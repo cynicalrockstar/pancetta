@@ -151,7 +151,7 @@ namespace Pancetta.Managers
                     string fileName = MakeFileNameFromUrl(currentRequest.Context.Url);
 
                     // If not we have to get the image
-                    IBuffer imgBuffer = await m_baconMan.NetworkMan.MakeRawGetRequest(currentRequest.Context.Url);
+                    IBuffer imgBuffer = await NetworkManager.MakeRawGetRequest(currentRequest.Context.Url);
 
                     // Turn the stream into an image
                     InMemoryRandomAccessStream imageStream = new InMemoryRandomAccessStream();

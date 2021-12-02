@@ -457,7 +457,7 @@ namespace Pancetta.Managers
         /// <summary>
         /// Fired when the user is updated, we should update the subreddit list.
         /// </summary>
-        private void UserMan_OnUserUpdated(object sender, OnUserUpdatedArgs args)
+        private void UserMan_OnUserUpdated(object sender, UserUpdatedArgs args)
         {
             // Take action on everything but user updated
             if (args.Action != UserCallbackAction.Updated)

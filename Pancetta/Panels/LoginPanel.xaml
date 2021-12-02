@@ -60,6 +60,15 @@
                         Content="Create Account"
                         Foreground="#FFFFFF" />
             </Grid>
+            <Grid x:Name="AuthWebViewUi"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Visibility="Collapsed">
+
+                <WebView x:Name="AuthWebView" 
+                         Margin="0,25,0,0"
+                         NavigationStarting="AuthWebViewNavigationStarting" />
+            </Grid>
             <Grid x:Name="ui_progressUI"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
